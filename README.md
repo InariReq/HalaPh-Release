@@ -38,6 +38,25 @@ Where Every Trip Meets It's Line
 3. Replace the `QR_IMAGE_HERE` placeholder in `index.html`.
 4. If adding an image file later, place it inside `showcase_site/assets/` and update the QR card markup.
 
+## Logo Asset
+
+The website uses a copied logo at `showcase_site/assets/app_icon.png`. If the app logo changes, copy the updated asset from `assets/icons/app_icon.png`.
+
+Do not move, rename, or modify the original Flutter app logo asset.
+
+## Theme Switcher
+
+The website includes a header theme switcher with four themes:
+
+- Light
+- Dark
+- Burgundy
+- Navy
+
+The selected theme is applied immediately and saved in `localStorage`, so the browser remembers the visitor's choice. If no saved preference exists, the site may use the browser's dark-mode preference.
+
+Theme colors are controlled with CSS variables near the top of `styles.css`. Edit the `:root` and `:root[data-theme="..."]` blocks to adjust backgrounds, cards, text, borders, buttons, route accents, and shadows.
+
 ## Hosting Options
 
 Good hosting options:

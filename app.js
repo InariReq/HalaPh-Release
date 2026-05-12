@@ -3,6 +3,51 @@
   const nav = document.querySelector("[data-nav]");
   const toast = document.querySelector("[data-toast]");
   const year = document.querySelector("[data-year]");
+  const themeButtons = document.querySelectorAll("[data-theme-option]");
+  const themeStorageKey = "halaph-showcase-theme";
+  const validThemes = ["light", "dark", "burgundy", "navy"];
+
+  function readSavedTheme() {
+    try {
+      return window.localStorage.getItem(themeStorageKey);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function saveTheme(theme) {
+    try {
+      window.localStorage.setItem(themeStorageKey, theme);
+    } catch (error) {
+      showToast("Theme changed for this page. Browser storage is unavailable.");
+    }
+  }
+
+  function preferredTheme() {
+    const savedTheme = readSavedTheme();
+    if (validThemes.includes(savedTheme)) return savedTheme;
+    if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+      return "dark";
+    }
+    return "light";
+  }
+
+  function applyTheme(theme, persist) {
+    const nextTheme = validThemes.includes(theme) ? theme : "light";
+    document.documentElement.dataset.theme = nextTheme;
+    themeButtons.forEach((button) => {
+      const isActive = button.dataset.themeOption === nextTheme;
+      button.setAttribute("aria-pressed", String(isActive));
+    });
+    if (persist) {
+      saveTheme(nextTheme);
+    }
+  }
+
+  applyTheme(preferredTheme(), false);
 
   if (year) {
     year.textContent = new Date().getFullYear();
@@ -33,6 +78,12 @@
       });
     });
   }
+
+  themeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      applyTheme(button.dataset.themeOption, true);
+    });
+  });
 
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
     link.addEventListener("click", (event) => {

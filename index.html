@@ -13,12 +13,26 @@
   <body>
     <header class="site-header" data-header>
       <a class="brand" href="#home" aria-label="HalaPH home">
-        <span class="brand-mark" aria-hidden="true">H</span>
+        <img
+          class="brand-logo"
+          src="assets/app_icon.png"
+          alt=""
+          width="44"
+          height="44"
+          aria-hidden="true"
+        />
         <span>
           <strong>HalaPH</strong>
           <small>Where Every Trip Meets It's Line</small>
         </span>
       </a>
+
+      <div class="theme-switcher" role="group" aria-label="Choose website theme" data-theme-switcher>
+        <button class="theme-option" type="button" data-theme-option="light" aria-pressed="true">Light</button>
+        <button class="theme-option" type="button" data-theme-option="dark" aria-pressed="false">Dark</button>
+        <button class="theme-option" type="button" data-theme-option="burgundy" aria-pressed="false">Burgundy</button>
+        <button class="theme-option" type="button" data-theme-option="navy" aria-pressed="false">Navy</button>
+      </div>
 
       <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false" data-nav-toggle>
         <span></span>
@@ -47,6 +61,13 @@
         </div>
         <div class="section-inner hero-grid">
           <div class="hero-copy reveal">
+            <img
+              class="hero-logo"
+              src="assets/app_icon.png"
+              alt="HalaPH app logo"
+              width="92"
+              height="92"
+            />
             <p class="eyebrow">Philippine commute planning app</p>
             <h1>HalaPH</h1>
             <p class="slogan">Where Every Trip Meets It's Line</p>
@@ -79,7 +100,10 @@
               <div class="phone-speaker"></div>
               <div class="app-preview">
                 <div class="app-topbar">
-                  <span>HalaPH</span>
+                  <span class="app-title">
+                    <img src="assets/app_icon.png" alt="" width="24" height="24" aria-hidden="true" />
+                    HalaPH
+                  </span>
                   <span class="status-pill">Guide ready</span>
                 </div>
                 <div class="destination-card">
@@ -487,7 +511,10 @@
     <footer class="site-footer">
       <div class="section-inner footer-grid">
         <div>
-          <h2>HalaPH</h2>
+          <div class="footer-brand">
+            <img src="assets/app_icon.png" alt="" width="46" height="46" aria-hidden="true" />
+            <h2>HalaPH</h2>
+          </div>
           <p>Where Every Trip Meets It's Line</p>
           <p>Built for Filipino commuters</p>
           <p>TripLine PH</p>
