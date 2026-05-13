@@ -21,8 +21,8 @@ Before publishing or presenting, replace these placeholder values:
 - `DEMO_VIDEO_URL_HERE` with the demo video URL.
 - `WEBSITE_URL_HERE` with the hosted showcase website URL.
 - `QR_IMAGE_HERE` with a real QR code image or embedded image element.
-- `CONTACT_EMAIL_HERE` with the official contact email.
-- Team member names and roles in `index.html`.
+- Official contact email: `triplineph13@gmail.com`.
+- Team content is managed through the manual carousel in `app.js`.
 - Official slogan if branding changes later.
 
 Current official slogan:
@@ -83,7 +83,15 @@ Some Android devices require allowing installs from the browser/file manager bef
 
 ## Team Note
 
-Replace team member names and roles before final publishing.
+The Team section uses a manual carousel in `app.js`. Add member photos later in `showcase_site/assets/team/`.
+
+## Team Carousel Photos
+
+Place team photos inside `showcase_site/assets/team/`.
+
+Recommended filenames: `cheong-jia-le.jpg`, `john-jian-carlos.jpg`, `fritzver-valdueza.jpg`, `ervin-amad.jpg`, `maraiah-salivio.jpg`, `jian-dela-cruz.jpg`, `ej-barroga.jpg`, `angela-encarnacion.jpg`, `dhustine-catubig.jpg`, `mark-ian-alimen.jpg`, `allen-ewag.jpg`, `mark-jansen-abilo.jpg`, `ynna-toh.jpg`.
+
+If a photo is missing, the website automatically shows the member initials. The team carousel is manual only. Use the arrows, dots, or keyboard left/right keys.
 
 ## Final Pre-Showcase Checklist
 

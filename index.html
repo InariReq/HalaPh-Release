@@ -373,40 +373,94 @@
         </div>
       </section>
 
-      <section class="section" id="team">
-        <div class="section-inner">
+      <section class="section team-section" id="team">
+        <div class="container">
           <div class="section-heading reveal">
             <p class="eyebrow">Team</p>
-            <h2>The people preparing HalaPH for showcase.</h2>
+            <h2>Meet the TripLine PH team.</h2>
+            <p>
+              HalaPH was prepared through app development, business planning, research,
+              marketing, documentation, advertising, booth preparation, and presentation work.
+            </p>
           </div>
-          <div class="team-grid">
-            <article class="team-card reveal">
-              <span class="avatar">CJ</span>
-              <h3>C Jerald Jia Le D. Cheong</h3>
-              <p>Project Lead / Developer</p>
-              <small>Product direction, app development, integration, and presentation readiness.</small>
-            </article>
-            <article class="team-card reveal">
-              <span class="avatar">T2</span>
-              <h3>Team Member 2</h3>
-              <p>Research and Documentation</p>
-              <small>Commute research, written materials, and showcase support.</small>
-            </article>
-            <article class="team-card reveal">
-              <span class="avatar">T3</span>
-              <h3>Team Member 3</h3>
-              <p>UI/UX and Presentation</p>
-              <small>Visual review, user flow feedback, and pitch preparation.</small>
-            </article>
-            <article class="team-card reveal">
-              <span class="avatar">T4</span>
-              <h3>Team Member 4</h3>
-              <p>Testing and Support</p>
-              <small>Device checks, test scenarios, and live demo backup.</small>
-            </article>
+
+          <div class="team-carousel reveal" aria-label="TripLine PH team carousel">
+            <div class="team-carousel-top">
+              <div>
+                <p class="eyebrow">Team spotlight</p>
+                <h3 id="team-member-name">Carlos, John Jian S.</h3>
+                <span id="team-member-role" class="team-role-pill">General Manager</span>
+              </div>
+              <div class="team-counter" id="team-counter">1 / 13</div>
+            </div>
+
+            <div class="team-carousel-body">
+              <button class="team-arrow" id="team-prev" type="button" aria-label="Previous team member">
+                ‹
+              </button>
+
+              <article class="team-slide-card" aria-live="polite">
+                <div class="team-photo-wrap">
+                  <img id="team-photo" class="team-photo" alt="" loading="lazy" />
+                  <div id="team-initials" class="team-initials">JC</div>
+                </div>
+
+                <div class="team-member-content">
+                  <p id="team-category" class="team-category">Leadership</p>
+                  <h4 id="team-slide-name">Carlos, John Jian S.</h4>
+                  <p id="team-summary" class="team-summary">
+                    Served as the group leader, coordinated members, activated APIs,
+                    and handled major paperwork and printing responsibilities.
+                  </p>
+                  <ul id="team-contributions" class="team-contributions"></ul>
+                </div>
+              </article>
+
+              <button class="team-arrow" id="team-next" type="button" aria-label="Next team member">
+                ›
+              </button>
+            </div>
+
+            <div class="team-carousel-footer">
+              <div id="team-dots" class="team-dots" aria-label="Team member selector"></div>
+              <p class="team-help">Use the arrows or keyboard left/right keys to browse members.</p>
+            </div>
+          </div>
+
+          <div class="contribution-summary reveal">
+            <div>
+              <p class="eyebrow">Project contribution summary</p>
+              <h3>Final app, business planning, and showcase preparation.</h3>
+            </div>
+            <p>
+              The final HalaPH application and showcase website were developed and rebuilt by
+              Cheong, C Jerald Jia Le D. The working app includes route planning, fare estimates,
+              favorites, plans, collaboration features, reminders, trip history, Firebase integration,
+              Guide Mode, final UI polish, debugging, and showcase testing.
+            </p>
+            <p>
+              The team supported the project through leadership, paperwork, printing,
+              documentation, auditing, finance planning, marketing strategy, research, data analysis,
+              advertising, UI concept planning, logo design, booth preparation, brochure work,
+              advertisement video preparation, and presentation support.
+            </p>
+          </div>
+
+          <div class="contact-strip reveal" id="contact">
+            <div>
+              <p class="eyebrow">Contact</p>
+              <h3>Connect with TripLine PH.</h3>
+            </div>
+            <div class="contact-actions">
+              <a class="contact-button" href="mailto:triplineph13@gmail.com">Email TripLine PH</a>
+              <a class="contact-button secondary" href="https://web.facebook.com/profile.php?id=61588991024151" target="_blank" rel="noopener">
+                Facebook Page
+              </a>
+            </div>
           </div>
         </div>
       </section>
+
 
       <section class="section download" id="download">
         <div class="section-inner">
@@ -527,7 +581,7 @@
         </nav>
         <div>
           <p>Contact</p>
-          <a href="mailto:CONTACT_EMAIL_HERE" data-placeholder-link>CONTACT_EMAIL_HERE</a>
+          <a href="mailto:triplineph13@gmail.com" data-placeholder-link>triplineph13@gmail.com</a>
           <p class="copyright">© <span data-year></span> HalaPH. All rights reserved.</p>
         </div>
       </div>
