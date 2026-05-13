@@ -18,7 +18,7 @@ You can double-click the file in Finder or open it from a browser.
 Before publishing or presenting, replace these placeholder values:
 
 - `ANDROID_APK_URL_HERE` with the final Android APK download URL.
-- `DEMO_VIDEO_URL_HERE` with the demo video URL.
+- `ADVERTISEMENT_VIDEO_URL_HERE` with the advertisement video URL.
 - `WEBSITE_URL_HERE` with the hosted showcase website URL.
 - `QR_IMAGE_HERE` with a real QR code image or embedded image element.
 - Official contact email: `triplineph13@gmail.com`.
@@ -97,7 +97,7 @@ If a photo is missing, the website automatically shows the member initials. The 
 
 - Replace Android APK link.
 - Replace QR image.
-- Add demo video link.
+- Add advertisement video link.
 - Check website on phone.
 - Check download button.
 - Test app on Android.
