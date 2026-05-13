@@ -140,9 +140,10 @@ const teamMembers = [
     category: "Leadership",
     photo: "assets/team/john-jian-carlos.jpg",
     initials: "JC",
-    summary: "Served as the group leader, coordinated members, activated APIs, helped with paper documentation, handled major paperwork and printing, and served as one of the heads for advertisement video production.",
+    summary: "Served as the group leader, made the early prototype, coordinated members, activated APIs, helped with paper documentation, handled major paperwork and printing, and served as one of the heads for advertisement video production.",
     contributions: [
       "Served as the group leader and general manager.",
+      "Made the early HalaPH prototype used as a project reference.",
       "Managed and coordinated group members.",
       "Activated the required APIs for the project.",
       "Joined brainstorming for the app concept and project plan with Jia Le, Fritzver, and Ynna.",
@@ -179,14 +180,14 @@ const teamMembers = [
   },
   {
     name: "Toh, Ynna Marie S.",
-    role: "UI/UX Designer",
-    category: "Design Support",
+    role: "Main Designer / UI/UX Designer",
+    category: "Main Design",
     photo: "assets/team/ynna-toh.jpg",
     initials: "YT",
-    summary: "Provided the base UI concept, created the app and business logos, worked on the brochure, helped with paper documentation, led booth design with Maraiah, and served as one of the heads for advertisement video production.",
+    summary: "Served as the main designer by providing the base UI concept, creating the app and business logos, working on the brochure, helping with paper documentation, leading booth design with Maraiah, and serving as one of the heads for advertisement video production.",
     contributions: [
-      "Provided the base UI concept for the application.",
-      "Helped shape the early visual direction of HalaPH.",
+      "Served as the main designer for the project.",
+      "Provided the base UI concept and helped shape the early visual direction of HalaPH.",
       "Joined brainstorming for the app concept and project plan with Carlos, Jia Le, and Fritzver.",
       "Created the HalaPH app logo.",
       "Created the business logo.",
@@ -244,11 +245,11 @@ const teamMembers = [
   {
     name: "Dela Cruz, Jian B.",
     role: "Data Analyst",
-    category: "Research and Data",
+    category: "Data Analyst",
     photo: "assets/team/jian-dela-cruz.jpg",
     fallbackPhoto: "assets/team/jian-dela-cruz.png",
     initials: "JD",
-    summary: "Analyzed project data, reviewed proposal information, and supported booth design.",
+    summary: "Served as the Data Analyst by analyzing project data, reviewing proposal information, and supporting booth design.",
     contributions: [
       "Analyzed project-related data.",
       "Reviewed information used for the proposal.",
@@ -258,11 +259,11 @@ const teamMembers = [
   },
   {
     name: "Barroga, Ej M.",
-    role: "Researcher",
-    category: "Research",
+    role: "Research Analyst",
+    category: "Research Analysis",
     photo: "assets/team/ej-barroga.jpg",
     initials: "EB",
-    summary: "Conducted market research, gathered supporting information, and supported project concept development.",
+    summary: "Served as the Research Analyst by conducting market research, gathering supporting information, and supporting project concept development.",
     contributions: [
       "Conducted market research for the project.",
       "Gathered supporting information for the proposal.",
@@ -453,3 +454,64 @@ function initTeamCarousel() {
 }
 
 document.addEventListener("DOMContentLoaded", initTeamCarousel);
+
+
+function initThemeDropdown() {
+  const picker = document.querySelector(".theme-picker");
+  const trigger = document.querySelector(".theme-trigger");
+  const value = document.querySelector(".theme-trigger-value");
+  const panel = document.querySelector(".theme-panel");
+
+  if (!picker || !trigger || !value || !panel) return;
+
+  const syncLabel = () => {
+    const active = panel.querySelector('[data-theme-option][aria-pressed="true"]');
+    value.textContent = active ? active.textContent.trim() : "Light";
+  };
+
+  const close = () => {
+    picker.classList.remove("is-open");
+    trigger.setAttribute("aria-expanded", "false");
+  };
+
+  const toggle = () => {
+    const open = picker.classList.toggle("is-open");
+    trigger.setAttribute("aria-expanded", String(open));
+    syncLabel();
+  };
+
+  trigger.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    toggle();
+  });
+
+  panel.addEventListener("click", (event) => {
+    const option = event.target.closest("[data-theme-option]");
+    if (!option) return;
+
+    window.setTimeout(() => {
+      syncLabel();
+      close();
+    }, 0);
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!picker.contains(event.target)) close();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") close();
+  });
+
+  panel.querySelectorAll("[data-theme-option]").forEach((option) => {
+    new MutationObserver(syncLabel).observe(option, {
+      attributes: true,
+      attributeFilter: ["aria-pressed", "class"],
+    });
+  });
+
+  syncLabel();
+}
+
+document.addEventListener("DOMContentLoaded", initThemeDropdown);
