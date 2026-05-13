@@ -2968,3 +2968,102 @@ a:focus-visible {
     font-size: clamp(1.4rem, 8vw, 1.9rem);
   }
 }
+
+/* Final QR Access alignment fix */
+.qr-card,
+.download-card:has(.qr-placeholder) {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 18px;
+  min-height: auto !important;
+  padding: 28px;
+  text-align: center;
+}
+
+.qr-card h3,
+.download-card:has(.qr-placeholder) h3 {
+  width: 100%;
+  margin: 0;
+  text-align: left;
+}
+
+.qr-placeholder {
+  width: min(100%, 300px) !important;
+  min-height: auto !important;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto !important;
+  padding: 14px !important;
+  overflow: hidden;
+  border-radius: 28px;
+}
+
+.qr-placeholder img {
+  display: block;
+  width: 100% !important;
+  max-width: 250px !important;
+  height: auto !important;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.qr-card p,
+.download-card:has(.qr-placeholder) p {
+  max-width: 360px;
+  margin: 0 auto;
+  text-align: center;
+  line-height: 1.45;
+}
+
+.qr-card .btn,
+.download-card:has(.qr-placeholder) .btn {
+  width: auto;
+  min-width: 220px;
+  margin: 8px auto 0 !important;
+  justify-content: center;
+}
+
+@media (max-width: 720px) {
+  .qr-card,
+  .download-card:has(.qr-placeholder) {
+    padding: 22px;
+    gap: 16px;
+  }
+
+  .qr-card h3,
+  .download-card:has(.qr-placeholder) h3 {
+    text-align: center;
+  }
+
+  .qr-placeholder {
+    width: min(100%, 260px) !important;
+    padding: 12px !important;
+  }
+
+  .qr-placeholder img {
+    max-width: 220px !important;
+  }
+
+  .qr-card .btn,
+  .download-card:has(.qr-placeholder) .btn {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .qr-card,
+  .download-card:has(.qr-placeholder) {
+    padding: 18px;
+    border-radius: 24px;
+  }
+
+  .qr-placeholder {
+    width: min(100%, 230px) !important;
+  }
+
+  .qr-placeholder img {
+    max-width: 196px !important;
+  }
+}
