@@ -134,10 +134,10 @@
 
 
 const teamMembers = [
-  {
+    {
     name: "Carlos, John Jian S.",
-    role: "General Manager",
-    category: "Leadership",
+    role: "Project Manager / General Manager",
+    category: "Project Leadership",
     photo: "assets/team/john-jian-carlos.jpg",
     initials: "JC",
     summary: "Served as the group leader, made the early prototype, coordinated members, activated APIs, helped with paper documentation, handled major paperwork and printing, and served as one of the heads for advertisement video production.",
@@ -157,7 +157,7 @@ const teamMembers = [
   {
     name: "Cheong, C Jerald Jia Le D.",
     role: "Technical Lead / App Developer",
-    category: "Core Development",
+    category: "Software Development",
     photo: "assets/team/cheong-jia-le.jpg",
     initials: "CJ",
     summary: "Led the final app and website development, rebuilt the working HalaPH app, handled testing, debugging, UI polish, Firebase integration, and final showcase preparation.",
@@ -181,7 +181,7 @@ const teamMembers = [
   {
     name: "Toh, Ynna Marie S.",
     role: "Main Designer / UI/UX Designer",
-    category: "Main Design",
+    category: "Creative Design",
     photo: "assets/team/ynna-toh.jpg",
     initials: "YT",
     summary: "Served as the main designer by providing the base UI concept, creating the app and business logos, working on the brochure, helping with paper documentation, leading booth design with Maraiah, and serving as one of the heads for advertisement video production.",
@@ -199,8 +199,8 @@ const teamMembers = [
   },
   {
     name: "Valdueza, Fritzver Ezra D.",
-    role: "Paper Auditor",
-    category: "Documentation",
+    role: "Documentation Auditor",
+    category: "Documentation Review",
     photo: "assets/team/fritzver-valdueza.jpg",
     initials: "FV",
     summary: "Reviewed and corrected the project paper, joined brainstorming, supported booth design, and served as one of the heads for advertisement video production.",
@@ -214,9 +214,23 @@ const teamMembers = [
     ]
   },
   {
+    name: "Encarnacion, Angela Brianna D.",
+    role: "Assistant Documentation Auditor",
+    category: "Documentation Assistance",
+    photo: "assets/team/angela-encarnacion.jpg",
+    initials: "AE",
+    summary: "Assisted in paper auditing, documentation review, and booth preparation.",
+    contributions: [
+      "Assisted in auditing the project paper.",
+      "Checked documentation accuracy and consistency.",
+      "Supported paper review and final output preparation.",
+      "Supported booth design and preparation."
+    ]
+  },
+  {
     name: "Salivio, Maraiah Decara D.",
-    role: "Marketing Manager",
-    category: "Marketing",
+    role: "Marketing Manager / Booth Design Lead",
+    category: "Marketing and Booth Design",
     photo: "assets/team/maraiah-salivio.jpg",
     initials: "MS",
     summary: "Led the marketing strategy, planned promotion, and led booth design and preparation with Ynna.",
@@ -231,7 +245,7 @@ const teamMembers = [
   {
     name: "Amad, Ervin Francis S.",
     role: "Finance Manager",
-    category: "Finance",
+    category: "Financial Planning",
     photo: "assets/team/ervin-amad.jpg",
     initials: "EA",
     summary: "Handled finance-related proposal work, costing details, and budget organization.",
@@ -245,7 +259,7 @@ const teamMembers = [
   {
     name: "Dela Cruz, Jian B.",
     role: "Data Analyst",
-    category: "Data Analyst",
+    category: "Data Analysis",
     photo: "assets/team/jian-dela-cruz.jpg",
     fallbackPhoto: "assets/team/jian-dela-cruz.png",
     initials: "JD",
@@ -274,7 +288,7 @@ const teamMembers = [
   {
     name: "Catubig, Dhustine G.",
     role: "Advertisement Manager",
-    category: "Advertising",
+    category: "Advertising Management",
     photo: "assets/team/dhustine-catubig.jpg",
     initials: "DC",
     summary: "Managed advertisement tasks, promotion support, booth preparation, and participated in the advertisement video.",
@@ -287,23 +301,23 @@ const teamMembers = [
     ]
   },
   {
-    name: "Encarnacion, Angela Brianna D.",
-    role: "Assistant Auditor",
-    category: "Documentation",
-    photo: "assets/team/angela-encarnacion.jpg",
-    initials: "AE",
-    summary: "Assisted in paper auditing, documentation review, and booth preparation.",
+name: "Abilo, Mark Jansen A.",
+    role: "Advertisement Officer",
+    category: "Advertising Support",
+    photo: "assets/team/mark-jansen-abilo.jpg",
+    initials: "MA",
+    summary: "Supported advertisement tasks, promotional materials, and booth preparation.",
     contributions: [
-      "Assisted in auditing the project paper.",
-      "Checked documentation accuracy and consistency.",
-      "Supported paper review and final output preparation.",
+      "Supported advertisement tasks for the project.",
+      "Helped promote the HalaPH application.",
+      "Assisted with promotional materials and preparation.",
       "Supported booth design and preparation."
     ]
   },
   {
     name: "Alimen, Mark Ian B.",
     role: "Advertisement Officer",
-    category: "Advertising",
+    category: "Advertising Support",
     photo: "assets/team/mark-ian-alimen.jpg",
     initials: "MA",
     summary: "Supported advertisement tasks, promotional materials, and booth preparation.",
@@ -317,23 +331,9 @@ const teamMembers = [
   {
     name: "Ewag, Allen P.",
     role: "Advertisement Officer",
-    category: "Advertising",
+    category: "Advertising Support",
     photo: "assets/team/allen-ewag.jpg",
     initials: "AE",
-    summary: "Supported advertisement tasks, promotional materials, and booth preparation.",
-    contributions: [
-      "Supported advertisement tasks for the project.",
-      "Helped promote the HalaPH application.",
-      "Assisted with promotional materials and preparation.",
-      "Supported booth design and preparation."
-    ]
-  },
-  {
-    name: "Abilo, Mark Jansen A.",
-    role: "Advertisement Officer",
-    category: "Advertising",
-    photo: "assets/team/mark-jansen-abilo.jpg",
-    initials: "MA",
     summary: "Supported advertisement tasks, promotional materials, and booth preparation.",
     contributions: [
       "Supported advertisement tasks for the project.",
