@@ -1968,3 +1968,577 @@ a:focus-visible {
     font-size: 0.72rem;
   }
 }
+
+/* Final brand polish: typography, contrast, and full color themes */
+:root {
+  --font-display: "Inter", "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Inter", "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  --headline-weight: 950;
+  --body-weight: 520;
+  --strong-weight: 850;
+}
+
+:root[data-theme="burgundy"] {
+  --bg: #16070d;
+  --bg-soft: #260d16;
+  --surface: #fff5f7;
+  --surface-2: #ffe8ee;
+  --text: #2a0812;
+  --muted: #7a4655;
+  --border: rgba(126, 28, 58, 0.22);
+  --primary: #8f123c;
+  --primary-2: #c43a67;
+  --secondary: #ffd0dc;
+  --accent: #f6b6c7;
+  --shadow-sm: 0 10px 28px rgba(84, 6, 31, 0.16);
+  --shadow-md: 0 18px 46px rgba(84, 6, 31, 0.22);
+  --shadow-lg: 0 28px 80px rgba(84, 6, 31, 0.30);
+}
+
+:root[data-theme="navy"] {
+  --bg: #07111f;
+  --bg-soft: #0d1b31;
+  --surface: #f2f7ff;
+  --surface-2: #ddeafe;
+  --text: #061326;
+  --muted: #40536e;
+  --border: rgba(19, 64, 124, 0.22);
+  --primary: #123d73;
+  --primary-2: #2b6fb8;
+  --secondary: #b9d8ff;
+  --accent: #7fb2f0;
+  --shadow-sm: 0 10px 28px rgba(4, 20, 44, 0.16);
+  --shadow-md: 0 18px 46px rgba(4, 20, 44, 0.22);
+  --shadow-lg: 0 28px 80px rgba(4, 20, 44, 0.30);
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: var(--body-weight);
+  background:
+    radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--primary) 18%, transparent), transparent 34%),
+    radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--secondary) 26%, transparent), transparent 30%),
+    linear-gradient(180deg, var(--bg), var(--bg-soft));
+}
+
+h1,
+h2,
+h3,
+h4,
+.brand-text,
+.logo-mark,
+.eyebrow {
+  font-family: var(--font-display);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: var(--headline-weight);
+  letter-spacing: -0.045em;
+}
+
+p strong,
+li strong,
+b {
+  font-weight: var(--strong-weight);
+  color: var(--text);
+}
+
+.eyebrow {
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  color: var(--primary);
+}
+
+.hero-copy h1 {
+  font-weight: 980;
+  letter-spacing: -0.075em;
+  text-wrap: balance;
+}
+
+.hero-copy h1 .accent,
+.hero-copy h1 em,
+.section-heading h2 strong {
+  color: var(--primary);
+  font-style: normal;
+}
+
+.hero-copy p,
+.section-heading p {
+  font-weight: 560;
+  line-height: 1.75;
+}
+
+.hero-badge,
+.metric-card,
+.route-chip,
+.team-role-pill,
+.team-category,
+.team-counter {
+  font-weight: 900;
+}
+
+.btn {
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  box-shadow: 0 14px 34px color-mix(in srgb, var(--primary) 24%, transparent);
+}
+
+.btn.secondary {
+  box-shadow: none;
+}
+
+.section-heading h2 {
+  text-wrap: balance;
+}
+
+.feature-card h3,
+.download-card h3,
+.statement-card h3,
+.value-card h3,
+.contribution-summary h3,
+.contact-strip h3,
+.team-member-content h4 {
+  font-weight: 950;
+}
+
+.feature-card p,
+.download-card p,
+.trust-card,
+.value-card p,
+.statement-card p,
+.team-summary,
+.contribution-summary p {
+  font-weight: 540;
+}
+
+.feature-card,
+.download-card,
+.statement-card,
+.value-card,
+.trust-card,
+.team-carousel,
+.contribution-summary,
+.contact-strip,
+.video-card,
+.guide-panel,
+.solution-strip,
+.pain-grid {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--surface) 96%, white 4%), color-mix(in srgb, var(--surface-2) 64%, var(--surface) 36%));
+  border-color: color-mix(in srgb, var(--primary) 18%, var(--border));
+}
+
+.feature-card h3::after,
+.download-card h3::after,
+.statement-card h3::after,
+.contribution-summary h3::after,
+.contact-strip h3::after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 4px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-2));
+}
+
+.team-carousel {
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--primary) 28%, transparent), transparent 36%),
+    radial-gradient(circle at bottom right, color-mix(in srgb, var(--secondary) 32%, transparent), transparent 34%),
+    linear-gradient(145deg, color-mix(in srgb, var(--surface) 96%, white 4%), color-mix(in srgb, var(--surface-2) 76%, var(--surface) 24%));
+}
+
+.team-slide-card {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--surface) 92%, white 8%), color-mix(in srgb, var(--surface-2) 80%, var(--primary) 20%));
+}
+
+.team-member-content h4 {
+  letter-spacing: -0.05em;
+}
+
+.team-contributions li {
+  font-weight: 600;
+}
+
+.team-contributions li::before {
+  color: var(--primary);
+  font-weight: 950;
+}
+
+.team-photo-wrap {
+  border: 3px solid color-mix(in srgb, var(--primary) 28%, white);
+  box-shadow:
+    0 20px 46px color-mix(in srgb, var(--primary) 26%, transparent),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.32);
+}
+
+.team-arrow {
+  font-weight: 950;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--surface) 94%, white 6%), color-mix(in srgb, var(--surface-2) 80%, var(--surface) 20%));
+}
+
+.team-dot {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 26%, transparent);
+}
+
+.team-dot.is-active {
+  background: linear-gradient(90deg, var(--primary), var(--primary-2));
+}
+
+.contact-button {
+  box-shadow: 0 16px 36px color-mix(in srgb, var(--primary) 24%, transparent);
+}
+
+.contact-button.secondary {
+  box-shadow: none;
+}
+
+.theme-option {
+  font-weight: 850;
+}
+
+:root[data-theme="burgundy"] .site-header,
+:root[data-theme="navy"] .site-header {
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 26%, var(--border));
+}
+
+:root[data-theme="burgundy"] .hero,
+:root[data-theme="navy"] .hero {
+  background:
+    radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--primary) 24%, transparent), transparent 34%),
+    radial-gradient(circle at 80% 10%, color-mix(in srgb, var(--secondary) 28%, transparent), transparent 32%);
+}
+
+:root[data-theme="burgundy"] .hero-copy h1,
+:root[data-theme="navy"] .hero-copy h1 {
+  color: color-mix(in srgb, var(--surface) 88%, white 12%);
+  text-shadow: 0 18px 60px rgba(0, 0, 0, 0.24);
+}
+
+:root[data-theme="burgundy"] .hero-copy p,
+:root[data-theme="navy"] .hero-copy p,
+:root[data-theme="burgundy"] .hero-copy .eyebrow,
+:root[data-theme="navy"] .hero-copy .eyebrow {
+  color: color-mix(in srgb, var(--surface) 82%, white 18%);
+}
+
+:root[data-theme="burgundy"] .section-heading .eyebrow,
+:root[data-theme="navy"] .section-heading .eyebrow {
+  color: var(--primary);
+}
+
+@media (max-width: 720px) {
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.055em;
+  }
+
+  .hero-copy h1 {
+    letter-spacing: -0.075em;
+  }
+
+  .feature-card h3::after,
+  .download-card h3::after,
+  .statement-card h3::after,
+  .contribution-summary h3::after,
+  .contact-strip h3::after {
+    width: 36px;
+    height: 3px;
+  }
+}
+
+/* Final brand polish: typography, contrast, and full color themes */
+:root {
+  --font-display: "Inter", "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Inter", "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  --headline-weight: 950;
+  --body-weight: 520;
+  --strong-weight: 850;
+}
+
+:root[data-theme="burgundy"] {
+  --bg: #16070d;
+  --bg-soft: #260d16;
+  --surface: #fff5f7;
+  --surface-2: #ffe8ee;
+  --text: #2a0812;
+  --muted: #7a4655;
+  --border: rgba(126, 28, 58, 0.22);
+  --primary: #8f123c;
+  --primary-2: #c43a67;
+  --secondary: #ffd0dc;
+  --accent: #f6b6c7;
+  --shadow-sm: 0 10px 28px rgba(84, 6, 31, 0.16);
+  --shadow-md: 0 18px 46px rgba(84, 6, 31, 0.22);
+  --shadow-lg: 0 28px 80px rgba(84, 6, 31, 0.30);
+}
+
+:root[data-theme="navy"] {
+  --bg: #07111f;
+  --bg-soft: #0d1b31;
+  --surface: #f2f7ff;
+  --surface-2: #ddeafe;
+  --text: #061326;
+  --muted: #40536e;
+  --border: rgba(19, 64, 124, 0.22);
+  --primary: #123d73;
+  --primary-2: #2b6fb8;
+  --secondary: #b9d8ff;
+  --accent: #7fb2f0;
+  --shadow-sm: 0 10px 28px rgba(4, 20, 44, 0.16);
+  --shadow-md: 0 18px 46px rgba(4, 20, 44, 0.22);
+  --shadow-lg: 0 28px 80px rgba(4, 20, 44, 0.30);
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: var(--body-weight);
+  background:
+    radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--primary) 18%, transparent), transparent 34%),
+    radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--secondary) 26%, transparent), transparent 30%),
+    linear-gradient(180deg, var(--bg), var(--bg-soft));
+}
+
+h1,
+h2,
+h3,
+h4,
+.brand-text,
+.logo-mark,
+.eyebrow {
+  font-family: var(--font-display);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: var(--headline-weight);
+  letter-spacing: -0.045em;
+}
+
+p strong,
+li strong,
+b {
+  font-weight: var(--strong-weight);
+  color: var(--text);
+}
+
+.eyebrow {
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  color: var(--primary);
+}
+
+.hero-copy h1 {
+  font-weight: 980;
+  letter-spacing: -0.075em;
+  text-wrap: balance;
+}
+
+.hero-copy h1 .accent,
+.hero-copy h1 em,
+.section-heading h2 strong {
+  color: var(--primary);
+  font-style: normal;
+}
+
+.hero-copy p,
+.section-heading p {
+  font-weight: 560;
+  line-height: 1.75;
+}
+
+.hero-badge,
+.metric-card,
+.route-chip,
+.team-role-pill,
+.team-category,
+.team-counter {
+  font-weight: 900;
+}
+
+.btn {
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  box-shadow: 0 14px 34px color-mix(in srgb, var(--primary) 24%, transparent);
+}
+
+.btn.secondary {
+  box-shadow: none;
+}
+
+.section-heading h2 {
+  text-wrap: balance;
+}
+
+.feature-card h3,
+.download-card h3,
+.statement-card h3,
+.value-card h3,
+.contribution-summary h3,
+.contact-strip h3,
+.team-member-content h4 {
+  font-weight: 950;
+}
+
+.feature-card p,
+.download-card p,
+.trust-card,
+.value-card p,
+.statement-card p,
+.team-summary,
+.contribution-summary p {
+  font-weight: 540;
+}
+
+.feature-card,
+.download-card,
+.statement-card,
+.value-card,
+.trust-card,
+.team-carousel,
+.contribution-summary,
+.contact-strip,
+.video-card,
+.guide-panel,
+.solution-strip,
+.pain-grid {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--surface) 96%, white 4%), color-mix(in srgb, var(--surface-2) 64%, var(--surface) 36%));
+  border-color: color-mix(in srgb, var(--primary) 18%, var(--border));
+}
+
+.feature-card h3::after,
+.download-card h3::after,
+.statement-card h3::after,
+.contribution-summary h3::after,
+.contact-strip h3::after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 4px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-2));
+}
+
+.team-carousel {
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--primary) 28%, transparent), transparent 36%),
+    radial-gradient(circle at bottom right, color-mix(in srgb, var(--secondary) 32%, transparent), transparent 34%),
+    linear-gradient(145deg, color-mix(in srgb, var(--surface) 96%, white 4%), color-mix(in srgb, var(--surface-2) 76%, var(--surface) 24%));
+}
+
+.team-slide-card {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--surface) 92%, white 8%), color-mix(in srgb, var(--surface-2) 80%, var(--primary) 20%));
+}
+
+.team-member-content h4 {
+  letter-spacing: -0.05em;
+}
+
+.team-contributions li {
+  font-weight: 600;
+}
+
+.team-contributions li::before {
+  color: var(--primary);
+  font-weight: 950;
+}
+
+.team-photo-wrap {
+  border: 3px solid color-mix(in srgb, var(--primary) 28%, white);
+  box-shadow:
+    0 20px 46px color-mix(in srgb, var(--primary) 26%, transparent),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.32);
+}
+
+.team-arrow {
+  font-weight: 950;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--surface) 94%, white 6%), color-mix(in srgb, var(--surface-2) 80%, var(--surface) 20%));
+}
+
+.team-dot {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 26%, transparent);
+}
+
+.team-dot.is-active {
+  background: linear-gradient(90deg, var(--primary), var(--primary-2));
+}
+
+.contact-button {
+  box-shadow: 0 16px 36px color-mix(in srgb, var(--primary) 24%, transparent);
+}
+
+.contact-button.secondary {
+  box-shadow: none;
+}
+
+.theme-option {
+  font-weight: 850;
+}
+
+:root[data-theme="burgundy"] .site-header,
+:root[data-theme="navy"] .site-header {
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 26%, var(--border));
+}
+
+:root[data-theme="burgundy"] .hero,
+:root[data-theme="navy"] .hero {
+  background:
+    radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--primary) 24%, transparent), transparent 34%),
+    radial-gradient(circle at 80% 10%, color-mix(in srgb, var(--secondary) 28%, transparent), transparent 32%);
+}
+
+:root[data-theme="burgundy"] .hero-copy h1,
+:root[data-theme="navy"] .hero-copy h1 {
+  color: color-mix(in srgb, var(--surface) 88%, white 12%);
+  text-shadow: 0 18px 60px rgba(0, 0, 0, 0.24);
+}
+
+:root[data-theme="burgundy"] .hero-copy p,
+:root[data-theme="navy"] .hero-copy p,
+:root[data-theme="burgundy"] .hero-copy .eyebrow,
+:root[data-theme="navy"] .hero-copy .eyebrow {
+  color: color-mix(in srgb, var(--surface) 82%, white 18%);
+}
+
+:root[data-theme="burgundy"] .section-heading .eyebrow,
+:root[data-theme="navy"] .section-heading .eyebrow {
+  color: var(--primary);
+}
+
+@media (max-width: 720px) {
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.055em;
+  }
+
+  .hero-copy h1 {
+    letter-spacing: -0.075em;
+  }
+
+  .feature-card h3::after,
+  .download-card h3::after,
+  .statement-card h3::after,
+  .contribution-summary h3::after,
+  .contact-strip h3::after {
+    width: 36px;
+    height: 3px;
+  }
+}
