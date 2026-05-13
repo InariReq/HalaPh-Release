@@ -27,11 +27,18 @@
         </span>
       </a>
 
-      <div class="theme-switcher" role="group" aria-label="Choose website theme" data-theme-switcher>
-        <button class="theme-option" type="button" data-theme-option="light" aria-pressed="true">Light</button>
-        <button class="theme-option" type="button" data-theme-option="dark" aria-pressed="false">Dark</button>
-        <button class="theme-option" type="button" data-theme-option="burgundy" aria-pressed="false">Burgundy</button>
-        <button class="theme-option" type="button" data-theme-option="navy" aria-pressed="false">Navy</button>
+      <div class="theme-picker" data-theme-switcher>
+        <button class="theme-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+          <span class="theme-trigger-label">Theme</span>
+          <span class="theme-trigger-value">Light</span>
+          <span class="theme-trigger-icon" aria-hidden="true">▾</span>
+        </button>
+        <div class="theme-panel" role="menu" aria-label="Theme options">
+          <button class="theme-option" type="button" data-theme-option="light" aria-pressed="true" role="menuitem">Light</button>
+          <button class="theme-option" type="button" data-theme-option="dark" aria-pressed="false" role="menuitem">Dark</button>
+          <button class="theme-option" type="button" data-theme-option="burgundy" aria-pressed="false" role="menuitem">Burgundy</button>
+          <button class="theme-option" type="button" data-theme-option="navy" aria-pressed="false" role="menuitem">Navy</button>
+        </div>
       </div>
 
       <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false" data-nav-toggle>
