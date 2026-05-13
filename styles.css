@@ -2687,3 +2687,74 @@ a:focus-visible {
     padding-inline: 10px;
   }
 }
+
+
+/* Clean QR layout for download section */
+.qr-placeholder {
+  display: grid;
+  place-items: center;
+  width: min(100%, 260px);
+  aspect-ratio: 1 / 1;
+  margin-inline: auto;
+  padding: 14px;
+  overflow: hidden;
+  border: 1px dashed var(--border);
+  border-radius: 28px;
+  background: color-mix(in srgb, var(--surface) 93%, white 7%);
+}
+
+.qr-placeholder img,
+.apk-qr img {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: auto;
+  background: #ffffff;
+}
+
+.qr-placeholder img {
+  max-width: 210px;
+  padding: 10px;
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+.apk-qr {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  margin: 18px 0;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--surface) 94%, white 6%);
+}
+
+.apk-qr img {
+  max-width: 170px;
+  padding: 8px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.apk-qr p {
+  margin: 0;
+  font-weight: 700;
+  text-align: center;
+  color: var(--text);
+}
+
+@media (max-width: 720px) {
+  .qr-placeholder {
+    width: min(100%, 220px);
+    padding: 12px;
+  }
+
+  .qr-placeholder img {
+    max-width: 180px;
+  }
+
+  .apk-qr img {
+    max-width: 150px;
+  }
+}
