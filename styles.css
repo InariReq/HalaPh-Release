@@ -2758,3 +2758,213 @@ a:focus-visible {
     max-width: 150px;
   }
 }
+
+/* Final website alignment and formatting pass */
+.section {
+  overflow-x: clip;
+}
+
+.section-heading {
+  max-width: 900px;
+}
+
+.section-heading.center,
+.section-heading[data-align="center"] {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.download-grid,
+.feature-grid,
+.trust-grid,
+.values-grid,
+.statement-grid {
+  align-items: stretch;
+}
+
+.download-card,
+.feature-card,
+.trust-card,
+.value-card,
+.statement-card,
+.contact-strip,
+.contribution-summary {
+  box-sizing: border-box;
+}
+
+.download-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.download-card .btn,
+.download-card .contact-button {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.qr-placeholder,
+.apk-qr {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.qr-placeholder img,
+.apk-qr img {
+  max-width: 100%;
+}
+
+.team-carousel,
+.contribution-summary,
+.contact-strip {
+  width: 100%;
+}
+
+.team-slide-card {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.team-member-content {
+  min-width: 0;
+}
+
+.team-summary,
+.team-contributions li,
+.contribution-summary p,
+.download-card p,
+.feature-card p {
+  overflow-wrap: break-word;
+}
+
+.contact-strip {
+  display: grid;
+  gap: 18px;
+}
+
+.contact-actions,
+.hero-actions {
+  flex-wrap: wrap;
+}
+
+.footer,
+.site-footer {
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  .contact-strip {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .contact-actions {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 720px) {
+  .container {
+    width: min(100% - 24px, 1160px);
+  }
+
+  .section {
+    padding-block: 54px;
+  }
+
+  .section-heading {
+    text-align: left;
+  }
+
+  .download-grid,
+  .feature-grid,
+  .trust-grid,
+  .values-grid,
+  .statement-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .download-card,
+  .feature-card,
+  .trust-card,
+  .value-card,
+  .statement-card,
+  .contact-strip,
+  .contribution-summary {
+    width: 100%;
+    max-width: 100%;
+    padding: 18px;
+  }
+
+  .download-card .btn,
+  .download-card .contact-button,
+  .contact-actions .btn,
+  .contact-actions .contact-button,
+  .hero-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .qr-placeholder {
+    width: min(100%, 220px);
+    min-height: auto;
+    aspect-ratio: 1 / 1;
+    margin-inline: auto;
+  }
+
+  .apk-qr {
+    width: min(100%, 220px);
+    margin-inline: auto;
+  }
+
+  .team-carousel {
+    padding: 16px;
+  }
+
+  .team-carousel-top {
+    gap: 10px;
+  }
+
+  .team-slide-card {
+    padding: 18px;
+  }
+
+  .team-photo-wrap {
+    margin-inline: auto;
+  }
+
+  .team-carousel-footer {
+    display: grid;
+    gap: 12px;
+  }
+
+  .team-dots {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .container {
+    width: min(100% - 18px, 1160px);
+  }
+
+  .download-card,
+  .feature-card,
+  .trust-card,
+  .value-card,
+  .statement-card,
+  .contact-strip,
+  .contribution-summary {
+    padding: 16px;
+    border-radius: 22px;
+  }
+
+  .section-heading h2 {
+    font-size: clamp(1.8rem, 10vw, 2.6rem);
+  }
+
+  .team-member-content h4 {
+    font-size: clamp(1.4rem, 8vw, 1.9rem);
+  }
+}
