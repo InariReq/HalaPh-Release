@@ -313,13 +313,13 @@ const teamMembers = [
   },
   {
     name: "Alimen, Mark Ian B.",
-    role: "Advertisement Officers",
+    role: "Advertisement Officer",
     category: "Advertising",
     initials: "MA",
     photo: "assets/team/mark-ian-alimen.jpg",
     image: "assets/team/mark-ian-alimen.jpg",
     imageUrl: "assets/team/mark-ian-alimen.jpg",
-    summary: "Served as one of the Advertisement Officers.",
+    summary: "Served as an Advertisement Officer.",
     contributions: [
       "Assisted the Advertisement Manager with advertisement tasks, promotional ideas, and showcase advertising preparation.",
       "Supported advertisement video or promotional material planning and ad-related presentation details.",
@@ -329,13 +329,13 @@ const teamMembers = [
   },
   {
     name: "Ewag, Allen P.",
-    role: "Advertisement Officers",
+    role: "Advertisement Officer",
     category: "Advertising",
     initials: "AE",
     photo: "assets/team/allen-ewag.jpg",
     image: "assets/team/allen-ewag.jpg",
     imageUrl: "assets/team/allen-ewag.jpg",
-    summary: "Served as one of the Advertisement Officers.",
+    summary: "Served as an Advertisement Officer.",
     contributions: [
       "Assisted the Advertisement Manager with advertisement tasks, promotional ideas, and showcase advertising preparation.",
       "Supported advertisement video or promotional material planning and ad-related presentation details.",
