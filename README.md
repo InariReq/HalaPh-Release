@@ -17,10 +17,10 @@ You can double-click the file in Finder or open it from a browser.
 
 Before publishing or presenting, replace these placeholder values:
 
-- `ANDROID_APK_URL_HERE` with the final Android APK download URL.
-- `ADVERTISEMENT_VIDEO_URL_HERE` with the advertisement video URL.
-- `WEBSITE_URL_HERE` with the hosted showcase website URL.
-- `QR_IMAGE_HERE` with a real QR code image or embedded image element.
+- The Android APK link points to `downloads/HalaPH-release.apk`.
+- The showcase QR image points to the hosted showcase website.
+- The APK QR image points to the hosted Android APK download.
+- The advertisement video is marked as Coming Soon until the final video link is ready.
 - Official contact email: `triplineph13@gmail.com`.
 - Team content is managed through the manual carousel in `app.js`.
 - Official slogan if branding changes later.
@@ -35,7 +35,7 @@ Where Every Trip Meets It's Line
 
 1. Host the website first or decide the final public URL.
 2. Generate a QR code from the hosted website URL.
-3. Replace the `QR_IMAGE_HERE` placeholder in `index.html`.
+3. Regenerate `assets/site_qr.png` and `assets/apk_qr.png` when hosted links change.
 4. If adding an image file later, place it inside `showcase_site/assets/` and update the QR card markup.
 
 ## Logo Asset
