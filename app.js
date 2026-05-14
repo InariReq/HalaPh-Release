@@ -168,7 +168,8 @@ const teamMembers = [
       "Led main design direction, UI/UX planning, visual layout support, color and presentation design discussions, and user-facing design improvements.",
       "Made the tarpaulin design for the showcase booth and made the brochure design and layout for the project presentation.",
       "Supported booth visuals, showcase design planning, Android build checking, and bug finding during app testing.",
-      "Reviewed design-related paper and presentation sections, and helped prepare, review, and improve the final paper."
+      "Reviewed design-related paper and presentation sections, and helped prepare, review, and improve the final paper.",
+      "Directed the advertisement video and will lead its editing."
     ]
   },
   {
@@ -184,7 +185,8 @@ const teamMembers = [
       "Led documentation work, organized written outputs, managed project files, and supported operations planning for the business proposal.",
       "Checked paper structure, formatting, completeness, consistency, and written materials for submission and presentation.",
       "Coordinated documentation needs with research and presentation requirements.",
-      "Helped prepare, review, and improve the final paper."
+      "Helped prepare, review, and improve the final paper.",
+      "Helped with and appeared in the advertisement video."
     ]
   },
   {
@@ -200,7 +202,8 @@ const teamMembers = [
       "Led finance planning, cost-related information preparation, budget planning, and business feasibility review.",
       "Supported pricing, funding, and ad-supported business model discussions for the proposal.",
       "Worked with the assistant finance role and reviewed finance-related paper sections.",
-      "Helped prepare, review, and improve the final paper."
+      "Helped prepare, review, and improve the final paper.",
+      "Helped with and appeared in the advertisement video."
     ]
   },
   {
@@ -248,7 +251,8 @@ const teamMembers = [
       "Led advertisement planning, advertising direction, promotional content ideas, and ad-related showcase preparation.",
       "Coordinated advertisement-related tasks with advertisement officers and supported promotional material planning.",
       "Contributed to the ad-supported business concept and reviewed advertising-related paper and presentation details.",
-      "Helped prepare, review, and improve the final paper."
+      "Helped prepare, review, and improve the final paper.",
+      "Helped with and appeared in the advertisement video."
     ]
   },
   {
@@ -264,7 +268,8 @@ const teamMembers = [
       "Supported data analysis, route-related information review, commuter use case review, and app concept data support.",
       "Organized data used for proposal support and checked consistency of project information.",
       "Supported research and documentation with data-related input and proposal review.",
-      "Helped prepare, review, and improve the final paper."
+      "Helped prepare, review, and improve the final paper.",
+      "Helped with and appeared in the advertisement video."
     ]
   },
   {
@@ -280,7 +285,8 @@ const teamMembers = [
       "Supported project research, information gathering, commuter and public transport review, and business proposal research sections.",
       "Reviewed research-based content and checked if written content matched project goals.",
       "Helped prepare proposal and presentation content through research support.",
-      "Helped prepare, review, and improve the final paper."
+      "Helped prepare, review, and improve the final paper.",
+      "Helped with and appeared in the advertisement video."
     ]
   },
   {
@@ -296,7 +302,8 @@ const teamMembers = [
       "Supported customer support planning, user concern handling, and customer-facing service responsibilities.",
       "Helped review how users could ask for help, report concerns, and receive service support.",
       "Assisted with presentation support and customer support-related paper content.",
-      "Helped prepare, review, and improve the final paper."
+      "Helped prepare, review, and improve the final paper.",
+      "Helped with and appeared in the advertisement video."
     ]
   },
   {
@@ -328,7 +335,8 @@ const teamMembers = [
       "Assisted the Advertisement Manager with advertisement tasks, promotional ideas, and showcase advertising preparation.",
       "Supported advertisement video or promotional material planning and ad-related presentation details.",
       "Reviewed advertising details for the paper and presentation.",
-      "Helped prepare, review, and improve the final paper."
+      "Helped prepare, review, and improve the final paper.",
+      "Helped with and appeared in the advertisement video."
     ]
   }
 ];
