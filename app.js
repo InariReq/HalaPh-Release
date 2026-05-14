@@ -163,7 +163,7 @@ const teamMembers = [
     photo: "assets/team/ynna-toh.jpg",
     image: "assets/team/ynna-toh.jpg",
     imageUrl: "assets/team/ynna-toh.jpg",
-    summary: "Served as Main Designer and UI/UX Designer for the project.",
+    summary: "Served as Main Designer and UI/UX Designer for the project. Directed the advertisement video and will lead its editing.",
     contributions: [
       "Led main design direction, UI/UX planning, visual layout support, color and presentation design discussions, and user-facing design improvements.",
       "Made the tarpaulin design for the showcase booth and made the brochure design and layout for the project presentation.",
@@ -179,7 +179,7 @@ const teamMembers = [
     photo: "assets/team/fritzver-valdueza.jpg",
     image: "assets/team/fritzver-valdueza.jpg",
     imageUrl: "assets/team/fritzver-valdueza.jpg",
-    summary: "Served as Operations Manager and Documentation Lead.",
+    summary: "Served as Operations Manager and Documentation Lead. Also helped with and appeared in the advertisement video.",
     contributions: [
       "Led documentation work, organized written outputs, managed project files, and supported operations planning for the business proposal.",
       "Checked paper structure, formatting, completeness, consistency, and written materials for submission and presentation.",
@@ -195,7 +195,7 @@ const teamMembers = [
     photo: "assets/team/ervin-amad.jpg",
     image: "assets/team/ervin-amad.jpg",
     imageUrl: "assets/team/ervin-amad.jpg",
-    summary: "Served as Finance Manager for TripLine PH.",
+    summary: "Served as Finance Manager for TripLine PH. Also helped with and appeared in the advertisement video.",
     contributions: [
       "Led finance planning, cost-related information preparation, budget planning, and business feasibility review.",
       "Supported pricing, funding, and ad-supported business model discussions for the proposal.",
@@ -243,7 +243,7 @@ const teamMembers = [
     photo: "assets/team/dhustine-catubig.jpg",
     image: "assets/team/dhustine-catubig.jpg",
     imageUrl: "assets/team/dhustine-catubig.jpg",
-    summary: "Served as Advertisement Manager.",
+    summary: "Served as Advertisement Manager. Also helped with and appeared in the advertisement video.",
     contributions: [
       "Led advertisement planning, advertising direction, promotional content ideas, and ad-related showcase preparation.",
       "Coordinated advertisement-related tasks with advertisement officers and supported promotional material planning.",
@@ -259,7 +259,7 @@ const teamMembers = [
     photo: "assets/team/jian-dela-cruz.png",
     image: "assets/team/jian-dela-cruz.png",
     imageUrl: "assets/team/jian-dela-cruz.png",
-    summary: "Served as Data Analyst.",
+    summary: "Served as Data Analyst. Also helped with and appeared in the advertisement video.",
     contributions: [
       "Supported data analysis, route-related information review, commuter use case review, and app concept data support.",
       "Organized data used for proposal support and checked consistency of project information.",
@@ -275,7 +275,7 @@ const teamMembers = [
     photo: "assets/team/ej-barroga.jpg",
     image: "assets/team/ej-barroga.jpg",
     imageUrl: "assets/team/ej-barroga.jpg",
-    summary: "Served as Research Analyst.",
+    summary: "Served as Research Analyst. Also helped with and appeared in the advertisement video.",
     contributions: [
       "Supported project research, information gathering, commuter and public transport review, and business proposal research sections.",
       "Reviewed research-based content and checked if written content matched project goals.",
@@ -291,7 +291,7 @@ const teamMembers = [
     photo: "assets/team/mark-jansen-abilo.jpg",
     image: "assets/team/mark-jansen-abilo.jpg",
     imageUrl: "assets/team/mark-jansen-abilo.jpg",
-    summary: "Served as Customer Support Representative.",
+    summary: "Served as Customer Support Representative. Also helped with and appeared in the advertisement video.",
     contributions: [
       "Supported customer support planning, user concern handling, and customer-facing service responsibilities.",
       "Helped review how users could ask for help, report concerns, and receive service support.",
@@ -323,7 +323,7 @@ const teamMembers = [
     photo: "assets/team/allen-ewag.jpg",
     image: "assets/team/allen-ewag.jpg",
     imageUrl: "assets/team/allen-ewag.jpg",
-    summary: "Served as an Advertisement Officer.",
+    summary: "Served as an Advertisement Officer. Also helped with and appeared in the advertisement video.",
     contributions: [
       "Assisted the Advertisement Manager with advertisement tasks, promotional ideas, and showcase advertising preparation.",
       "Supported advertisement video or promotional material planning and ad-related presentation details.",
