@@ -3067,3 +3067,12 @@ a:focus-visible {
     max-width: 196px !important;
   }
 }
+
+
+/* Coming soon buttons */
+.btn-disabled,
+.btn-disabled:hover {
+  cursor: not-allowed;
+  opacity: 0.72;
+  pointer-events: none;
+}
