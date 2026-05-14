@@ -89,7 +89,7 @@
             </p>
             <div class="hero-actions">
               <a class="btn btn-primary" href="#download" data-placeholder-link>Download for Android</a>
-              <a class="btn btn-secondary" href="#download">View iPhone Demo Info</a>
+              <a class="btn btn-secondary" href="#install-android">How to Install</a>
               <a class="btn btn-ghost btn-disabled" href="#video-coming-soon" aria-disabled="true">
                 Advertisement Video Coming Soon
               </a>
@@ -475,24 +475,30 @@
         <div class="section-inner">
           <div class="section-heading reveal">
             <p class="eyebrow">Access HalaPH</p>
-            <h2>Download the Android build, scan the QR code, or view the presenter demo.</h2>
+            <h2>Download the latest Android showcase build, scan the QR code, or view presenter demo details.</h2>
           </div>
           <div class="download-grid">
+            <article class="download-card build-card reveal">
+              <div>
+                <p class="eyebrow">Latest Build</p>
+                <h3>Android APK</h3>
+                <span class="ios-badge">Latest showcase build</span>
+              </div>
+              <div class="build-meta" aria-label="Android APK build details">
+                <span>Around 63 MB</span>
+                <span>Download through button or QR</span>
+              </div>
+              <div class="apk-qr">
+                <img src="./assets/apk_qr.png" alt="QR code to download the HalaPH Android APK" loading="lazy" />
+                <p>Scan to download the latest Android APK</p>
+              </div>
+              <a class="btn btn-primary" href="./downloads/HalaPH-release.apk" data-placeholder-link>Download APK</a>
+            </article>
             <article class="download-card qr-card reveal">
               <h3>QR Access</h3>
               <div class="qr-placeholder" aria-label="QR placeholder"><img src="./assets/site_qr.png" alt="QR code to open the HalaPH showcase page" loading="lazy" /></div>
               <p>Scan to open the HalaPH showcase page</p>
               <a class="btn btn-secondary" href="https://inarireq.github.io/HalaPh-Release/" data-placeholder-link>Open Direct Link</a>
-            </article>
-            <article class="download-card reveal">
-              <h3>Android</h3>
-              <p>Download the latest Android APK, allow install from browser if prompted, then open HalaPH.</p>
-              <div class="apk-qr">
-  <img src="./assets/apk_qr.png" alt="QR code to download the HalaPH Android APK" loading="lazy" />
-  <p>Scan to download the latest Android APK</p>
-</div>
-<a class="btn btn-primary" href="./downloads/HalaPH-release.apk" data-placeholder-link>Download APK</a>
-              <small>Latest Android APK build. File size is about 63 MB. If the QR code does not work, use the direct download button.</small>
             </article>
             <article class="download-card reveal" id="video-coming-soon">
               <h3>Advertisement Video</h3>
@@ -511,6 +517,33 @@
               </p>
             </article>
           </div>
+        </div>
+      </section>
+
+      <section class="section install-section" id="install-android">
+        <div class="section-inner">
+          <div class="section-heading reveal">
+            <p class="eyebrow">Android installation</p>
+            <h2>How to install on Android.</h2>
+          </div>
+          <ol class="install-steps reveal">
+            <li>
+              <span>1</span>
+              <p>Scan the APK QR or tap Download APK.</p>
+            </li>
+            <li>
+              <span>2</span>
+              <p>Allow install from browser if prompted.</p>
+            </li>
+            <li>
+              <span>3</span>
+              <p>Open HalaPH.</p>
+            </li>
+            <li>
+              <span>4</span>
+              <p>Login or create an account.</p>
+            </li>
+          </ol>
         </div>
       </section>
 
