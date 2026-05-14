@@ -94,18 +94,6 @@
     });
   });
 
-  document.querySelectorAll("[data-placeholder-link]").forEach((link) => {
-    link.addEventListener("click", (event) => {
-      const href = link.getAttribute("href") || "";
-      const isPlaceholder =
-        href.includes("_HERE") ||
-        href === "mailto:CONTACT_EMAIL_HERE";
-      if (!isPlaceholder) return;
-      event.preventDefault();
-      showToast("Placeholder link. Replace it before the live showcase.");
-    });
-  });
-
   const revealItems = document.querySelectorAll(".reveal");
   if (!("IntersectionObserver" in window)) {
     revealItems.forEach((item) => item.classList.add("visible"));

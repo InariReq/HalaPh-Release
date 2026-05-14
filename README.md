@@ -13,17 +13,17 @@ showcase_site/index.html
 
 You can double-click the file in Finder or open it from a browser.
 
-## Replace Placeholders
+## Release Links
 
-Before publishing or presenting, replace these placeholder values:
+Current showcase links and assets:
 
-- The Android APK link points to `downloads/HalaPH-release.apk`.
+- The Android APK link points to `downloads/HalaPH-release-brand-theme-final.apk`.
 - The showcase QR image points to the hosted showcase website.
 - The APK QR image points to the hosted Android APK download.
 - The advertisement video is marked as Coming Soon until the final video link is ready.
 - Official contact email: `triplineph13@gmail.com`.
 - Team content is managed through the manual carousel in `app.js`.
-- Official slogan if branding changes later.
+- The official slogan is shown below for consistency checks.
 
 Current official slogan:
 
@@ -31,12 +31,13 @@ Current official slogan:
 Where Every Trip Meets It's Line
 ```
 
-## QR Code
+## QR Codes
 
-1. Host the website first or decide the final public URL.
-2. Generate a QR code from the hosted website URL.
-3. Regenerate `assets/site_qr.png` and `assets/apk_qr.png` when hosted links change.
-4. If adding an image file later, place it inside `showcase_site/assets/` and update the QR card markup.
+Do not regenerate QR images unless the hosted website URL or APK download URL changes.
+
+- `assets/site_qr.png` opens the hosted showcase website.
+- `assets/apk_qr.png` downloads the Android APK.
+- If a new QR image is required later, place it inside `showcase_site/assets/` and update only the related card markup.
 
 ## Logo Asset
 
@@ -95,9 +96,9 @@ If a photo is missing, the website automatically shows the member initials. The 
 
 ## Final Pre-Showcase Checklist
 
-- Replace Android APK link.
-- Replace QR image.
-- Add advertisement video link.
+- Confirm the Android APK link still points to the final release file.
+- Confirm both QR codes open the expected targets.
+- Keep the advertisement video marked Coming Soon until the final video link exists.
 - Check website on phone.
 - Check download button.
 - Test app on Android.
