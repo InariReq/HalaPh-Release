@@ -3740,3 +3740,1046 @@ main {
     width: min(100%, 220px);
   }
 }
+
+
+/* Hard centered download grid override */
+body #download.section.download {
+  padding-top: clamp(150px, 14vw, 190px) !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
+
+body #download .section-heading {
+  width: min(100%, 900px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-bottom: 48px !important;
+  text-align: center !important;
+}
+
+body #download .section-heading h2 {
+  width: 100% !important;
+  max-width: 900px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+  line-height: 1.02 !important;
+}
+
+body #download .download-grid {
+  width: 100% !important;
+  max-width: 1180px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 24px !important;
+  justify-content: center !important;
+  align-items: start !important;
+}
+
+body #download .download-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+  align-self: start !important;
+  justify-self: stretch !important;
+  padding: 28px 24px !important;
+  text-align: center !important;
+  align-items: center !important;
+}
+
+body #download .download-card:first-child {
+  text-align: center !important;
+  align-items: center !important;
+}
+
+body #download .download-card h3,
+body #download .download-card p,
+body #download .download-card small,
+body #download .download-card span {
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body #download .qr-placeholder {
+  width: 190px !important;
+  height: 190px !important;
+  max-width: 100% !important;
+  margin: 18px auto !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+body #download .qr-placeholder img,
+body #download .download-card img {
+  width: 158px !important;
+  height: 158px !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body #download .download-card:first-child .qr-placeholder {
+  width: 210px !important;
+  height: 210px !important;
+}
+
+body #download .download-card:first-child .qr-placeholder img {
+  width: 176px !important;
+  height: 176px !important;
+}
+
+body #download .btn {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+@media (max-width: 1100px) {
+  body #download .download-grid {
+    max-width: 720px !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 680px) {
+  body #download.section.download {
+    padding-top: 112px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  body #download .download-grid {
+    max-width: 420px !important;
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  body #download .download-card {
+    padding: 24px !important;
+  }
+}
+
+
+/* FINAL GLOBAL SITE FORMAT OVERRIDE */
+*,
+*::before,
+*::after {
+  box-sizing: border-box !important;
+}
+
+html,
+body {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  overflow-x: hidden !important;
+}
+
+body {
+  min-height: 100vh !important;
+}
+
+main {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+}
+
+/* Fixed navbar should not cover section content */
+.nav,
+.site-nav,
+header {
+  z-index: 1000 !important;
+}
+
+.nav-inner {
+  width: min(100% - 32px, 1220px) !important;
+  max-width: 1220px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+/* Main section layout */
+section,
+.section {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  padding-top: clamp(96px, 10vw, 150px) !important;
+  padding-bottom: clamp(72px, 8vw, 120px) !important;
+  scroll-margin-top: 130px !important;
+}
+
+.container,
+.section-inner,
+.hero-inner,
+.footer-inner {
+  width: min(100%, 1180px) !important;
+  max-width: 1180px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Headings */
+.section-heading {
+  width: min(100%, 900px) !important;
+  max-width: 900px !important;
+  margin: 0 auto clamp(32px, 4vw, 56px) !important;
+  text-align: center !important;
+}
+
+.section-heading h1,
+.section-heading h2 {
+  width: 100% !important;
+  max-width: 900px !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+  line-height: 1.04 !important;
+  overflow-wrap: balance !important;
+}
+
+.section-heading p {
+  width: min(100%, 720px) !important;
+  max-width: 720px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+/* All grids center as full blocks */
+.hero-grid,
+.feature-grid,
+.download-grid,
+.team-grid,
+.stats-grid,
+.qr-grid,
+.footer-grid,
+.cards-grid {
+  width: min(100%, 1180px) !important;
+  max-width: 1180px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: grid !important;
+  gap: clamp(18px, 2vw, 28px) !important;
+  justify-content: center !important;
+  align-items: start !important;
+}
+
+/* Standard grid behavior */
+.feature-grid,
+.team-grid,
+.stats-grid,
+.cards-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)) !important;
+}
+
+/* Download section exact centering */
+#download .download-grid,
+.download .download-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  width: min(100%, 1120px) !important;
+  max-width: 1120px !important;
+}
+
+.card,
+.feature-card,
+.download-card,
+.team-card,
+.qr-card,
+.faq-card,
+.status-card,
+.build-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  min-height: unset !important;
+  height: auto !important;
+  align-self: start !important;
+  justify-self: stretch !important;
+  overflow: hidden !important;
+}
+
+/* Download cards */
+#download .download-card,
+.download .download-card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  text-align: center !important;
+  padding: 28px 22px !important;
+}
+
+#download .download-card *,
+.download .download-card * {
+  text-align: center !important;
+}
+
+.qr-placeholder {
+  width: 190px !important;
+  height: 190px !important;
+  max-width: 100% !important;
+  margin: 18px auto !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+.qr-placeholder img,
+.download-card img,
+.qr-card img {
+  width: 160px !important;
+  height: 160px !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+/* FAQ */
+.faq,
+#faq {
+  text-align: center !important;
+}
+
+.faq details,
+#faq details,
+.faq-card {
+  width: min(100%, 820px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: left !important;
+}
+
+/* Footer must be visible and centered */
+footer,
+.footer {
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: clamp(56px, 7vw, 90px) 24px !important;
+  background: #3b0012 !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+footer *,
+.footer * {
+  color: rgba(255, 255, 255, 0.92) !important;
+  opacity: 1 !important;
+}
+
+.footer-inner,
+.footer-grid {
+  width: min(100%, 1180px) !important;
+  max-width: 1180px !important;
+  margin: 0 auto !important;
+}
+
+.footer-grid {
+  display: grid !important;
+  grid-template-columns: 1.2fr 0.8fr !important;
+  gap: 40px !important;
+  align-items: start !important;
+}
+
+.footer-brand,
+.footer-links,
+.footer-contact {
+  text-align: center !important;
+}
+
+.footer-links {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  align-items: center !important;
+}
+
+.footer a {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+/* Tablet */
+@media (max-width: 1100px) {
+  .nav-inner {
+    width: min(100% - 28px, 960px) !important;
+  }
+
+  #download .download-grid,
+  .download .download-grid {
+    width: min(100%, 760px) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    text-align: center !important;
+  }
+}
+
+/* Phone */
+@media (max-width: 720px) {
+  section,
+  .section {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-top: 88px !important;
+    padding-bottom: 72px !important;
+  }
+
+  .nav-inner {
+    width: calc(100% - 24px) !important;
+  }
+
+  .hero-grid,
+  .feature-grid,
+  .download-grid,
+  .team-grid,
+  .stats-grid,
+  .qr-grid,
+  .footer-grid,
+  .cards-grid,
+  #download .download-grid,
+  .download .download-grid {
+    width: min(100%, 440px) !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .section-heading h1,
+  .section-heading h2 {
+    font-size: clamp(2rem, 11vw, 3.35rem) !important;
+    line-height: 1.06 !important;
+  }
+
+  .qr-placeholder {
+    width: 210px !important;
+    height: 210px !important;
+  }
+
+  .qr-placeholder img,
+  .download-card img,
+  .qr-card img {
+    width: 176px !important;
+    height: 176px !important;
+  }
+
+  footer,
+  .footer {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+
+/* FINAL SECTION CENTERING FIX */
+section,
+.section {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
+
+section > *,
+.section > * {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+section .section-heading,
+.section .section-heading {
+  width: min(100%, 900px) !important;
+  max-width: 900px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+section .section-heading h1,
+section .section-heading h2,
+.section .section-heading h1,
+.section .section-heading h2 {
+  width: 100% !important;
+  max-width: 900px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+/* FAQ exact centering */
+#faq,
+.faq {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 100% !important;
+  text-align: center !important;
+}
+
+#faq .section-heading,
+.faq .section-heading {
+  width: min(100%, 900px) !important;
+  max-width: 900px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+#faq .faq-list,
+.faq .faq-list,
+#faq .accordion,
+.faq .accordion,
+#faq .faq-grid,
+.faq .faq-grid {
+  width: min(100%, 860px) !important;
+  max-width: 860px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+#faq details,
+.faq details,
+#faq .faq-card,
+.faq .faq-card {
+  width: min(100%, 860px) !important;
+  max-width: 860px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: left !important;
+}
+
+/* Footer exact centering and visibility */
+footer,
+.footer {
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+footer > *,
+.footer > * {
+  width: min(100%, 1180px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.footer-grid {
+  width: min(100%, 1180px) !important;
+  max-width: 1180px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  justify-content: center !important;
+  align-items: start !important;
+}
+
+/* Download exact centering */
+#download .download-grid,
+.download .download-grid {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  justify-content: center !important;
+}
+
+/* Mobile */
+@media (max-width: 720px) {
+  section,
+  .section {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  #faq .faq-list,
+  .faq .faq-list,
+  #faq .accordion,
+  .faq .accordion,
+  #faq .faq-grid,
+  .faq .faq-grid,
+  #faq details,
+  .faq details,
+  #faq .faq-card,
+  .faq .faq-card {
+    width: min(100%, 440px) !important;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    text-align: center !important;
+  }
+}
+
+
+/* FINAL HERO CENTERING FIX */
+#home,
+.hero {
+  width: 100% !important;
+  min-height: 100vh !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#home .hero-inner,
+.hero .hero-inner,
+#home .hero-grid,
+.hero .hero-grid {
+  width: min(100%, 1180px) !important;
+  max-width: 1180px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.86fr) !important;
+  gap: clamp(48px, 6vw, 96px) !important;
+  align-items: center !important;
+  justify-content: center !important;
+  justify-items: center !important;
+}
+
+#home .hero-copy,
+.hero .hero-copy,
+#home .hero-content,
+.hero .hero-content {
+  width: min(100%, 620px) !important;
+  max-width: 620px !important;
+  justify-self: start !important;
+}
+
+#home .hero-visual,
+.hero .hero-visual,
+#home .phone-showcase,
+.hero .phone-showcase,
+#home .phone-mockup,
+.hero .phone-mockup {
+  justify-self: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+#home .hero-actions,
+.hero .hero-actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 14px !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+}
+
+#home h1,
+.hero h1 {
+  max-width: 620px !important;
+  line-height: 0.95 !important;
+}
+
+#home p,
+.hero p {
+  max-width: 620px !important;
+}
+
+/* Keep the nav centered and prevent logo text clipping */
+.nav-inner {
+  width: min(100% - 32px, 1220px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.brand,
+.nav-brand {
+  min-width: max-content !important;
+  overflow: visible !important;
+}
+
+.brand small,
+.nav-brand small {
+  white-space: nowrap !important;
+}
+
+/* Tablet */
+@media (max-width: 980px) {
+  #home,
+  .hero {
+    padding-top: 130px !important;
+    min-height: auto !important;
+  }
+
+  #home .hero-inner,
+  .hero .hero-inner,
+  #home .hero-grid,
+  .hero .hero-grid {
+    grid-template-columns: 1fr !important;
+    width: min(100%, 760px) !important;
+    gap: 42px !important;
+    text-align: center !important;
+  }
+
+  #home .hero-copy,
+  .hero .hero-copy,
+  #home .hero-content,
+  .hero .hero-content {
+    justify-self: center !important;
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  #home .hero-actions,
+  .hero .hero-actions {
+    justify-content: center !important;
+  }
+}
+
+/* Phone */
+@media (max-width: 640px) {
+  #home,
+  .hero {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-top: 120px !important;
+  }
+
+  #home .hero-inner,
+  .hero .hero-inner,
+  #home .hero-grid,
+  .hero .hero-grid {
+    width: min(100%, 420px) !important;
+  }
+
+  #home .hero-actions .btn,
+  .hero .hero-actions .btn {
+    width: 100% !important;
+  }
+}
+
+
+/* FINAL NAV OVERLAP FIX */
+:root {
+  --nav-safe-top: clamp(118px, 10vw, 150px);
+}
+
+html {
+  scroll-padding-top: var(--nav-safe-top) !important;
+}
+
+body {
+  padding-top: 0 !important;
+}
+
+main {
+  padding-top: 0 !important;
+}
+
+/* Keep floating nav above content but stop content from hiding under it */
+.nav,
+.site-nav,
+header {
+  z-index: 9999 !important;
+}
+
+#home,
+.hero {
+  padding-top: var(--nav-safe-top) !important;
+  min-height: 100vh !important;
+}
+
+section,
+.section {
+  scroll-margin-top: var(--nav-safe-top) !important;
+}
+
+/* When navigating to sections, leave clearance below navbar */
+#features,
+#how-it-works,
+#guide-mode,
+#mission,
+#team,
+#download,
+#faq {
+  padding-top: var(--nav-safe-top) !important;
+}
+
+/* Fix narrow/fullscreen browser preview where the nav wraps or clips brand text */
+.nav-inner {
+  min-height: 70px !important;
+  overflow: visible !important;
+}
+
+.brand,
+.nav-brand {
+  flex: 0 0 auto !important;
+  max-width: none !important;
+  overflow: visible !important;
+}
+
+.brand small,
+.nav-brand small {
+  white-space: nowrap !important;
+}
+
+/* Tablet and small preview widths */
+@media (max-width: 980px) {
+  :root {
+    --nav-safe-top: 132px;
+  }
+
+  #home,
+  .hero {
+    padding-top: var(--nav-safe-top) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --nav-safe-top: 148px;
+  }
+
+  .nav-inner {
+    min-height: 76px !important;
+  }
+}
+
+
+/* FINAL NAV HAMBURGER BREAKPOINT FIX */
+@media (max-width: 1280px) {
+  .nav-inner {
+    width: min(100% - 28px, 1040px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 14px !important;
+    overflow: visible !important;
+  }
+
+  .brand,
+  .nav-brand {
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+    max-width: 260px !important;
+  }
+
+  .brand small,
+  .nav-brand small {
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 220px !important;
+  }
+
+  .nav-links {
+    display: none !important;
+  }
+
+  .menu-toggle,
+  .nav-toggle,
+  .mobile-menu-toggle,
+  .hamburger,
+  [data-menu-toggle] {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 auto !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 14px !important;
+    cursor: pointer !important;
+  }
+
+  .theme-select,
+  .theme-control,
+  .theme-picker {
+    flex: 0 0 auto !important;
+    max-width: 190px !important;
+  }
+}
+
+/* Open mobile menu as a centered dropdown */
+@media (max-width: 1280px) {
+  .nav-links.is-open,
+  .nav-links.open,
+  .nav-links.active,
+  .nav-links[data-open="true"],
+  body.menu-open .nav-links,
+  body.nav-open .nav-links {
+    display: flex !important;
+    position: absolute !important;
+    top: calc(100% + 12px) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: min(100vw - 32px, 420px) !important;
+    padding: 16px !important;
+    border-radius: 24px !important;
+    background: var(--card, #ffffff) !important;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.18) !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    z-index: 10000 !important;
+  }
+
+  .nav-links.is-open a,
+  .nav-links.open a,
+  .nav-links.active a,
+  .nav-links[data-open="true"] a,
+  body.menu-open .nav-links a,
+  body.nav-open .nav-links a {
+    width: 100% !important;
+    padding: 12px 14px !important;
+    border-radius: 14px !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+}
+
+@media (min-width: 1281px) {
+  .menu-toggle,
+  .nav-toggle,
+  .mobile-menu-toggle,
+  .hamburger,
+  [data-menu-toggle] {
+    display: none !important;
+  }
+
+  .nav-links {
+    display: flex !important;
+  }
+}
+
+
+/* FINAL ALWAYS-HAMBURGER NAV FIX */
+.nav,
+.site-nav,
+header {
+  z-index: 9999 !important;
+}
+
+.nav-inner {
+  width: min(100% - 28px, 1220px) !important;
+  max-width: 1220px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
+  overflow: visible !important;
+}
+
+.brand,
+.nav-brand {
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  max-width: min(42vw, 360px) !important;
+  overflow: hidden !important;
+}
+
+.brand small,
+.nav-brand small {
+  display: block !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Hide full desktop links permanently to stop overflow */
+.nav-links {
+  display: none !important;
+}
+
+/* Always show the hamburger/menu button */
+.menu-toggle,
+.nav-toggle,
+.mobile-menu-toggle,
+.hamburger,
+[data-menu-toggle] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  width: 46px !important;
+  height: 46px !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(120, 28, 65, 0.18) !important;
+  background: rgba(255, 255, 255, 0.82) !important;
+  color: currentColor !important;
+  cursor: pointer !important;
+}
+
+/* Open menu dropdown */
+.nav-links.is-open,
+.nav-links.open,
+.nav-links.active,
+.nav-links[data-open="true"],
+body.menu-open .nav-links,
+body.nav-open .nav-links {
+  display: flex !important;
+  position: absolute !important;
+  top: calc(100% + 12px) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: min(100vw - 32px, 440px) !important;
+  padding: 16px !important;
+  border-radius: 24px !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.18) !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  gap: 8px !important;
+  z-index: 10000 !important;
+}
+
+.nav-links.is-open a,
+.nav-links.open a,
+.nav-links.active a,
+.nav-links[data-open="true"] a,
+body.menu-open .nav-links a,
+body.nav-open .nav-links a {
+  width: 100% !important;
+  padding: 13px 14px !important;
+  border-radius: 14px !important;
+  text-align: center !important;
+  white-space: normal !important;
+}
+
+/* Keep theme selector from forcing nav overflow */
+.theme-select,
+.theme-control,
+.theme-picker {
+  flex: 0 0 auto !important;
+  max-width: min(38vw, 200px) !important;
+}
+
+/* Give hero enough space below floating navbar */
+:root {
+  --nav-safe-top: clamp(124px, 10vw, 160px);
+}
+
+html {
+  scroll-padding-top: var(--nav-safe-top) !important;
+}
+
+#home,
+.hero {
+  padding-top: var(--nav-safe-top) !important;
+}
+
+section,
+.section {
+  scroll-margin-top: var(--nav-safe-top) !important;
+}
