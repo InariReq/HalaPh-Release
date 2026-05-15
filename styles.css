@@ -4783,3 +4783,646 @@ section,
 .section {
   scroll-margin-top: var(--nav-safe-top) !important;
 }
+
+/* === Final dark-mode mobile navigation readability fix === */
+@media (max-width: 900px) {
+  html[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list),
+  body[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list),
+  body.dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list),
+  body.dark-mode :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list),
+  .theme-dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) {
+    background: rgba(7, 18, 36, 0.96) !important;
+    border: 1px solid rgba(146, 190, 255, 0.28) !important;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45) !important;
+    color: #f4f8ff !important;
+    backdrop-filter: blur(22px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(140%) !important;
+  }
+
+  html[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a,
+  body[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a,
+  body.dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a,
+  body.dark-mode :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a,
+  .theme-dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a {
+    color: #f4f8ff !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+    font-weight: 800 !important;
+  }
+
+  html[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:hover,
+  html[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:focus-visible,
+  body[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:hover,
+  body[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:focus-visible,
+  body.dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:hover,
+  body.dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:focus-visible,
+  body.dark-mode :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:hover,
+  body.dark-mode :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:focus-visible,
+  .theme-dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:hover,
+  .theme-dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:focus-visible {
+    color: #5cc8ff !important;
+    background: rgba(92, 200, 255, 0.12) !important;
+    border-radius: 14px !important;
+  }
+}
+
+/* === Final dark-mode mobile navigation readability fix === */
+@media (max-width: 900px) {
+  html[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list),
+  body[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list),
+  body.dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list),
+  body.dark-mode :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list),
+  .theme-dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) {
+    background: rgba(7, 18, 36, 0.96) !important;
+    border: 1px solid rgba(146, 190, 255, 0.28) !important;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45) !important;
+    color: #f4f8ff !important;
+    backdrop-filter: blur(22px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(140%) !important;
+  }
+
+  html[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a,
+  body[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a,
+  body.dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a,
+  body.dark-mode :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a,
+  .theme-dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a {
+    color: #f4f8ff !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+    font-weight: 800 !important;
+  }
+
+  html[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:hover,
+  html[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:focus-visible,
+  body[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:hover,
+  body[data-theme="dark"] :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:focus-visible,
+  body.dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:hover,
+  body.dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:focus-visible,
+  body.dark-mode :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:hover,
+  body.dark-mode :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:focus-visible,
+  .theme-dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:hover,
+  .theme-dark :is(.nav-links, .nav-menu, .mobile-menu, .mobile-nav, .nav-drawer, .menu-panel, .site-menu, .nav-list) a:focus-visible {
+    color: #5cc8ff !important;
+    background: rgba(92, 200, 255, 0.12) !important;
+    border-radius: 14px !important;
+  }
+}
+
+/* === HalaPH final dark mobile menu readability fix === */
+@media (max-width: 900px) {
+  html[data-theme="dark"] .nav-links,
+  html[data-theme="dark"] .nav-links.active,
+  html[data-theme="dark"] .nav-links.open,
+  html[data-theme="dark"] .nav-links.show,
+  html[data-theme="dark"] .navbar .nav-links,
+  html[data-theme="dark"] .mobile-menu,
+  html[data-theme="dark"] .mobile-menu.active,
+  html[data-theme="dark"] .menu-panel,
+  html[data-theme="dark"] .menu-panel.active,
+  html[data-theme="dark"] .nav-drawer,
+  html[data-theme="dark"] .nav-drawer.active,
+  body[data-theme="dark"] .nav-links,
+  body[data-theme="dark"] .nav-links.active,
+  body[data-theme="dark"] .nav-links.open,
+  body[data-theme="dark"] .nav-links.show,
+  body[data-theme="dark"] .navbar .nav-links,
+  body[data-theme="dark"] .mobile-menu,
+  body[data-theme="dark"] .mobile-menu.active,
+  body[data-theme="dark"] .menu-panel,
+  body[data-theme="dark"] .menu-panel.active,
+  body[data-theme="dark"] .nav-drawer,
+  body[data-theme="dark"] .nav-drawer.active,
+  body.dark .nav-links,
+  body.dark .nav-links.active,
+  body.dark .nav-links.open,
+  body.dark .nav-links.show,
+  body.dark .navbar .nav-links,
+  body.dark .mobile-menu,
+  body.dark .mobile-menu.active,
+  body.dark .menu-panel,
+  body.dark .menu-panel.active,
+  body.dark .nav-drawer,
+  body.dark .nav-drawer.active,
+  body.dark-mode .nav-links,
+  body.dark-mode .nav-links.active,
+  body.dark-mode .nav-links.open,
+  body.dark-mode .nav-links.show,
+  body.dark-mode .navbar .nav-links,
+  body.dark-mode .mobile-menu,
+  body.dark-mode .mobile-menu.active,
+  body.dark-mode .menu-panel,
+  body.dark-mode .menu-panel.active,
+  body.dark-mode .nav-drawer,
+  body.dark-mode .nav-drawer.active,
+  .theme-dark .nav-links,
+  .theme-dark .nav-links.active,
+  .theme-dark .nav-links.open,
+  .theme-dark .nav-links.show,
+  .theme-dark .navbar .nav-links,
+  .theme-dark .mobile-menu,
+  .theme-dark .mobile-menu.active,
+  .theme-dark .menu-panel,
+  .theme-dark .menu-panel.active,
+  .theme-dark .nav-drawer,
+  .theme-dark .nav-drawer.active {
+    background: rgba(7, 18, 36, 0.97) !important;
+    border: 1px solid rgba(146, 190, 255, 0.35) !important;
+    box-shadow: 0 26px 80px rgba(0, 0, 0, 0.55) !important;
+    color: #f4f8ff !important;
+    backdrop-filter: blur(22px) saturate(145%) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(145%) !important;
+  }
+
+  html[data-theme="dark"] .nav-links a,
+  body[data-theme="dark"] .nav-links a,
+  body.dark .nav-links a,
+  body.dark-mode .nav-links a,
+  .theme-dark .nav-links a,
+  html[data-theme="dark"] .mobile-menu a,
+  body[data-theme="dark"] .mobile-menu a,
+  body.dark .mobile-menu a,
+  body.dark-mode .mobile-menu a,
+  .theme-dark .mobile-menu a,
+  html[data-theme="dark"] .menu-panel a,
+  body[data-theme="dark"] .menu-panel a,
+  body.dark .menu-panel a,
+  body.dark-mode .menu-panel a,
+  .theme-dark .menu-panel a,
+  html[data-theme="dark"] .nav-drawer a,
+  body[data-theme="dark"] .nav-drawer a,
+  body.dark .nav-drawer a,
+  body.dark-mode .nav-drawer a,
+  .theme-dark .nav-drawer a {
+    color: #f4f8ff !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+    font-weight: 800 !important;
+  }
+
+  html[data-theme="dark"] .nav-links a:hover,
+  html[data-theme="dark"] .nav-links a:focus-visible,
+  body[data-theme="dark"] .nav-links a:hover,
+  body[data-theme="dark"] .nav-links a:focus-visible,
+  body.dark .nav-links a:hover,
+  body.dark .nav-links a:focus-visible,
+  body.dark-mode .nav-links a:hover,
+  body.dark-mode .nav-links a:focus-visible,
+  .theme-dark .nav-links a:hover,
+  .theme-dark .nav-links a:focus-visible {
+    color: #5cc8ff !important;
+    background: rgba(92, 200, 255, 0.14) !important;
+    border-radius: 14px !important;
+  }
+}
+
+/* === HalaPH final dark mobile menu readability fix === */
+@media (max-width: 900px) {
+  html[data-theme="dark"] .nav-links,
+  html[data-theme="dark"] .nav-links.active,
+  html[data-theme="dark"] .nav-links.show,
+  body[data-theme="dark"] .nav-links,
+  body[data-theme="dark"] .nav-links.active,
+  body[data-theme="dark"] .nav-links.show,
+  body.dark .nav-links,
+  body.dark .nav-links.active,
+  body.dark .nav-links.show,
+  body.dark-mode .nav-links,
+  body.dark-mode .nav-links.active,
+  body.dark-mode .nav-links.show {
+    background: rgba(7, 18, 36, 0.98) !important;
+    border: 1px solid rgba(146, 190, 255, 0.35) !important;
+    box-shadow: 0 26px 80px rgba(0, 0, 0, 0.55) !important;
+  }
+
+  html[data-theme="dark"] .nav-links a,
+  body[data-theme="dark"] .nav-links a,
+  body.dark .nav-links a,
+  body.dark-mode .nav-links a {
+    color: #f4f8ff !important;
+    opacity: 1 !important;
+    font-weight: 800 !important;
+    text-shadow: none !important;
+  }
+
+  html[data-theme="dark"] .nav-links a:hover,
+  html[data-theme="dark"] .nav-links a:focus-visible,
+  body[data-theme="dark"] .nav-links a:hover,
+  body[data-theme="dark"] .nav-links a:focus-visible,
+  body.dark .nav-links a:hover,
+  body.dark .nav-links a:focus-visible,
+  body.dark-mode .nav-links a:hover,
+  body.dark-mode .nav-links a:focus-visible {
+    color: #5cc8ff !important;
+    background: rgba(92, 200, 255, 0.14) !important;
+    border-radius: 14px !important;
+  }
+}
+
+
+/* === HalaPH SAVED FINAL NAV AND ALIGNMENT FIX 20260515 === */
+:root {
+  --showcase-container: min(100% - clamp(32px, 5vw, 96px), 1180px);
+  --showcase-nav-offset: clamp(86px, 9vw, 112px);
+}
+
+html {
+  overflow-x: clip;
+  scroll-padding-top: var(--showcase-nav-offset) !important;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.site-header {
+  width: var(--showcase-container) !important;
+  max-width: 1180px !important;
+  margin-inline: auto !important;
+  border-color: var(--line) !important;
+  overflow: visible !important;
+}
+
+.section-inner,
+.container {
+  width: var(--showcase-container) !important;
+  max-width: 1180px !important;
+  margin-inline: auto !important;
+}
+
+.section,
+section {
+  scroll-margin-top: var(--showcase-nav-offset) !important;
+}
+
+.section-heading {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.hero {
+  display: grid !important;
+  min-height: clamp(700px, calc(100vh - 20px), 860px) !important;
+  padding-top: clamp(112px, 11vw, 150px) !important;
+  align-items: center !important;
+}
+
+.hero-grid {
+  width: var(--showcase-container) !important;
+  max-width: 1180px !important;
+  margin-inline: auto !important;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 420px) !important;
+  gap: clamp(36px, 6vw, 76px) !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.hero-copy {
+  width: min(100%, 650px) !important;
+  justify-self: end !important;
+  min-width: 0 !important;
+}
+
+.hero-copy h1,
+.hero-copy p,
+.hero-subtitle,
+.hero-pitch {
+  max-width: 650px !important;
+}
+
+.hero-actions,
+.hero-proof {
+  justify-content: flex-start !important;
+}
+
+.phone-showcase {
+  width: min(100%, 420px) !important;
+  max-width: 420px !important;
+  justify-self: start !important;
+  margin-inline: 0 !important;
+}
+
+.phone-frame {
+  width: min(365px, 100%) !important;
+  margin-inline: auto !important;
+}
+
+.feature-grid,
+.pain-grid,
+.values-grid,
+.download-grid,
+.trust-grid,
+.team-grid,
+.faq-list,
+.team-carousel,
+.contribution-summary,
+.contact-strip,
+.install-steps,
+.footer-grid {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto !important;
+}
+
+.download-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.faq-list {
+  max-width: 920px !important;
+}
+
+.site-footer {
+  overflow-x: clip;
+}
+
+.site-footer nav,
+.footer-brand {
+  justify-content: center;
+}
+
+@media (min-width: 1161px) {
+  .site-header {
+    flex-wrap: nowrap !important;
+  }
+
+  .brand {
+    flex: 1 1 260px !important;
+    min-width: 0 !important;
+    max-width: 360px !important;
+  }
+
+  .brand small {
+    max-width: 100% !important;
+  }
+
+  .theme-picker {
+    flex: 0 0 auto !important;
+    max-width: none !important;
+  }
+
+  .nav-toggle {
+    display: none !important;
+  }
+
+  .nav-links,
+  .nav-links.open,
+  body.nav-open .nav-links {
+    position: static !important;
+    display: flex !important;
+    width: auto !important;
+    max-width: none !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+    flex: 1 1 auto !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 4px !important;
+  }
+
+  .nav-links a {
+    width: auto !important;
+    padding: 10px clamp(8px, 0.8vw, 12px) !important;
+    color: var(--nav-text) !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+  }
+
+  .nav-links a:hover,
+  .nav-links a:focus-visible {
+    color: var(--blue-700) !important;
+    background: var(--blue-100) !important;
+  }
+}
+
+@media (max-width: 1160px) {
+  :root {
+    --showcase-container: min(100% - clamp(28px, 5vw, 56px), 920px);
+    --showcase-nav-offset: clamp(116px, 13vw, 150px);
+  }
+
+  .site-header {
+    width: min(100% - 28px, 920px) !important;
+    flex-wrap: wrap !important;
+    border-radius: 24px !important;
+  }
+
+  .brand {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    max-width: min(58vw, 360px) !important;
+  }
+
+  .brand small {
+    max-width: 100% !important;
+  }
+
+  .theme-picker {
+    flex: 0 0 auto !important;
+    max-width: none !important;
+  }
+
+  .nav-toggle {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 46px !important;
+    width: 46px !important;
+    height: 46px !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 16px !important;
+    background: var(--blue-100) !important;
+    box-shadow: none !important;
+  }
+
+  .nav-toggle span {
+    background: var(--blue-700) !important;
+  }
+
+  .nav-links {
+    position: absolute !important;
+    top: calc(100% + 12px) !important;
+    left: 50% !important;
+    right: auto !important;
+    display: none !important;
+    width: min(calc(100vw - 32px), 440px) !important;
+    padding: 14px !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 24px !important;
+    background: rgba(var(--surface-rgb), 0.98) !important;
+    box-shadow: var(--shadow) !important;
+    transform: translateX(-50%) !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    z-index: 10000 !important;
+    backdrop-filter: blur(22px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(140%) !important;
+  }
+
+  .nav-links.open,
+  body.nav-open .nav-links {
+    display: flex !important;
+  }
+
+  .nav-links a,
+  .nav-links.open a,
+  body.nav-open .nav-links a {
+    width: 100% !important;
+    padding: 13px 14px !important;
+    border-radius: 14px !important;
+    color: var(--nav-text) !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+
+  .nav-links a:hover,
+  .nav-links a:focus-visible {
+    color: var(--blue-700) !important;
+    background: var(--blue-100) !important;
+  }
+
+  html[data-theme="dark"] .nav-links,
+  html[data-theme="dark"] .nav-links.open,
+  html[data-theme="dark"] body.nav-open .nav-links {
+    border-color: rgba(146, 190, 255, 0.36) !important;
+    background: rgba(7, 18, 36, 0.98) !important;
+    color: #f4f8ff !important;
+    box-shadow: 0 26px 80px rgba(0, 0, 0, 0.55) !important;
+  }
+
+  html[data-theme="dark"] .nav-links a,
+  html[data-theme="dark"] .nav-links.open a,
+  html[data-theme="dark"] body.nav-open .nav-links a {
+    color: #f4f8ff !important;
+  }
+
+  html[data-theme="dark"] .nav-links a:hover,
+  html[data-theme="dark"] .nav-links a:focus-visible {
+    color: #dff4ff !important;
+    background: rgba(92, 200, 255, 0.18) !important;
+    outline-color: rgba(92, 200, 255, 0.42) !important;
+  }
+
+  .hero {
+    min-height: auto !important;
+    padding-top: clamp(128px, 15vw, 168px) !important;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    width: min(100%, 760px) !important;
+    gap: clamp(34px, 7vw, 52px) !important;
+    text-align: center !important;
+  }
+
+  .hero-copy,
+  .phone-showcase {
+    justify-self: center !important;
+    margin-inline: auto !important;
+  }
+
+  .hero-actions,
+  .hero-proof {
+    justify-content: center !important;
+  }
+
+  .download-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 780px) {
+  :root {
+    --showcase-container: min(100% - 28px, 620px);
+    --showcase-nav-offset: 152px;
+  }
+
+  .site-header {
+    width: calc(100% - 20px) !important;
+    gap: 10px !important;
+  }
+
+  .theme-picker {
+    order: 3;
+    width: 100%;
+  }
+
+  .theme-trigger {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .brand small {
+    max-width: 180px !important;
+  }
+
+  .section {
+    padding-block: clamp(64px, 12vw, 78px) !important;
+  }
+
+  .hero {
+    padding-top: 150px !important;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(3rem, 17vw, 4.8rem) !important;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1.05rem, 4.8vw, 1.35rem) !important;
+  }
+
+  .download-grid,
+  .feature-grid,
+  .pain-grid,
+  .values-grid,
+  .trust-grid,
+  .team-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .footer-grid {
+    text-align: center;
+  }
+}
+
+@media (max-width: 430px) {
+  :root {
+    --showcase-container: min(100% - 24px, 390px);
+  }
+
+  .brand {
+    max-width: calc(100% - 62px) !important;
+  }
+
+  .brand small {
+    max-width: 150px !important;
+  }
+
+  .hero-actions .btn {
+    width: 100% !important;
+  }
+
+  .hero-proof {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .hero-proof span {
+    width: 100%;
+  }
+
+  .phone-frame {
+    border-radius: 34px;
+    padding: 12px;
+  }
+
+  .app-preview {
+    padding: 14px;
+  }
+}
