@@ -128,7 +128,7 @@ const teamMembers = [
     photo: "assets/team/john-jian-carlos.jpg",
     image: "assets/team/john-jian-carlos.jpg",
     imageUrl: "assets/team/john-jian-carlos.jpg",
-    summary: "Overall head of TripLine PH. Responsible for strategic planning, team coordination, progress monitoring, decision-making, and ensuring that the business proposal and HalaPH application meet the project objectives.",
+    summary: "Served as the overall head of TripLine PH. Guided the project direction, coordinated major decisions, monitored team progress, and helped keep the business proposal, HalaPH app, and presentation outputs aligned with the project objectives.",
     contributions: [
       "Led group coordination, project direction, task assignment, member progress checking, and final preparation support.",
       "Supported business proposal decisions, API-related coordination, major paperwork responsibilities, printing, and physical submission preparation.",
@@ -145,7 +145,7 @@ const teamMembers = [
     photo: "assets/team/fritzver-valdueza.jpg",
     image: "assets/team/fritzver-valdueza.jpg",
     imageUrl: "assets/team/fritzver-valdueza.jpg",
-    summary: "Responsible for day-to-day operations and documentation work. Oversees workflow, coordinates members, monitors deadlines, and maintains the quality of project documents. Also helped with and appeared in the advertisement video.",
+    summary: "Managed day-to-day coordination, documentation flow, task follow-ups, and deadline tracking. Helped organize team responsibilities, supported communication between members, and contributed to advertisement video production and presentation preparation.",
     contributions: [
       "Led documentation work, organized written outputs, managed project files, and supported operations planning for the business proposal.",
       "Checked paper structure, formatting, completeness, consistency, and written materials for submission and presentation.",
@@ -163,16 +163,15 @@ const teamMembers = [
     photo: "assets/team/cheong-jia-le.jpg",
     image: "assets/team/cheong-jia-le.jpg",
     imageUrl: "assets/team/cheong-jia-le.jpg",
-    summary: "Leads the development of the HalaPH mobile application using Flutter and Dart. Handles system architecture, feature implementation, integration, testing, admin system support, APK release flow, and app reliability.",
+    summary: "Led the technical side of HalaPH and handled the app development work using Flutter and Dart. Built and refined the mobile app, Firebase and Firestore integration, routing features, featured places system, advertisement tools, admin dashboard support, APK release flow, website deployment support, testing, debugging, and production-ready fixes.",
     contributions: [
-      "Led full Flutter app development for HalaPH, including Home, Explore, Favorites, Friends, My Plans, Plan Details, Trip History, Settings, and Guide Mode.",
-      "Built the main commute-planning features, including destination browsing, route planning, fare estimates, search behavior, shared plans, collaboration flows, reminders, and finished-trip history.",
-      "Integrated and debugged Firebase features, including Auth, Cloud Firestore, Firebase Storage, live app data updates, profile handling, friend system fixes, plan banners, and account cleanup improvements.",
-      "Built the admin-to-user system, including App Settings, Featured Places, Admin Locations, Sponsored Cards, Fullscreen Ads, live settings refresh, and role-based admin permissions.",
-      "Handled ad system refinement, including non-intrusive sponsored cards, fullscreen ads after finished trips, X-only fullscreen ad closing, banner ad deprecation, and ad setting controls.",
-      "Updated the showcase release assets, including the Android APK download, APK QR code, site QR code, showcase website copy, download section, FAQ, and release information.",
-      "Ran technical validation, release builds, debugging, Git commits, stable tags, Xcode log checks, Android build checks, Firebase permission checks, and final showcase testing.",
-      "Helped prepare, review, and improve the final paper."
+      "Technical Development: Handled the development of the HalaPH mobile application using Flutter and Dart.",
+      "App Features: Built and refined route guidance, trip planning, collaboration flows, favorites, profiles, guide mode, account tools, and polished user interfaces.",
+      "Firebase and Backend Work: Worked on Firebase Authentication, Firestore data flows, Firestore rules, Firebase Storage, profile image syncing, friend systems, shared plans, account cleanup, and real-time data behavior.",
+      "Routes and Places: Improved route-related features, fare support, Google Maps integration, cached destinations, featured places, admin-managed locations, and Explore screen behavior.",
+      "Admin and Monetization Tools: Built and improved the admin dashboard, featured places management, advertisement controls, sponsored card behavior, delete controls, and dashboard statistics.",
+      "Release and Deployment: Handled APK builds, public APK updates, QR/download support, showcase website updates, GitHub Pages deployment, and Firebase admin web deployment.",
+      "Testing and Stability: Ran Dart analyze, Flutter analyze, Flutter tests, release builds, Xcode/iOS checks, Android checks, debugging, and production-ready fixes."
     ]
   },
   {
@@ -184,7 +183,7 @@ const teamMembers = [
     photo: "assets/team/ynna-toh.jpg",
     image: "assets/team/ynna-toh.jpg",
     imageUrl: "assets/team/ynna-toh.jpg",
-    summary: "Creates the overall look and feel of HalaPH. Designs the interface, branding, visual layout, and user experience so the app is easy to use for commuters and travelers. Directed the advertisement video and will lead its editing.",
+    summary: "Led the visual direction of HalaPH. Designed the app's look and feel, interface flow, branding direction, layout decisions, and user experience improvements. Directed the advertisement video and will lead its editing to keep the promotional output consistent with the HalaPH brand.",
     contributions: [
       "Led main design direction, UI/UX planning, visual layout support, color and presentation design discussions, and user-facing design improvements.",
       "Made the tarpaulin design for the showcase booth and made the brochure design and layout for the project presentation.",
@@ -527,3 +526,225 @@ function initThemeDropdown() {
 }
 
 document.addEventListener("DOMContentLoaded", initThemeDropdown);
+
+// HalaPH replayable scroll and slide animations 20260515 START
+(() => {
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  const revealSelectors = [
+    ".hero-copy",
+    ".hero-content",
+    ".hero-text",
+    ".hero-visual",
+    ".phone-mockup",
+    ".phone",
+    ".section-header",
+    ".section-heading",
+    ".feature-card",
+    ".card",
+    ".step-card",
+    ".workflow-card",
+    ".route-step",
+    ".mission-card",
+    ".vision-card",
+    ".team-card",
+    ".member-card",
+    ".contribution-card",
+    ".download-card",
+    ".apk-qr",
+    ".faq-card",
+    ".footer-inner"
+  ];
+
+  const slideScopes = [
+    ".team-carousel",
+    ".members-carousel",
+    ".carousel",
+    ".team-section",
+    ".team",
+    "[data-carousel]"
+  ];
+
+  let revealObserver = null;
+
+  function isInsideNav(element) {
+    return Boolean(element.closest(".nav-links, [data-nav], header, .site-header, .navbar"));
+  }
+
+  function markRevealElements() {
+    const elements = Array.from(document.querySelectorAll(revealSelectors.join(",")))
+      .filter((element) => !isInsideNav(element))
+      .filter((element) => !element.classList.contains("hala-reveal-opt-out"));
+
+    elements.forEach((element, index) => {
+      element.classList.add("hala-reveal");
+
+      if (
+        element.matches(".hero-visual, .phone-mockup, .phone") ||
+        element.closest(".hero-visual")
+      ) {
+        element.classList.add("reveal-right");
+      } else if (
+        element.matches(".hero-copy, .hero-content, .hero-text")
+      ) {
+        element.classList.add("reveal-left");
+      }
+
+      const delay = Math.min((index % 5) * 55, 220);
+      element.style.setProperty("--reveal-delay", `${delay}ms`);
+    });
+
+    return elements;
+  }
+
+  function elementIsInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    const height = window.innerHeight || document.documentElement.clientHeight;
+
+    return rect.top < height * 0.86 && rect.bottom > height * 0.12;
+  }
+
+  function initRevealAnimations() {
+    const elements = markRevealElements();
+
+    if (reducedMotion.matches) {
+      elements.forEach((element) => element.classList.add("is-visible"));
+      return;
+    }
+
+    if (revealObserver) {
+      revealObserver.disconnect();
+    }
+
+    revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.08) {
+            entry.target.classList.add("is-visible");
+          } else if (!entry.isIntersecting) {
+            entry.target.classList.remove("is-visible");
+          }
+        });
+      },
+      {
+        threshold: [0, 0.08, 0.18, 0.32],
+        rootMargin: "-6% 0px -8% 0px"
+      }
+    );
+
+    elements.forEach((element) => {
+      revealObserver.observe(element);
+
+      if (elementIsInViewport(element)) {
+        element.classList.add("is-visible");
+      }
+    });
+  }
+
+  function closestSlideScope(element) {
+    return element.closest(slideScopes.join(","));
+  }
+
+  function inferDirection(trigger) {
+    const aria = trigger.getAttribute("aria-label") || "";
+    const title = trigger.getAttribute("title") || "";
+    const text = trigger.textContent || "";
+    const className =
+      typeof trigger.className === "string" ? trigger.className : "";
+
+    const label = `${aria} ${title} ${text} ${className}`.toLowerCase();
+
+    if (
+      label.includes("prev") ||
+      label.includes("previous") ||
+      label.includes("back") ||
+      label.includes("left") ||
+      label.includes("‹") ||
+      label.includes("←")
+    ) {
+      return "prev";
+    }
+
+    return "next";
+  }
+
+  function replaySlideAnimation(scope, direction = "next") {
+    if (!scope || reducedMotion.matches) return;
+
+    scope.classList.add("hala-slide-scope");
+    scope.classList.remove(
+      "hala-slide-animating",
+      "hala-slide-next",
+      "hala-slide-prev"
+    );
+
+    void scope.offsetWidth;
+
+    scope.classList.add(
+      "hala-slide-animating",
+      direction === "prev" ? "hala-slide-prev" : "hala-slide-next"
+    );
+
+    window.clearTimeout(scope.__halaSlideTimer);
+    scope.__halaSlideTimer = window.setTimeout(() => {
+      scope.classList.remove(
+        "hala-slide-animating",
+        "hala-slide-next",
+        "hala-slide-prev"
+      );
+    }, 620);
+  }
+
+  function initSlideAnimations() {
+    document.addEventListener(
+      "click",
+      (event) => {
+        const trigger = event.target.closest(
+          "button, [role='button'], .carousel-arrow, .carousel-dot, .team-arrow"
+        );
+
+        if (!trigger) return;
+
+        const scope = closestSlideScope(trigger);
+        if (!scope) return;
+
+        replaySlideAnimation(scope, inferDirection(trigger));
+      },
+      true
+    );
+
+    const scopes = Array.from(document.querySelectorAll(slideScopes.join(",")));
+
+    scopes.forEach((scope) => {
+      scope.classList.add("hala-slide-scope");
+
+      const observer = new MutationObserver(() => {
+        replaySlideAnimation(scope, "next");
+      });
+
+      observer.observe(scope, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
+    });
+  }
+
+  function initHalaMotion() {
+    initRevealAnimations();
+    initSlideAnimations();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initHalaMotion);
+  } else {
+    initHalaMotion();
+  }
+
+  window.addEventListener("load", () => {
+    window.setTimeout(initRevealAnimations, 150);
+  });
+
+  reducedMotion.addEventListener?.("change", initRevealAnimations);
+})();
+// HalaPH replayable scroll and slide animations 20260515 END

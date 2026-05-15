@@ -6481,3 +6481,102 @@ html[data-theme="dark"] .theme-panel .theme-option:focus-visible {
     transition: none;
   }
 }
+
+/* === HalaPH REPLAYABLE SCROLL AND SLIDE ANIMATIONS 20260515 START === */
+:root {
+  --hala-motion-fast: 420ms;
+  --hala-motion-main: 680ms;
+  --hala-motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hala-reveal {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0) scale(0.985);
+  filter: blur(4px);
+  transition:
+    opacity var(--hala-motion-main) var(--hala-motion-ease),
+    transform var(--hala-motion-main) var(--hala-motion-ease),
+    filter var(--hala-motion-main) var(--hala-motion-ease);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform, filter;
+}
+
+.hala-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0);
+}
+
+.hala-reveal.reveal-left {
+  transform: translate3d(-28px, 0, 0) scale(0.985);
+}
+
+.hala-reveal.reveal-right {
+  transform: translate3d(28px, 0, 0) scale(0.985);
+}
+
+.hala-reveal.reveal-left.is-visible,
+.hala-reveal.reveal-right.is-visible {
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.hala-slide-scope {
+  transform-origin: center;
+}
+
+.hala-slide-scope.hala-slide-animating {
+  animation-duration: 520ms;
+  animation-timing-function: var(--hala-motion-ease);
+  animation-fill-mode: both;
+}
+
+.hala-slide-scope.hala-slide-next {
+  animation-name: halaSlideNext;
+}
+
+.hala-slide-scope.hala-slide-prev {
+  animation-name: halaSlidePrev;
+}
+
+@keyframes halaSlideNext {
+  from {
+    opacity: 0.25;
+    transform: translate3d(34px, 0, 0) scale(0.985);
+    filter: blur(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes halaSlidePrev {
+  from {
+    opacity: 0.25;
+    transform: translate3d(-34px, 0, 0) scale(0.985);
+    filter: blur(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hala-reveal,
+  .hala-reveal.is-visible,
+  .hala-reveal.reveal-left,
+  .hala-reveal.reveal-right,
+  .hala-slide-scope.hala-slide-animating {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+/* === HalaPH REPLAYABLE SCROLL AND SLIDE ANIMATIONS 20260515 END === */
