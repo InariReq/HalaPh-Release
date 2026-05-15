@@ -120,6 +120,7 @@
 
 const teamMembers = [
   {
+    department: "Leadership",
     name: "Carlos, John Jian S.",
     role: "General Manager",
     category: "Leadership",
@@ -127,7 +128,7 @@ const teamMembers = [
     photo: "assets/team/john-jian-carlos.jpg",
     image: "assets/team/john-jian-carlos.jpg",
     imageUrl: "assets/team/john-jian-carlos.jpg",
-    summary: "Served as General Manager and overall group leader for TripLine PH.",
+    summary: "Overall head of TripLine PH. Responsible for strategic planning, team coordination, progress monitoring, decision-making, and ensuring that the business proposal and HalaPH application meet the project objectives.",
     contributions: [
       "Led group coordination, project direction, task assignment, member progress checking, and final preparation support.",
       "Supported business proposal decisions, API-related coordination, major paperwork responsibilities, printing, and physical submission preparation.",
@@ -136,6 +137,25 @@ const teamMembers = [
     ]
   },
   {
+    department: "Operations",
+    name: "Valdueza, Fritzver Ezra D.",
+    role: "Assistant Manager",
+    category: "Operations",
+    initials: "FV",
+    photo: "assets/team/fritzver-valdueza.jpg",
+    image: "assets/team/fritzver-valdueza.jpg",
+    imageUrl: "assets/team/fritzver-valdueza.jpg",
+    summary: "Responsible for day-to-day operations and documentation work. Oversees workflow, coordinates members, monitors deadlines, and maintains the quality of project documents. Also helped with and appeared in the advertisement video.",
+    contributions: [
+      "Led documentation work, organized written outputs, managed project files, and supported operations planning for the business proposal.",
+      "Checked paper structure, formatting, completeness, consistency, and written materials for submission and presentation.",
+      "Coordinated documentation needs with research and presentation requirements.",
+      "Helped prepare, review, and improve the final paper.",
+      "Helped with and appeared in the advertisement video."
+    ]
+  },
+  {
+    department: "Development",
     name: "Cheong, Jerald Jia Le D.",
     role: "Technical Lead / Senior App Developer",
     category: "Development",
@@ -143,7 +163,7 @@ const teamMembers = [
     photo: "assets/team/cheong-jia-le.jpg",
     image: "assets/team/cheong-jia-le.jpg",
     imageUrl: "assets/team/cheong-jia-le.jpg",
-    summary: "Served as Technical Lead and Senior App Developer, leading the working HalaPH app, admin system integration, APK release, QR download flow, and showcase website updates.",
+    summary: "Leads the development of the HalaPH mobile application using Flutter and Dart. Handles system architecture, feature implementation, integration, testing, admin system support, APK release flow, and app reliability.",
     contributions: [
       "Led full Flutter app development for HalaPH, including Home, Explore, Favorites, Friends, My Plans, Plan Details, Trip History, Settings, and Guide Mode.",
       "Built the main commute-planning features, including destination browsing, route planning, fare estimates, search behavior, shared plans, collaboration flows, reminders, and finished-trip history.",
@@ -156,6 +176,7 @@ const teamMembers = [
     ]
   },
   {
+    department: "Design",
     name: "Toh, Ynna Marie S.",
     role: "Main Designer / UI/UX Designer",
     category: "Design",
@@ -163,7 +184,7 @@ const teamMembers = [
     photo: "assets/team/ynna-toh.jpg",
     image: "assets/team/ynna-toh.jpg",
     imageUrl: "assets/team/ynna-toh.jpg",
-    summary: "Served as Main Designer and UI/UX Designer for the project. Directed the advertisement video and will lead its editing.",
+    summary: "Creates the overall look and feel of HalaPH. Designs the interface, branding, visual layout, and user experience so the app is easy to use for commuters and travelers. Directed the advertisement video and will lead its editing.",
     contributions: [
       "Led main design direction, UI/UX planning, visual layout support, color and presentation design discussions, and user-facing design improvements.",
       "Made the tarpaulin design for the showcase booth and made the brochure design and layout for the project presentation.",
@@ -173,106 +194,7 @@ const teamMembers = [
     ]
   },
   {
-    name: "Valdueza, Fritzver Ezra D.",
-    role: "Operations Manager / Documentation Lead",
-    category: "Operations",
-    initials: "FV",
-    photo: "assets/team/fritzver-valdueza.jpg",
-    image: "assets/team/fritzver-valdueza.jpg",
-    imageUrl: "assets/team/fritzver-valdueza.jpg",
-    summary: "Served as Operations Manager and Documentation Lead. Also helped with and appeared in the advertisement video.",
-    contributions: [
-      "Led documentation work, organized written outputs, managed project files, and supported operations planning for the business proposal.",
-      "Checked paper structure, formatting, completeness, consistency, and written materials for submission and presentation.",
-      "Coordinated documentation needs with research and presentation requirements.",
-      "Helped prepare, review, and improve the final paper.",
-      "Helped with and appeared in the advertisement video."
-    ]
-  },
-  {
-    name: "Amad, Ervin Francis S.",
-    role: "Finance Manager",
-    category: "Finance",
-    initials: "EA",
-    photo: "assets/team/ervin-amad.jpg",
-    image: "assets/team/ervin-amad.jpg",
-    imageUrl: "assets/team/ervin-amad.jpg",
-    summary: "Served as Finance Manager for TripLine PH. Also helped with and appeared in the advertisement video.",
-    contributions: [
-      "Led finance planning, cost-related information preparation, budget planning, and business feasibility review.",
-      "Supported pricing, funding, and ad-supported business model discussions for the proposal.",
-      "Worked with the assistant finance role and reviewed finance-related paper sections.",
-      "Helped prepare, review, and improve the final paper.",
-      "Helped with and appeared in the advertisement video."
-    ]
-  },
-  {
-    name: "Encarnacion, Brianna Angela D.",
-    role: "Finance Analyst / Assistant Finance Manager",
-    category: "Finance",
-    initials: "BE",
-    photo: "assets/team/angela-encarnacion.jpg",
-    image: "assets/team/angela-encarnacion.jpg",
-    imageUrl: "assets/team/angela-encarnacion.jpg",
-    summary: "Served as Finance Analyst and Assistant Finance Manager.",
-    contributions: [
-      "Assisted the Finance Manager with finance work, cost review, budget details, and business feasibility analysis.",
-      "Helped organize financial information and check finance-related written content for clarity.",
-      "Supported the business model section through finance-related input and review.",
-      "Helped prepare, review, and improve the final paper."
-    ]
-  },
-  {
-    name: "Salivio, Mariah Dacara D.",
-    role: "Marketing Manager / Booth Design Lead",
-    category: "Marketing",
-    initials: "MS",
-    photo: "assets/team/maraiah-salivio.jpg",
-    image: "assets/team/maraiah-salivio.jpg",
-    imageUrl: "assets/team/maraiah-salivio.jpg",
-    summary: "Served as Marketing Manager and Booth Design Lead.",
-    contributions: [
-      "Led marketing planning, audience positioning, promotional ideas, and how HalaPH should be presented to students and commuters.",
-      "Led booth design planning and helped align booth visuals with the HalaPH brand and app purpose.",
-      "Supported brochure planning, presentation materials, and marketing-related paper review.",
-      "Helped prepare, review, and improve the final paper."
-    ]
-  },
-  {
-    name: "Catubig, Dhustine G.",
-    role: "Advertisement Manager",
-    category: "Advertising",
-    initials: "DC",
-    photo: "assets/team/dhustine-catubig.jpg",
-    image: "assets/team/dhustine-catubig.jpg",
-    imageUrl: "assets/team/dhustine-catubig.jpg",
-    summary: "Served as Advertisement Manager. Also helped with and appeared in the advertisement video.",
-    contributions: [
-      "Led advertisement planning, advertising direction, promotional content ideas, and ad-related showcase preparation.",
-      "Coordinated advertisement-related tasks with advertisement officers and supported promotional material planning.",
-      "Contributed to the ad-supported business concept and reviewed advertising-related paper and presentation details.",
-      "Helped prepare, review, and improve the final paper.",
-      "Helped with and appeared in the advertisement video."
-    ]
-  },
-  {
-    name: "Dela Cruz, Jian B.",
-    role: "Data Analyst",
-    category: "Research",
-    initials: "JD",
-    photo: "assets/team/jian-dela-cruz.png",
-    image: "assets/team/jian-dela-cruz.png",
-    imageUrl: "assets/team/jian-dela-cruz.png",
-    summary: "Served as Data Analyst. Also helped with and appeared in the advertisement video.",
-    contributions: [
-      "Supported data analysis, route-related information review, commuter use case review, and app concept data support.",
-      "Organized data used for proposal support and checked consistency of project information.",
-      "Supported research and documentation with data-related input and proposal review.",
-      "Helped prepare, review, and improve the final paper.",
-      "Helped with and appeared in the advertisement video."
-    ]
-  },
-  {
+    department: "Research",
     name: "Barroga, Ej M.",
     role: "Research Analyst",
     category: "Research",
@@ -280,7 +202,7 @@ const teamMembers = [
     photo: "assets/team/ej-barroga.jpg",
     image: "assets/team/ej-barroga.jpg",
     imageUrl: "assets/team/ej-barroga.jpg",
-    summary: "Served as Research Analyst. Also helped with and appeared in the advertisement video.",
+    summary: "Conducts market research, competitor analysis, and user requirement gathering to support project planning and feature development. Also helped with and appeared in the advertisement video.",
     contributions: [
       "Supported project research, information gathering, commuter and public transport review, and business proposal research sections.",
       "Reviewed research-based content and checked if written content matched project goals.",
@@ -290,23 +212,95 @@ const teamMembers = [
     ]
   },
   {
-    name: "Abilo, Mark Jansen A.",
-    role: "Customer Support Representative",
-    category: "Support",
-    initials: "MA",
-    photo: "assets/team/mark-jansen-abilo.jpg",
-    image: "assets/team/mark-jansen-abilo.jpg",
-    imageUrl: "assets/team/mark-jansen-abilo.jpg",
-    summary: "Served as Customer Support Representative. Also helped with and appeared in the advertisement video.",
+    department: "Data",
+    name: "Dela Cruz, Jian B.",
+    role: "Data Analyst",
+    category: "Research",
+    initials: "JD",
+    photo: "assets/team/jian-dela-cruz.png",
+    image: "assets/team/jian-dela-cruz.png",
+    imageUrl: "assets/team/jian-dela-cruz.png",
+    summary: "Collects, manages, and analyzes transport data such as routes, fare estimates, and destination information to support application accuracy. Also helped with and appeared in the advertisement video.",
     contributions: [
-      "Supported customer support planning, user concern handling, and customer-facing service responsibilities.",
-      "Helped review how users could ask for help, report concerns, and receive service support.",
-      "Assisted with presentation support and customer support-related paper content.",
+      "Supported data analysis, route-related information review, commuter use case review, and app concept data support.",
+      "Organized data used for proposal support and checked consistency of project information.",
+      "Supported research and documentation with data-related input and proposal review.",
       "Helped prepare, review, and improve the final paper.",
       "Helped with and appeared in the advertisement video."
     ]
   },
   {
+    department: "Finance",
+    name: "Amad, Ervin Francis S.",
+    role: "Finance Manager",
+    category: "Finance",
+    initials: "EA",
+    photo: "assets/team/ervin-amad.jpg",
+    image: "assets/team/ervin-amad.jpg",
+    imageUrl: "assets/team/ervin-amad.jpg",
+    summary: "Handles budgeting, capital management, financial projections, expense monitoring, and revenue planning from in-app advertisements. Also helped with and appeared in the advertisement video.",
+    contributions: [
+      "Led finance planning, cost-related information preparation, budget planning, and business feasibility review.",
+      "Supported pricing, funding, and ad-supported business model discussions for the proposal.",
+      "Worked with the assistant finance role and reviewed finance-related paper sections.",
+      "Helped prepare, review, and improve the final paper.",
+      "Helped with and appeared in the advertisement video."
+    ]
+  },
+  {
+    department: "Finance",
+    name: "Encarnacion, Brianna Angela D.",
+    role: "Finance Analyst",
+    category: "Finance",
+    initials: "BE",
+    photo: "assets/team/angela-encarnacion.jpg",
+    image: "assets/team/angela-encarnacion.jpg",
+    imageUrl: "assets/team/angela-encarnacion.jpg",
+    summary: "Tracks expenses, monitors development costs, prepares financial reports, and helps develop budget-friendly features for HalaPH.",
+    contributions: [
+      "Assisted the Finance Manager with finance work, cost review, budget details, and business feasibility analysis.",
+      "Helped organize financial information and check finance-related written content for clarity.",
+      "Supported the business model section through finance-related input and review.",
+      "Helped prepare, review, and improve the final paper."
+    ]
+  },
+  {
+    department: "Marketing",
+    name: "Salivio, Mariah Dacara D.",
+    role: "Marketing Manager",
+    category: "Marketing",
+    initials: "MS",
+    photo: "assets/team/maraiah-salivio.jpg",
+    image: "assets/team/maraiah-salivio.jpg",
+    imageUrl: "assets/team/maraiah-salivio.jpg",
+    summary: "Creates marketing strategies and handles promotional activities for the project.",
+    contributions: [
+      "Led marketing planning, audience positioning, promotional ideas, and how HalaPH should be presented to students and commuters.",
+      "Led booth design planning and helped align booth visuals with the HalaPH brand and app purpose.",
+      "Supported brochure planning, presentation materials, and marketing-related paper review.",
+      "Helped prepare, review, and improve the final paper."
+    ]
+  },
+  {
+    department: "Advertising",
+    name: "Catubig, Dhustine G.",
+    role: "Advertisement Manager",
+    category: "Advertising",
+    initials: "DC",
+    photo: "assets/team/dhustine-catubig.jpg",
+    image: "assets/team/dhustine-catubig.jpg",
+    imageUrl: "assets/team/dhustine-catubig.jpg",
+    summary: "Plans and supervises advertising and promotional campaigns, including in-app advertisements, to reach target users. Also helped with and appeared in the advertisement video.",
+    contributions: [
+      "Led advertisement planning, advertising direction, promotional content ideas, and ad-related showcase preparation.",
+      "Coordinated advertisement-related tasks with advertisement officers and supported promotional material planning.",
+      "Contributed to the ad-supported business concept and reviewed advertising-related paper and presentation details.",
+      "Helped prepare, review, and improve the final paper.",
+      "Helped with and appeared in the advertisement video."
+    ]
+  },
+  {
+    department: "Advertising",
     name: "Alimen, Mark Ian B.",
     role: "Advertisement Officer",
     category: "Advertising",
@@ -314,7 +308,7 @@ const teamMembers = [
     photo: "assets/team/mark-ian-alimen.jpg",
     image: "assets/team/mark-ian-alimen.jpg",
     imageUrl: "assets/team/mark-ian-alimen.jpg",
-    summary: "Served as an Advertisement Officer.",
+    summary: "Creates promotional content, social media materials, advertising designs, and advertisement video support materials to increase awareness of HalaPH.",
     contributions: [
       "Assisted the Advertisement Manager with advertisement tasks, promotional ideas, and showcase advertising preparation.",
       "Supported advertisement video or promotional material planning and ad-related presentation details.",
@@ -323,6 +317,7 @@ const teamMembers = [
     ]
   },
   {
+    department: "Advertising",
     name: "Ewag, Allen P.",
     role: "Advertisement Officer",
     category: "Advertising",
@@ -330,7 +325,7 @@ const teamMembers = [
     photo: "assets/team/allen-ewag.jpg",
     image: "assets/team/allen-ewag.jpg",
     imageUrl: "assets/team/allen-ewag.jpg",
-    summary: "Served as an Advertisement Officer. Also helped with and appeared in the advertisement video.",
+    summary: "Creates promotional content, social media materials, advertising designs, and advertisement video support materials to increase awareness of HalaPH. Also helped with and appeared in the advertisement video.",
     contributions: [
       "Assisted the Advertisement Manager with advertisement tasks, promotional ideas, and showcase advertising preparation.",
       "Supported advertisement video or promotional material planning and ad-related presentation details.",
@@ -338,8 +333,28 @@ const teamMembers = [
       "Helped prepare, review, and improve the final paper.",
       "Helped with and appeared in the advertisement video."
     ]
+  },
+  {
+    department: "Customer Support",
+    name: "Abilo, Mark Jansen A.",
+    role: "Customer Support Representative",
+    category: "Support",
+    initials: "MA",
+    photo: "assets/team/mark-jansen-abilo.jpg",
+    image: "assets/team/mark-jansen-abilo.jpg",
+    imageUrl: "assets/team/mark-jansen-abilo.jpg",
+    summary: "Handles user feedback, concerns about routes, fares, and usability, and collects suggestions to improve the application. Also helped with and appeared in the advertisement video.",
+    contributions: [
+      "Supported customer support planning, user concern handling, and customer-facing service responsibilities.",
+      "Helped review how users could ask for help, report concerns, and receive service support.",
+      "Assisted with presentation support and customer support-related paper content.",
+      "Helped prepare, review, and improve the final paper.",
+      "Helped with and appeared in the advertisement video."
+    ]
   }
-];
+]
+
+const organizationFlow = "General Manager → Assistant Manager → Technical / Design → Research / Data → Finance → Marketing / Ads → Customer Support";;
 
 function initTeamCarousel() {
   const name = document.getElementById("team-member-name");
