@@ -7301,3 +7301,175 @@ body[data-theme="navy"] .step-card {
   color: #f4f7ff !important;
   box-shadow: 0 28px 84px rgba(0, 0, 0, 0.72) !important;
 }
+
+/* === HalaPH final force navy showcase theme === */
+/* Navy must look dark navy, not light mode. */
+
+:root[data-theme="navy"],
+html[data-theme="navy"],
+html[data-theme="navy"] body,
+body[data-theme="navy"],
+body.theme-navy,
+body.navy,
+body.navy-mode,
+body[data-theme="Navy"],
+html[data-theme="Navy"] {
+  --bg: #020714 !important;
+  --page-bg: #020714 !important;
+  --surface: #071426 !important;
+  --surface-bg: #071426 !important;
+  --surface-soft: #0b1d38 !important;
+  --card: #08182d !important;
+  --card-bg: rgba(8, 24, 45, 0.98) !important;
+  --text: #f4f7ff !important;
+  --text-main: #f4f7ff !important;
+  --muted: #b7c4d8 !important;
+  --text-muted: #b7c4d8 !important;
+  --border: rgba(89, 125, 185, 0.24) !important;
+  --card-border: rgba(89, 125, 185, 0.24) !important;
+
+  background: #020714 !important;
+  background-image:
+    radial-gradient(circle at 18% 8%, rgba(30, 64, 130, 0.18), transparent 30rem),
+    linear-gradient(180deg, #020714 0%, #061326 48%, #01040b 100%) !important;
+  color: #f4f7ff !important;
+}
+
+html[data-theme="navy"] *,
+body[data-theme="navy"] *,
+body.theme-navy *,
+body.navy *,
+body.navy-mode * {
+  border-color: rgba(89, 125, 185, 0.24) !important;
+}
+
+html[data-theme="navy"] body,
+body[data-theme="navy"],
+body.theme-navy,
+body.navy,
+body.navy-mode {
+  background: #020714 !important;
+  background-image:
+    radial-gradient(circle at 18% 8%, rgba(30, 64, 130, 0.18), transparent 30rem),
+    linear-gradient(180deg, #020714 0%, #061326 48%, #01040b 100%) !important;
+}
+
+html[data-theme="navy"] main,
+html[data-theme="navy"] .page,
+html[data-theme="navy"] .site,
+html[data-theme="navy"] .site-shell,
+html[data-theme="navy"] .showcase,
+html[data-theme="navy"] .showcase-page,
+html[data-theme="navy"] .hero,
+html[data-theme="navy"] .hero-shell,
+html[data-theme="navy"] .hero-content,
+html[data-theme="navy"] .hero-visual,
+html[data-theme="navy"] section,
+html[data-theme="navy"] .section,
+html[data-theme="navy"] .site-section,
+body[data-theme="navy"] main,
+body[data-theme="navy"] .page,
+body[data-theme="navy"] .site,
+body[data-theme="navy"] .site-shell,
+body[data-theme="navy"] .showcase,
+body[data-theme="navy"] .showcase-page,
+body[data-theme="navy"] .hero,
+body[data-theme="navy"] .hero-shell,
+body[data-theme="navy"] .hero-content,
+body[data-theme="navy"] .hero-visual,
+body[data-theme="navy"] section,
+body[data-theme="navy"] .section,
+body[data-theme="navy"] .site-section {
+  background: transparent !important;
+  color: #f4f7ff !important;
+}
+
+html[data-theme="navy"] .navbar,
+html[data-theme="navy"] .site-header,
+html[data-theme="navy"] .header,
+html[data-theme="navy"] .card,
+html[data-theme="navy"] .panel,
+html[data-theme="navy"] .glass,
+html[data-theme="navy"] .glass-card,
+html[data-theme="navy"] .feature-card,
+html[data-theme="navy"] .route-card,
+html[data-theme="navy"] .preview-card,
+html[data-theme="navy"] .phone-card,
+html[data-theme="navy"] .team-card,
+html[data-theme="navy"] .pricing-card,
+html[data-theme="navy"] .faq-card,
+html[data-theme="navy"] .download-card,
+html[data-theme="navy"] .mission-card,
+html[data-theme="navy"] .spotlight-card,
+html[data-theme="navy"] .timeline-card,
+html[data-theme="navy"] .stat-card,
+html[data-theme="navy"] .step-card,
+html[data-theme="navy"] .mockup,
+html[data-theme="navy"] .phone,
+html[data-theme="navy"] .app-preview,
+body[data-theme="navy"] .navbar,
+body[data-theme="navy"] .site-header,
+body[data-theme="navy"] .header,
+body[data-theme="navy"] .card,
+body[data-theme="navy"] .panel,
+body[data-theme="navy"] .glass,
+body[data-theme="navy"] .glass-card,
+body[data-theme="navy"] .feature-card,
+body[data-theme="navy"] .route-card,
+body[data-theme="navy"] .preview-card,
+body[data-theme="navy"] .phone-card,
+body[data-theme="navy"] .team-card,
+body[data-theme="navy"] .pricing-card,
+body[data-theme="navy"] .faq-card,
+body[data-theme="navy"] .download-card,
+body[data-theme="navy"] .mission-card,
+body[data-theme="navy"] .spotlight-card,
+body[data-theme="navy"] .timeline-card,
+body[data-theme="navy"] .stat-card,
+body[data-theme="navy"] .step-card,
+body[data-theme="navy"] .mockup,
+body[data-theme="navy"] .phone,
+body[data-theme="navy"] .app-preview {
+  background: rgba(8, 24, 45, 0.98) !important;
+  background-image: none !important;
+  color: #f4f7ff !important;
+  box-shadow: 0 28px 84px rgba(0, 0, 0, 0.72) !important;
+}
+
+html[data-theme="navy"] h1,
+html[data-theme="navy"] h2,
+html[data-theme="navy"] h3,
+html[data-theme="navy"] h4,
+html[data-theme="navy"] h5,
+html[data-theme="navy"] h6,
+body[data-theme="navy"] h1,
+body[data-theme="navy"] h2,
+body[data-theme="navy"] h3,
+body[data-theme="navy"] h4,
+body[data-theme="navy"] h5,
+body[data-theme="navy"] h6 {
+  color: #f4f7ff !important;
+}
+
+html[data-theme="navy"] p,
+html[data-theme="navy"] li,
+html[data-theme="navy"] small,
+html[data-theme="navy"] span,
+body[data-theme="navy"] p,
+body[data-theme="navy"] li,
+body[data-theme="navy"] small,
+body[data-theme="navy"] span {
+  color: #b7c4d8 !important;
+}
+
+html[data-theme="navy"] .btn,
+html[data-theme="navy"] button,
+html[data-theme="navy"] .primary-btn,
+html[data-theme="navy"] .download-btn,
+body[data-theme="navy"] .btn,
+body[data-theme="navy"] button,
+body[data-theme="navy"] .primary-btn,
+body[data-theme="navy"] .download-btn {
+  background: linear-gradient(135deg, #174f91, #0a9fbb) !important;
+  color: #ffffff !important;
+}
