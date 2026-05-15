@@ -6862,3 +6862,165 @@ html[data-theme="dark"] .theme-panel .theme-option:focus-visible {
 ) * {
   animation-duration: 0ms !important;
 }
+
+/* === HalaPH theme contrast override === */
+/* Forces Light mode and Navy mode to look clearly different. */
+
+/* LIGHT THEME */
+:root,
+html[data-theme="light"],
+body[data-theme="light"],
+body.light,
+body.light-mode,
+body.theme-light {
+  --page-bg: #f7fbf7;
+  --surface-bg: #ffffff;
+  --surface-soft: #eef7ef;
+  --card-bg: rgba(255, 255, 255, 0.96);
+  --card-border: rgba(31, 88, 48, 0.16);
+  --text-main: #102216;
+  --text-muted: #53645a;
+  --accent-main: #1f8f4d;
+  --accent-soft: rgba(31, 143, 77, 0.12);
+  --shadow-soft: 0 18px 45px rgba(20, 64, 35, 0.12);
+}
+
+/* NAVY THEME */
+html[data-theme="navy"],
+body[data-theme="navy"],
+body.navy,
+body.navy-mode,
+body.theme-navy,
+body.dark,
+body.dark-mode,
+body.theme-dark {
+  --page-bg: #071426;
+  --surface-bg: #0d1f36;
+  --surface-soft: #102943;
+  --card-bg: rgba(13, 31, 54, 0.94);
+  --card-border: rgba(149, 184, 255, 0.18);
+  --text-main: #f3f7ff;
+  --text-muted: #b8c7dc;
+  --accent-main: #66d9e8;
+  --accent-soft: rgba(102, 217, 232, 0.14);
+  --shadow-soft: 0 22px 55px rgba(0, 0, 0, 0.36);
+}
+
+/* Global theme application */
+html,
+body {
+  background: var(--page-bg) !important;
+  color: var(--text-main) !important;
+}
+
+body::before,
+body::after {
+  opacity: 0.72;
+}
+
+section,
+.site-section,
+.hero,
+.navbar,
+.app-shell,
+.panel,
+.card,
+.feature-card,
+.route-card,
+.preview-card,
+.phone-card,
+.team-card,
+.pricing-card,
+.faq-card,
+.glass,
+.glass-card {
+  background-color: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+  color: var(--text-main) !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+
+.navbar,
+.site-header,
+.header {
+  background: color-mix(in srgb, var(--surface-bg) 88%, transparent) !important;
+  border-color: var(--card-border) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.logo,
+.brand,
+.section-title,
+.card-title {
+  color: var(--text-main) !important;
+}
+
+p,
+li,
+span,
+small,
+.eyebrow,
+.subtitle,
+.muted,
+.section-subtitle,
+.card-copy,
+.card-text {
+  color: var(--text-muted) !important;
+}
+
+a,
+.nav-link,
+.link,
+.accent,
+.highlight {
+  color: var(--accent-main) !important;
+}
+
+button,
+.btn,
+.cta,
+.primary-btn,
+.download-btn {
+  background: var(--accent-main) !important;
+  color: #ffffff !important;
+  border-color: var(--accent-main) !important;
+}
+
+.badge,
+.pill,
+.chip,
+.tag {
+  background: var(--accent-soft) !important;
+  color: var(--accent-main) !important;
+  border-color: var(--card-border) !important;
+}
+
+/* Strong visual separation for navy theme */
+html[data-theme="navy"] body,
+body[data-theme="navy"],
+body.navy,
+body.navy-mode,
+body.theme-navy,
+body.dark,
+body.dark-mode,
+body.theme-dark {
+  background:
+    radial-gradient(circle at top left, rgba(102, 217, 232, 0.16), transparent 34rem),
+    linear-gradient(180deg, #071426 0%, #09182b 48%, #050d19 100%) !important;
+}
+
+/* Strong visual separation for light theme */
+html[data-theme="light"] body,
+body[data-theme="light"],
+body.light,
+body.light-mode,
+body.theme-light {
+  background:
+    radial-gradient(circle at top left, rgba(49, 179, 100, 0.13), transparent 34rem),
+    linear-gradient(180deg, #f7fbf7 0%, #ffffff 48%, #eef7ef 100%) !important;
+}
