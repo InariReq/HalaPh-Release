@@ -7066,3 +7066,238 @@ html[data-theme="navy"] .glass-card {
   color: #f5f8ff !important;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.58) !important;
 }
+
+/* === HalaPH GitHub Pages midnight navy override === */
+/* Keeps Navy visually separate from Light mode. */
+html[data-theme="navy"],
+html[data-theme="navy"] body,
+body[data-theme="navy"],
+body.theme-navy,
+body.navy,
+body.navy-mode {
+  --page-bg: #00030b !important;
+  --surface-bg: #030b1c !important;
+  --surface-soft: #06142b !important;
+  --card-bg: rgba(3, 11, 28, 0.98) !important;
+  --card-border: rgba(83, 130, 210, 0.22) !important;
+  --text-main: #f5f8ff !important;
+  --text-muted: #aebfd8 !important;
+  --accent-main: #56d7ea !important;
+  --accent-soft: rgba(86, 215, 234, 0.14) !important;
+  --shadow-soft: 0 26px 80px rgba(0, 0, 0, 0.68) !important;
+
+  background:
+    radial-gradient(circle at 12% 8%, rgba(56, 149, 215, 0.12), transparent 32rem),
+    radial-gradient(circle at 90% 20%, rgba(26, 80, 160, 0.10), transparent 30rem),
+    linear-gradient(180deg, #00030b 0%, #020817 45%, #00020a 100%) !important;
+  color: #f5f8ff !important;
+}
+
+html[data-theme="navy"] body::before,
+html[data-theme="navy"] body::after,
+body[data-theme="navy"]::before,
+body[data-theme="navy"]::after,
+body.theme-navy::before,
+body.theme-navy::after,
+body.navy::before,
+body.navy::after,
+body.navy-mode::before,
+body.navy-mode::after {
+  opacity: 0.22 !important;
+}
+
+html[data-theme="navy"] main,
+html[data-theme="navy"] section,
+html[data-theme="navy"] .site-section,
+html[data-theme="navy"] .hero,
+html[data-theme="navy"] .navbar,
+html[data-theme="navy"] .site-header,
+html[data-theme="navy"] .header,
+html[data-theme="navy"] .panel,
+html[data-theme="navy"] .card,
+html[data-theme="navy"] .feature-card,
+html[data-theme="navy"] .route-card,
+html[data-theme="navy"] .preview-card,
+html[data-theme="navy"] .phone-card,
+html[data-theme="navy"] .team-card,
+html[data-theme="navy"] .pricing-card,
+html[data-theme="navy"] .faq-card,
+html[data-theme="navy"] .glass,
+html[data-theme="navy"] .glass-card,
+html[data-theme="navy"] .download-card,
+html[data-theme="navy"] .mission-card,
+html[data-theme="navy"] .spotlight-card,
+html[data-theme="navy"] .timeline-card,
+html[data-theme="navy"] .stat-card,
+html[data-theme="navy"] .step-card,
+body[data-theme="navy"] main,
+body[data-theme="navy"] section,
+body[data-theme="navy"] .site-section,
+body[data-theme="navy"] .hero,
+body[data-theme="navy"] .navbar,
+body[data-theme="navy"] .site-header,
+body[data-theme="navy"] .header,
+body[data-theme="navy"] .panel,
+body[data-theme="navy"] .card,
+body[data-theme="navy"] .feature-card,
+body[data-theme="navy"] .route-card,
+body[data-theme="navy"] .preview-card,
+body[data-theme="navy"] .phone-card,
+body[data-theme="navy"] .team-card,
+body[data-theme="navy"] .pricing-card,
+body[data-theme="navy"] .faq-card,
+body[data-theme="navy"] .glass,
+body[data-theme="navy"] .glass-card,
+body[data-theme="navy"] .download-card,
+body[data-theme="navy"] .mission-card,
+body[data-theme="navy"] .spotlight-card,
+body[data-theme="navy"] .timeline-card,
+body[data-theme="navy"] .stat-card,
+body[data-theme="navy"] .step-card {
+  background-color: rgba(3, 11, 28, 0.98) !important;
+  border-color: rgba(83, 130, 210, 0.22) !important;
+  color: #f5f8ff !important;
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.68) !important;
+}
+
+html[data-theme="navy"] h1,
+html[data-theme="navy"] h2,
+html[data-theme="navy"] h3,
+html[data-theme="navy"] h4,
+html[data-theme="navy"] h5,
+html[data-theme="navy"] h6,
+html[data-theme="navy"] .section-title,
+html[data-theme="navy"] .card-title,
+body[data-theme="navy"] h1,
+body[data-theme="navy"] h2,
+body[data-theme="navy"] h3,
+body[data-theme="navy"] h4,
+body[data-theme="navy"] h5,
+body[data-theme="navy"] h6,
+body[data-theme="navy"] .section-title,
+body[data-theme="navy"] .card-title {
+  color: #f5f8ff !important;
+}
+
+html[data-theme="navy"] p,
+html[data-theme="navy"] li,
+html[data-theme="navy"] small,
+html[data-theme="navy"] .muted,
+html[data-theme="navy"] .subtitle,
+html[data-theme="navy"] .section-subtitle,
+html[data-theme="navy"] .card-copy,
+body[data-theme="navy"] p,
+body[data-theme="navy"] li,
+body[data-theme="navy"] small,
+body[data-theme="navy"] .muted,
+body[data-theme="navy"] .subtitle,
+body[data-theme="navy"] .section-subtitle,
+body[data-theme="navy"] .card-copy {
+  color: #aebfd8 !important;
+}
+
+html[data-theme="navy"] .chip,
+html[data-theme="navy"] .tag,
+html[data-theme="navy"] .pill,
+html[data-theme="navy"] .badge,
+body[data-theme="navy"] .chip,
+body[data-theme="navy"] .tag,
+body[data-theme="navy"] .pill,
+body[data-theme="navy"] .badge {
+  background: rgba(86, 215, 234, 0.14) !important;
+  color: #74e6f5 !important;
+  border-color: rgba(86, 215, 234, 0.22) !important;
+}
+
+/* === HalaPH true navy background override === */
+/* Makes Navy read as navy, not light blue. */
+html[data-theme="navy"],
+html[data-theme="navy"] body,
+body[data-theme="navy"],
+body.theme-navy,
+body.navy,
+body.navy-mode {
+  --page-bg: #020816 !important;
+  --surface-bg: #061120 !important;
+  --surface-soft: #0a1830 !important;
+  --card-bg: rgba(6, 17, 32, 0.96) !important;
+  --card-border: rgba(70, 108, 168, 0.22) !important;
+  --text-main: #f4f7ff !important;
+  --text-muted: #aebcd3 !important;
+  --accent-main: #77d7f2 !important;
+  --accent-soft: rgba(119, 215, 242, 0.10) !important;
+  --shadow-soft: 0 28px 84px rgba(0, 0, 0, 0.72) !important;
+
+  background:
+    radial-gradient(circle at 12% 10%, rgba(35, 64, 120, 0.10), transparent 28rem),
+    radial-gradient(circle at 88% 18%, rgba(22, 42, 86, 0.08), transparent 26rem),
+    linear-gradient(180deg, #020816 0%, #071427 52%, #01040b 100%) !important;
+  color: #f4f7ff !important;
+}
+
+html[data-theme="navy"] body::before,
+html[data-theme="navy"] body::after,
+body[data-theme="navy"]::before,
+body[data-theme="navy"]::after,
+body.theme-navy::before,
+body.theme-navy::after,
+body.navy::before,
+body.navy::after,
+body.navy-mode::before,
+body.navy-mode::after {
+  opacity: 0.10 !important;
+}
+
+html[data-theme="navy"] main,
+html[data-theme="navy"] section,
+html[data-theme="navy"] .site-section,
+html[data-theme="navy"] .hero,
+html[data-theme="navy"] .navbar,
+html[data-theme="navy"] .site-header,
+html[data-theme="navy"] .header,
+html[data-theme="navy"] .panel,
+html[data-theme="navy"] .card,
+html[data-theme="navy"] .feature-card,
+html[data-theme="navy"] .route-card,
+html[data-theme="navy"] .preview-card,
+html[data-theme="navy"] .phone-card,
+html[data-theme="navy"] .team-card,
+html[data-theme="navy"] .pricing-card,
+html[data-theme="navy"] .faq-card,
+html[data-theme="navy"] .glass,
+html[data-theme="navy"] .glass-card,
+html[data-theme="navy"] .download-card,
+html[data-theme="navy"] .mission-card,
+html[data-theme="navy"] .spotlight-card,
+html[data-theme="navy"] .timeline-card,
+html[data-theme="navy"] .stat-card,
+html[data-theme="navy"] .step-card,
+body[data-theme="navy"] main,
+body[data-theme="navy"] section,
+body[data-theme="navy"] .site-section,
+body[data-theme="navy"] .hero,
+body[data-theme="navy"] .navbar,
+body[data-theme="navy"] .site-header,
+body[data-theme="navy"] .header,
+body[data-theme="navy"] .panel,
+body[data-theme="navy"] .card,
+body[data-theme="navy"] .feature-card,
+body[data-theme="navy"] .route-card,
+body[data-theme="navy"] .preview-card,
+body[data-theme="navy"] .phone-card,
+body[data-theme="navy"] .team-card,
+body[data-theme="navy"] .pricing-card,
+body[data-theme="navy"] .faq-card,
+body[data-theme="navy"] .glass,
+body[data-theme="navy"] .glass-card,
+body[data-theme="navy"] .download-card,
+body[data-theme="navy"] .mission-card,
+body[data-theme="navy"] .spotlight-card,
+body[data-theme="navy"] .timeline-card,
+body[data-theme="navy"] .stat-card,
+body[data-theme="navy"] .step-card {
+  background-color: rgba(6, 17, 32, 0.96) !important;
+  border-color: rgba(70, 108, 168, 0.22) !important;
+  color: #f4f7ff !important;
+  box-shadow: 0 28px 84px rgba(0, 0, 0, 0.72) !important;
+}
