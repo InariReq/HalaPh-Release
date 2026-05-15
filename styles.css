@@ -6580,3 +6580,101 @@ html[data-theme="dark"] .theme-panel .theme-option:focus-visible {
   }
 }
 /* === HalaPH REPLAYABLE SCROLL AND SLIDE ANIMATIONS 20260515 END === */
+
+/* === HalaPH TEAM SPOTLIGHT SMOOTH SWITCH PATCH 20260515 === */
+.team-carousel-body {
+  min-height: 360px;
+  align-items: center;
+  contain: layout paint;
+}
+
+.team-slide-card {
+  min-height: 330px;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: opacity, transform;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.team-slide-card.is-changing {
+  opacity: 0;
+  transform: translate3d(10px, 0, 0);
+}
+
+.team-photo-wrap {
+  flex: 0 0 auto;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.team-photo,
+.team-initials {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.team-member-content {
+  min-width: 0;
+}
+
+.team-summary {
+  min-height: 54px;
+}
+
+.team-contributions {
+  min-height: 132px;
+}
+
+@media (max-width: 820px) {
+  .team-carousel-body {
+    min-height: 470px;
+  }
+
+  .team-slide-card {
+    min-height: 430px;
+  }
+
+  .team-summary {
+    min-height: 72px;
+  }
+
+  .team-contributions {
+    min-height: 168px;
+  }
+}
+
+@media (max-width: 560px) {
+  .team-carousel-body {
+    min-height: 510px;
+  }
+
+  .team-slide-card {
+    min-height: 470px;
+  }
+
+  .team-slide-card.is-changing {
+    transform: translate3d(0, 8px, 0);
+  }
+}
+
+/* === HalaPH TEAM SPOTLIGHT NO SWITCH ANIMATION 20260515 === */
+.team-carousel .team-slide-card,
+.team-carousel .team-slide-card.is-changing,
+.team-carousel .team-member-content,
+.team-carousel .team-photo-wrap,
+.team-carousel .team-photo,
+.team-carousel .team-initials {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+.team-carousel .team-slide-card::after {
+  transition: none !important;
+}
+
+.team-carousel .team-dot,
+.team-carousel .team-arrow {
+  transition: none !important;
+}
