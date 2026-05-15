@@ -6678,3 +6678,187 @@ html[data-theme="dark"] .theme-panel .theme-option:focus-visible {
 .team-carousel .team-arrow {
   transition: none !important;
 }
+
+/* === HalaPH TEAM SPOTLIGHT FLASH FIX 20260515 === */
+/* Removes harsh flash/fade/blur when switching team spotlight members. */
+.team,
+.team-section,
+.team-carousel,
+.members-carousel,
+.team-spotlight,
+.team-spotlight-card,
+.member-carousel,
+.member-spotlight {
+  backface-visibility: hidden;
+}
+
+:is(
+  .team,
+  .team-section,
+  .team-carousel,
+  .members-carousel,
+  .team-spotlight,
+  .member-carousel,
+  .member-spotlight
+).hala-slide-scope,
+:is(
+  .team,
+  .team-section,
+  .team-carousel,
+  .members-carousel,
+  .team-spotlight,
+  .member-carousel,
+  .member-spotlight
+).hala-slide-scope.hala-slide-animating,
+:is(
+  .team,
+  .team-section,
+  .team-carousel,
+  .members-carousel,
+  .team-spotlight,
+  .member-carousel,
+  .member-spotlight
+).hala-slide-scope.hala-slide-next,
+:is(
+  .team,
+  .team-section,
+  .team-carousel,
+  .members-carousel,
+  .team-spotlight,
+  .member-carousel,
+  .member-spotlight
+).hala-slide-scope.hala-slide-prev {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+:is(
+  .team,
+  .team-section,
+  .team-carousel,
+  .members-carousel,
+  .team-spotlight,
+  .member-carousel,
+  .member-spotlight
+) :is(
+  .hala-reveal,
+  .hala-reveal.is-visible,
+  .team-card,
+  .member-card,
+  .spotlight-card,
+  .team-member-card
+) {
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+  transition-property: box-shadow, border-color, background, color !important;
+}
+
+:is(
+  .team,
+  .team-section,
+  .team-carousel,
+  .members-carousel,
+  .team-spotlight,
+  .member-carousel,
+  .member-spotlight
+) * {
+  animation-duration: 0ms !important;
+}
+
+:is(
+  .team,
+  .team-section,
+  .team-carousel,
+  .members-carousel,
+  .team-spotlight,
+  .member-carousel,
+  .member-spotlight
+) :is(
+  .carousel-arrow,
+  .team-arrow,
+  button
+) {
+  animation-duration: initial !important;
+  transition: transform 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease !important;
+}
+
+/* === HalaPH TEAM SPOTLIGHT FLASH FIX 20260515 === */
+/* Removes harsh flash/fade/blur when switching team spotlight members. */
+:is(
+  .team,
+  .team-section,
+  .team-carousel,
+  .members-carousel,
+  .team-spotlight,
+  .member-carousel,
+  .member-spotlight
+).hala-slide-scope,
+:is(
+  .team,
+  .team-section,
+  .team-carousel,
+  .members-carousel,
+  .team-spotlight,
+  .member-carousel,
+  .member-spotlight
+).hala-slide-scope.hala-slide-animating,
+:is(
+  .team,
+  .team-section,
+  .team-carousel,
+  .members-carousel,
+  .team-spotlight,
+  .member-carousel,
+  .member-spotlight
+).hala-slide-scope.hala-slide-next,
+:is(
+  .team,
+  .team-section,
+  .team-carousel,
+  .members-carousel,
+  .team-spotlight,
+  .member-carousel,
+  .member-spotlight
+).hala-slide-scope.hala-slide-prev {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+:is(
+  .team,
+  .team-section,
+  .team-carousel,
+  .members-carousel,
+  .team-spotlight,
+  .member-carousel,
+  .member-spotlight
+) :is(
+  .hala-reveal,
+  .hala-reveal.is-visible,
+  .team-card,
+  .member-card,
+  .spotlight-card,
+  .team-member-card
+) {
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+  transition-property: box-shadow, border-color, background, color !important;
+}
+
+:is(
+  .team,
+  .team-section,
+  .team-carousel,
+  .members-carousel,
+  .team-spotlight,
+  .member-carousel,
+  .member-spotlight
+) * {
+  animation-duration: 0ms !important;
+}
