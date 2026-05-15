@@ -122,7 +122,7 @@
   --cyan: #0f9aa8;
   --green: #16835a;
   --amber: #b7791f;
-  --ink: #071426;
+  --ink: #031025;
   --muted: #52657f;
   --line: #d4e0ee;
   --surface: #ffffff;
@@ -2115,7 +2115,7 @@ a:focus-visible {
   --bg-soft: #e6f0ff;
   --surface: #ffffff;
   --surface-2: #edf5ff;
-  --text: #071426;
+  --text: #031025;
   --muted: #40536e;
   --border: rgba(24, 68, 125, 0.18);
   --primary: #14518f;
@@ -6894,11 +6894,11 @@ body.theme-navy,
 body.dark,
 body.dark-mode,
 body.theme-dark {
-  --page-bg: #030914;
-  --surface-bg: #071426;
-  --surface-soft: #0a1a2e;
-  --card-bg: rgba(7, 20, 38, 0.96);
-  --card-border: rgba(117, 157, 226, 0.16);
+  --page-bg: #000713;
+  --surface-bg: #031025;
+  --surface-soft: #061832;
+  --card-bg: rgba(3, 16, 37, 0.98);
+  --card-border: rgba(90, 130, 210, 0.18);
   --text-main: #f3f7ff;
   --text-muted: #b8c7dc;
   --accent-main: #66d9e8;
@@ -7010,8 +7010,8 @@ body.dark,
 body.dark-mode,
 body.theme-dark {
   background:
-    radial-gradient(circle at top left, rgba(102, 217, 232, 0.16), transparent 34rem),
-    linear-gradient(180deg, #030914 0%, #061225 48%, #020610 100%) !important;
+    radial-gradient(circle at top left, rgba(64, 155, 210, 0.10), transparent 34rem),
+    linear-gradient(180deg, #000713 0%, #020b1d 48%, #00040c 100%) !important;
 }
 
 /* Strong visual separation for light theme */
@@ -7023,4 +7023,46 @@ body.theme-light {
   background:
     radial-gradient(circle at top left, rgba(49, 179, 100, 0.13), transparent 34rem),
     linear-gradient(180deg, #f7fbf7 0%, #ffffff 48%, #eef7ef 100%) !important;
+}
+
+/* === HalaPH ultra dark navy force override === */
+html[data-theme="navy"],
+html[data-theme="navy"] body,
+body[data-theme="navy"],
+body.navy,
+body.navy-mode,
+body.theme-navy {
+  --page-bg: #000713 !important;
+  --surface-bg: #031025 !important;
+  --surface-soft: #061832 !important;
+  --card-bg: rgba(3, 16, 37, 0.98) !important;
+  --card-border: rgba(90, 130, 210, 0.18) !important;
+  --text-main: #f5f8ff !important;
+  --text-muted: #b7c7df !important;
+  --accent-main: #58d3e8 !important;
+  background:
+    radial-gradient(circle at top left, rgba(64, 155, 210, 0.10), transparent 34rem),
+    linear-gradient(180deg, #000713 0%, #020b1d 48%, #00040c 100%) !important;
+}
+
+html[data-theme="navy"] section,
+html[data-theme="navy"] .site-section,
+html[data-theme="navy"] .hero,
+html[data-theme="navy"] .navbar,
+html[data-theme="navy"] .app-shell,
+html[data-theme="navy"] .panel,
+html[data-theme="navy"] .card,
+html[data-theme="navy"] .feature-card,
+html[data-theme="navy"] .route-card,
+html[data-theme="navy"] .preview-card,
+html[data-theme="navy"] .phone-card,
+html[data-theme="navy"] .team-card,
+html[data-theme="navy"] .pricing-card,
+html[data-theme="navy"] .faq-card,
+html[data-theme="navy"] .glass,
+html[data-theme="navy"] .glass-card {
+  background-color: rgba(3, 16, 37, 0.98) !important;
+  border-color: rgba(90, 130, 210, 0.18) !important;
+  color: #f5f8ff !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.58) !important;
 }
