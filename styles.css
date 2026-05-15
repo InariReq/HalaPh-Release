@@ -6894,16 +6894,16 @@ body.theme-navy,
 body.dark,
 body.dark-mode,
 body.theme-dark {
-  --page-bg: #071426;
-  --surface-bg: #0d1f36;
-  --surface-soft: #102943;
-  --card-bg: rgba(13, 31, 54, 0.94);
-  --card-border: rgba(149, 184, 255, 0.18);
+  --page-bg: #030914;
+  --surface-bg: #071426;
+  --surface-soft: #0a1a2e;
+  --card-bg: rgba(7, 20, 38, 0.96);
+  --card-border: rgba(117, 157, 226, 0.16);
   --text-main: #f3f7ff;
   --text-muted: #b8c7dc;
   --accent-main: #66d9e8;
   --accent-soft: rgba(102, 217, 232, 0.14);
-  --shadow-soft: 0 22px 55px rgba(0, 0, 0, 0.36);
+  --shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.52);
 }
 
 /* Global theme application */
@@ -7011,7 +7011,7 @@ body.dark-mode,
 body.theme-dark {
   background:
     radial-gradient(circle at top left, rgba(102, 217, 232, 0.16), transparent 34rem),
-    linear-gradient(180deg, #071426 0%, #09182b 48%, #050d19 100%) !important;
+    linear-gradient(180deg, #030914 0%, #061225 48%, #020610 100%) !important;
 }
 
 /* Strong visual separation for light theme */
