@@ -806,7 +806,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Plan calmer Philippine commutes.',
+                        'Where Every Trip Meets Its Line.',
                         style: TextStyle(
                           color: colorScheme.onSurface,
                           fontSize: 24,
