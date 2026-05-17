@@ -74,6 +74,7 @@ class _PracticeTripChip extends StatelessWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   static bool _announcementDismissedThisSession = false;
+  final GlobalKey _exploreSectionKey = GlobalKey();
 
   List<Destination> _trendingDestinations = [];
   List<SponsoredAd> _homeSponsoredAds = const [];
@@ -441,24 +442,38 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             SliverToBoxAdapter(
               child: _buildHomeEntrance(
                 order: 0,
-                child: _buildHeader(context),
-              ),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
-            SliverToBoxAdapter(
-              child: _buildHomeEntrance(
-                order: 1,
-                child: _buildCurrentPlan(context),
+                child: _buildHero(context),
               ),
             ),
             SliverToBoxAdapter(child: _buildAnnouncementSpacing()),
             SliverToBoxAdapter(
               child: _buildHomeEntrance(
-                order: 2,
+                order: 1,
                 child: _buildAnnouncementCard(context),
               ),
             ),
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            const SliverToBoxAdapter(child: SizedBox(height: 22)),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: HalaSectionHeader(
+                  title: 'Up next',
+                  subtitle: _plansLoading
+                      ? 'Checking saved plans and reminders'
+                      : _nextPlan == null
+                          ? 'Your next trip plan will appear here'
+                          : 'The next trip that needs your attention',
+                ),
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 12)),
+            SliverToBoxAdapter(
+              child: _buildHomeEntrance(
+                order: 2,
+                child: _buildCurrentPlan(context),
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 22)),
             SliverToBoxAdapter(
               child: _buildHomeEntrance(
                 order: 3,
@@ -764,82 +779,146 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   bool _locationEnabled = true;
   String _locationStatus = 'Getting location...';
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHero(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 14),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+      child: HalaCard(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Where Every Trip\nFinds Its Line',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                    height: 1.04,
-                    letterSpacing: -0.7,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Row(
-                  children: [
-                    Text(
-                      'Discover Philippines',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'HalaPH',
+                        style: TextStyle(
+                          color: colorScheme.primary,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.4,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Icon(
-                      _locationEnabled ? Icons.location_on : Icons.location_off,
-                      size: 20,
-                      color: _locationEnabled
-                          ? Colors.green[600]
-                          : Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                    if (!_locationEnabled) ...[
-                      const SizedBox(width: 4),
-                      GestureDetector(
-                        onTap: _retryLocation,
-                        child: Icon(
-                          Icons.refresh,
-                          size: 16,
-                          color: Colors.blue[600],
+                      const SizedBox(height: 6),
+                      Text(
+                        'Plan calmer Philippine commutes.',
+                        style: TextStyle(
+                          color: colorScheme.onSurface,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w900,
+                          height: 1.08,
+                          letterSpacing: -0.7,
                         ),
                       ),
                     ],
-                  ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                widget.guideModeDemo
+                    ? _buildProfileButton(context)
+                    : StreamBuilder<firebase_auth.User?>(
+                        stream:
+                            firebase_auth.FirebaseAuth.instance.userChanges(),
+                        initialData:
+                            firebase_auth.FirebaseAuth.instance.currentUser,
+                        builder: (context, snapshot) {
+                          final avatarUrl = snapshot.data?.photoURL?.trim();
+                          return _buildProfileButton(
+                            context,
+                            avatarUrl: avatarUrl,
+                          );
+                        },
+                      ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Text(
+              'Routes, fares, and trip plans in one commute workspace.',
+              style: TextStyle(
+                color: colorScheme.onSurfaceVariant,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                height: 1.35,
+              ),
+            ),
+            const SizedBox(height: 14),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                HalaStatusChip(
+                  icon: _locationEnabled
+                      ? Icons.location_on_rounded
+                      : Icons.location_off_rounded,
+                  label: _locationEnabled ? 'Nearby ready' : 'Location off',
+                  color:
+                      _locationEnabled ? Colors.green[700] : Colors.orange[700],
                 ),
                 if (!_locationEnabled)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Text(
-                      _locationStatus,
-                      style: TextStyle(fontSize: 12, color: Colors.orange[700]),
+                  InkWell(
+                    onTap: _retryLocation,
+                    borderRadius: BorderRadius.circular(999),
+                    child: HalaStatusChip(
+                      icon: Icons.refresh_rounded,
+                      label: 'Retry location',
+                      color: colorScheme.primary,
                     ),
                   ),
               ],
             ),
-          ),
-          widget.guideModeDemo
-              ? _buildProfileButton(context)
-              : StreamBuilder<firebase_auth.User?>(
-                  stream: firebase_auth.FirebaseAuth.instance.userChanges(),
-                  initialData: firebase_auth.FirebaseAuth.instance.currentUser,
-                  builder: (context, snapshot) {
-                    final avatarUrl = snapshot.data?.photoURL?.trim();
-                    return _buildProfileButton(context, avatarUrl: avatarUrl);
-                  },
+            if (!_locationEnabled) ...[
+              const SizedBox(height: 10),
+              Text(
+                _locationStatus,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.orange[700],
+                  fontWeight: FontWeight.w700,
                 ),
-        ],
+              ),
+            ],
+            const SizedBox(height: 18),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: HalaPrimaryButton(
+                    onPressed: () => GoRouter.of(context).push('/create-plan'),
+                    icon: Icons.alt_route_rounded,
+                    child: const Text('Plan a trip'),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  child: HalaSecondaryButton(
+                    onPressed: _scrollToExplorePlaces,
+                    icon: Icons.explore_rounded,
+                    child: const Text('Explore places'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
+    );
+  }
+
+  void _scrollToExplorePlaces() {
+    final context = _exploreSectionKey.currentContext;
+    if (context == null) return;
+    Scrollable.ensureVisible(
+      context,
+      duration: const Duration(milliseconds: 320),
+      curve: Curves.easeOutCubic,
+      alignment: 0.08,
     );
   }
 
@@ -946,61 +1025,23 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       return _buildNextPlanCard(context, _nextPlan!);
     }
 
-    return HalaCard(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                height: 42,
-                width: 42,
-                decoration: BoxDecoration(
-                  color: Colors.blue[50],
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Icon(
-                  Icons.event_available_rounded,
-                  color: Colors.blue[700],
-                  size: 24,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                'Next Up',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-              ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: HalaEmptyState(
+        icon: Icons.event_available_rounded,
+        title: 'No trip planned yet',
+        message: 'Create a plan to keep routes, stops, and reminders together.',
+        action: SizedBox(
+          width: double.infinity,
+          child: HalaPrimaryButton(
+            onPressed: () {
+              debugPrint('Create Plan tapped!');
+              GoRouter.of(context).push('/create-plan');
+            },
+            icon: Icons.add_rounded,
+            child: const Text('Create plan'),
           ),
-          const SizedBox(height: 12),
-          Text(
-            'No current plans yet. Start a trip plan when you are ready.',
-            style: TextStyle(
-              fontSize: 14,
-              height: 1.35,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: HalaPrimaryButton(
-              onPressed: () {
-                debugPrint('Create Plan tapped!');
-                GoRouter.of(context).push('/create-plan');
-              },
-              icon: Icons.add_rounded,
-              child: const Text('Create Plan'),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -1250,30 +1291,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final heroImagePath = _bestPlanImagePath(plan);
     final firstDestination = _firstPlanDestination(plan);
 
-    return Container(
+    return HalaCard(
       margin: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: Theme.of(context)
-              .colorScheme
-              .outlineVariant
-              .withValues(alpha: 0.28),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.withValues(alpha: 0.10),
-            blurRadius: 28,
-            offset: const Offset(0, 14),
-          ),
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.18),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+      padding: EdgeInsets.zero,
       child: InkWell(
         onTap: () {
           if (widget.guideModeDemo) return;
@@ -1290,42 +1310,43 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             '/plan-details?planId=${Uri.encodeComponent(planId)}',
           );
         },
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(22),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildNextPlanImageHeader(dayText, heroImagePath),
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.coffee, color: Colors.brown[600], size: 20),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Next Up',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.grey,
-                        ),
+                      HalaStatusChip(
+                        icon: Icons.schedule_rounded,
+                        label: dayText,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const Spacer(),
+                      Icon(
+                        Icons.chevron_right_rounded,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
                   Text(
                     plan.title,
                     style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
                       color: Theme.of(context).colorScheme.onSurface,
+                      height: 1.12,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
                       Icon(
@@ -1344,7 +1365,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     ],
                   ),
                   if (destinationCount > 0) ...[
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
                         Icon(Icons.place, size: 14, color: Colors.blue[600]),
@@ -1355,7 +1376,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.blue[600],
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
@@ -1485,6 +1506,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final hasFewResults = !_isLoading && _trendingDestinations.length < 5;
 
     return Column(
+      key: _exploreSectionKey,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
@@ -1521,37 +1543,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Widget _buildSearchPrompt() {
-    return Container(
+    return HalaCard(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: Theme.of(context).brightness == Brightness.dark
-              ? const [
-                  Color(0xFF332711),
-                  Color(0xFF2B2110),
-                ]
-              : const [
-                  Color(0xFFFFFBEB),
-                  Color(0xFFFFF4D8),
-                ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? const Color(0xFF8A641B)
-              : const Color(0xFFFFDFA3),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.orange.withValues(alpha: 0.10),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1578,24 +1572,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ),
           ),
           const SizedBox(height: 12),
-          GestureDetector(
-            onTap: () {
-              GoRouter.of(context).go('/explore');
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.orange[600],
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                'Search Destinations',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+          SizedBox(
+            width: double.infinity,
+            child: HalaSecondaryButton(
+              onPressed: _scrollToExplorePlaces,
+              icon: Icons.explore_rounded,
+              child: const Text('Browse current places'),
             ),
           ),
         ],
@@ -1604,56 +1586,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Widget _buildEmptyPlacesState() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      height: 220,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: Theme.of(context)
-              .colorScheme
-              .outlineVariant
-              .withValues(alpha: 0.28),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.18),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 58,
-                width: 58,
-                decoration: BoxDecoration(
-                  color: Colors.blue[50],
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Icon(
-                  Icons.travel_explore_rounded,
-                  size: 30,
-                  color: Colors.blue[700],
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'No nearby places found from your current location',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: HalaEmptyState(
+        icon: Icons.travel_explore_rounded,
+        title: 'No nearby places found',
+        message:
+            'Try again later or search from Explore when you know where to go.',
       ),
     );
   }
@@ -1718,32 +1657,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final isFavorite = _favoriteIds.contains(destination.id);
     final isFavoriteBusy = _favoriteBusyIds.contains(destination.id);
 
-    return Container(
-      margin: const EdgeInsets.fromLTRB(20, 0, 20, 18),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: Theme.of(context)
-              .colorScheme
-              .outlineVariant
-              .withValues(alpha: 0.28),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.withValues(alpha: 0.10),
-            blurRadius: 28,
-            offset: const Offset(0, 14),
-          ),
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.18),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
+    return HalaCard(
+      margin: const EdgeInsets.fromLTRB(20, 0, 20, 14),
+      padding: EdgeInsets.zero,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(22),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1752,7 +1670,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               children: [
                 SizedBox(
                   width: double.infinity,
-                  height: 200,
+                  height: 168,
                   child: ClipRRect(
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(16),
@@ -1763,7 +1681,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             imageUrl: destination.imageUrl,
                             fit: BoxFit.cover,
                             width: double.infinity,
-                            height: 200,
+                            height: 168,
                             placeholder: (context, url) => Container(
                               color: Colors.grey[100],
                               child: Center(
@@ -1948,7 +1866,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ),
             // Content section
             Padding(
-              padding: const EdgeInsets.all(18),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1963,45 +1881,24 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 16),
-                  // Explore More button
-                  GestureDetector(
-                    onTap: () {
-                      if (widget.guideModeDemo) return;
-                      debugPrint(
-                        '=== HOME SCREEN TAP: ${destination.name} - ID: ${destination.id} ===',
-                      );
-                      ExploreDetailsScreen.showAsBottomSheet(
-                        context,
-                        destinationId: destination.id,
-                        source: 'home',
-                        destination: destination,
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.blue[700],
-                        borderRadius: BorderRadius.circular(18),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.blue.withValues(alpha: 0.20),
-                            blurRadius: 14,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
-                      ),
-                      child: Text(
-                        'Explore More',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                  const SizedBox(height: 14),
+                  SizedBox(
+                    width: double.infinity,
+                    child: HalaSecondaryButton(
+                      onPressed: () {
+                        if (widget.guideModeDemo) return;
+                        debugPrint(
+                          '=== HOME SCREEN TAP: ${destination.name} - ID: ${destination.id} ===',
+                        );
+                        ExploreDetailsScreen.showAsBottomSheet(
+                          context,
+                          destinationId: destination.id,
+                          source: 'home',
+                          destination: destination,
+                        );
+                      },
+                      icon: Icons.arrow_forward_rounded,
+                      child: const Text('Explore place'),
                     ),
                   ),
                 ],

@@ -105,6 +105,34 @@ class HalaPrimaryButton extends StatelessWidget {
   }
 }
 
+class HalaSecondaryButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final Widget child;
+  final IconData? icon;
+
+  const HalaSecondaryButton({
+    super.key,
+    required this.onPressed,
+    required this.child,
+    this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final button = icon == null
+        ? OutlinedButton(onPressed: onPressed, child: child)
+        : OutlinedButton.icon(
+            onPressed: onPressed,
+            icon: Icon(icon),
+            label: child,
+          );
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 48),
+      child: button,
+    );
+  }
+}
+
 class HalaStatusChip extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -141,6 +169,62 @@ class HalaStatusChip extends StatelessWidget {
               fontWeight: FontWeight.w800,
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class HalaEmptyState extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String message;
+  final Widget? action;
+
+  const HalaEmptyState({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.message,
+    this.action,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return HalaCard(
+      child: Column(
+        children: [
+          Container(
+            width: 54,
+            height: 54,
+            decoration: BoxDecoration(
+              color: colorScheme.primary.withValues(alpha: 0.10),
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Icon(icon, color: colorScheme.primary, size: 28),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w900,
+                ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  height: 1.35,
+                ),
+          ),
+          if (action != null) ...[
+            const SizedBox(height: 16),
+            action!,
+          ],
         ],
       ),
     );
