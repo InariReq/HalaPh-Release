@@ -28,7 +28,7 @@ Current showcase links and assets:
 Current official slogan:
 
 ```text
-Where Every Trip Meets It's Line
+Where Every Trip Meets Its Line
 ```
 
 ## QR Codes
