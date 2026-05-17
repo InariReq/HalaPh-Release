@@ -14,7 +14,6 @@ import 'services/auth_service.dart';
 import 'services/firebase_app_service.dart';
 import 'services/theme_mode_service.dart';
 import 'services/app_tutorial_service.dart';
-import 'services/guide_presenter_controller.dart';
 import 'screens/home_screen.dart';
 import 'screens/favorites_screen.dart';
 
@@ -923,7 +922,6 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
   bool _terminalsTabInitialized = false;
-  final _guidePresenterController = GuidePresenterController();
   final _homeNavKey = GlobalKey();
   final _exploreNavKey = GlobalKey();
   final _terminalsNavKey = GlobalKey();
@@ -937,49 +935,30 @@ class _MainNavigationState extends State<MainNavigation> {
         _terminalsTabInitialized = true;
       }
     });
-    if (!widget.showGuideMode) return;
-    switch (index) {
-      case 1:
-        _guidePresenterController
-            .signalSafely(GuidePresenterSignal.openExplore);
-        break;
-      case 3:
-        _guidePresenterController.signalSafely(GuidePresenterSignal.openPlans);
-        break;
-      case 4:
-        _guidePresenterController
-            .signalSafely(GuidePresenterSignal.openSettings);
-        break;
-    }
   }
 
   void _onGuideStepChanged(int stepIndex) {
     final targetIndex = switch (stepIndex) {
       0 => 0,
-      1 => 1,
+      1 => 0,
       2 => 1,
-      3 => 1,
-      4 => 1,
-      5 => 1,
-      6 => 3,
-      7 => 3,
-      8 => 3,
-      9 => 3,
-      10 => 3,
-      11 => 4,
-      12 => 4,
+      3 => 2,
+      4 => 3,
+      5 => 4,
+      6 => 0,
       _ => _currentIndex,
     };
-    if (targetIndex == _currentIndex) return;
+    final shouldInitializeTerminals = targetIndex == 2;
+    if (targetIndex == _currentIndex &&
+        (!shouldInitializeTerminals || _terminalsTabInitialized)) {
+      return;
+    }
     setState(() {
       _currentIndex = targetIndex;
+      if (shouldInitializeTerminals) {
+        _terminalsTabInitialized = true;
+      }
     });
-  }
-
-  @override
-  void dispose() {
-    _guidePresenterController.dispose();
-    super.dispose();
   }
 
   @override
@@ -997,28 +976,13 @@ class _MainNavigationState extends State<MainNavigation> {
           body: IndexedStack(
             index: _currentIndex,
             children: [
-              HomeScreen(guideModeDemo: widget.showGuideMode),
-              ExploreScreen(
-                guideModeDemo: widget.showGuideMode,
-                guidePresenterController:
-                    widget.showGuideMode ? _guidePresenterController : null,
-                onGuideDestinationSelected: widget.showGuideMode
-                    ? _guidePresenterController.selectDestination
-                    : null,
-              ),
+              const HomeScreen(),
+              const ExploreScreen(),
               _terminalsTabInitialized
                   ? const TerminalRoutesScreen()
                   : const SizedBox.shrink(),
-              MyPlansScreen(
-                guideModeDemo: widget.showGuideMode,
-                guidePresenterController:
-                    widget.showGuideMode ? _guidePresenterController : null,
-              ),
-              ProfileScreen(
-                guideModeDemo: widget.showGuideMode,
-                guidePresenterController:
-                    widget.showGuideMode ? _guidePresenterController : null,
-              ),
+              const MyPlansScreen(),
+              const ProfileScreen(),
             ],
           ),
           bottomNavigationBar: Container(
@@ -1078,13 +1042,6 @@ class _MainNavigationState extends State<MainNavigation> {
           Positioned.fill(
             child: AppTutorialScreen(
               launchedFromSettings: false,
-              targetKeys: GuideModeTargetKeys(
-                homeNavKey: _homeNavKey,
-                exploreNavKey: _exploreNavKey,
-                plansNavKey: _plansNavKey,
-                profileNavKey: _profileNavKey,
-              ),
-              presenterController: _guidePresenterController,
               onStepChanged: _onGuideStepChanged,
               onFinish: widget.onGuideModeFinished ?? () {},
               onSkip: widget.onGuideModeSkipped ?? () {},
