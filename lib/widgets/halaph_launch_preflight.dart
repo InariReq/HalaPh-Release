@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../services/plan_notification_service.dart';
+import 'hala_mobile_ui.dart';
 
 class HalaPhLaunchPreflight extends StatefulWidget {
   final VoidCallback onStart;
@@ -264,7 +265,6 @@ class _HalaPhLaunchPreflightState extends State<HalaPhLaunchPreflight>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: colorScheme.surfaceContainerLow,
@@ -289,9 +289,8 @@ class _HalaPhLaunchPreflightState extends State<HalaPhLaunchPreflight>
                         routeProgress: routeProgress,
                         logoScale: _logoScale,
                         colorScheme: colorScheme,
-                        isDark: isDark,
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 18),
                       FadeTransition(
                         opacity: _contentFade,
                         child: SlideTransition(
@@ -299,7 +298,7 @@ class _HalaPhLaunchPreflightState extends State<HalaPhLaunchPreflight>
                           child: Column(
                             children: [
                               Text(
-                                'Welcome to HalaPH',
+                                'Preparing your commute workspace',
                                 textAlign: TextAlign.center,
                                 style: theme.textTheme.headlineSmall?.copyWith(
                                   fontWeight: FontWeight.w900,
@@ -308,7 +307,7 @@ class _HalaPhLaunchPreflightState extends State<HalaPhLaunchPreflight>
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                'Plan routes, fares, and trips before you go.',
+                                'Setting up route tools, plans, and reminders.',
                                 textAlign: TextAlign.center,
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   color: colorScheme.onSurfaceVariant,
@@ -323,7 +322,7 @@ class _HalaPhLaunchPreflightState extends State<HalaPhLaunchPreflight>
                                   colorScheme: colorScheme,
                                 ),
                               ],
-                              const SizedBox(height: 24),
+                              const SizedBox(height: 22),
                               _StatusPanel(
                                 colorScheme: colorScheme,
                                 children: [
@@ -367,7 +366,7 @@ class _HalaPhLaunchPreflightState extends State<HalaPhLaunchPreflight>
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: 22),
                               AnimatedSwitcher(
                                 duration: const Duration(milliseconds: 260),
                                 switchInCurve: Curves.easeOutCubic,
@@ -400,12 +399,10 @@ class _HalaPhLaunchPreflightState extends State<HalaPhLaunchPreflight>
                                     ? SizedBox(
                                         key: const ValueKey('start-ready'),
                                         width: double.infinity,
-                                        child: FilledButton.icon(
+                                        child: HalaPrimaryButton(
                                           onPressed: _completeStart,
-                                          icon: const Icon(
-                                            Icons.arrow_forward_rounded,
-                                          ),
-                                          label: const Text('Start'),
+                                          icon: Icons.arrow_forward_rounded,
+                                          child: const Text('Start'),
                                         ),
                                       )
                                     : _PreparingPill(
@@ -481,14 +478,12 @@ class _LaunchRouteBoard extends StatelessWidget {
   final double routeProgress;
   final Animation<double> logoScale;
   final ColorScheme colorScheme;
-  final bool isDark;
 
   const _LaunchRouteBoard({
     required this.introProgress,
     required this.routeProgress,
     required this.logoScale,
     required this.colorScheme,
-    required this.isDark,
   });
 
   @override
@@ -499,24 +494,9 @@ class _LaunchRouteBoard extends StatelessWidget {
     final routeDraw = _phase(safeIntroProgress, 0.20, 0.72);
     final pinsIn = _phase(safeIntroProgress, 0.08, 0.36);
     final chipsIn = _phase(safeIntroProgress, 0.48, 0.86);
-    final cardsIn = _phase(safeIntroProgress, 0.62, 1);
 
-    return Container(
+    return HalaCard(
       padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: colorScheme.surface.withValues(alpha: isDark ? 0.88 : 0.96),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withValues(alpha: 0.5),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.28 : 0.10),
-            blurRadius: 26,
-            offset: const Offset(0, 14),
-          ),
-        ],
-      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -532,7 +512,7 @@ class _LaunchRouteBoard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Commute preflight',
+                      'Getting HalaPH ready',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.titleMedium?.copyWith(
@@ -542,7 +522,7 @@ class _LaunchRouteBoard extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      'Route, fare, and trip tools are getting ready.',
+                      'A calm start before the commute begins.',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodySmall?.copyWith(
@@ -603,67 +583,30 @@ class _LaunchRouteBoard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _ModePrepChip(
-                icon: Icons.directions_walk_rounded,
-                label: 'Walk',
-                progress: chipsIn,
-                color: colorScheme.primary,
-              ),
-              _ModePrepChip(
-                icon: Icons.directions_bus_filled_rounded,
-                label: 'Jeepney',
-                progress: _phase(safeIntroProgress, 0.54, 0.88),
-                color: colorScheme.secondary,
-              ),
-              _ModePrepChip(
-                icon: Icons.train_rounded,
-                label: 'Train',
-                progress: _phase(safeIntroProgress, 0.60, 0.92),
-                color: colorScheme.tertiary,
-              ),
-              _ModePrepChip(
-                icon: Icons.payments_rounded,
-                label: 'Fare',
-                progress: _phase(safeIntroProgress, 0.66, 0.96),
-                color: Colors.green[700]!,
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _ReadyPreviewCard(
+          Opacity(
+            opacity: chipsIn,
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                HalaStatusChip(
                   icon: Icons.alt_route_rounded,
-                  label: 'Route guide',
-                  progress: cardsIn,
-                  colorScheme: colorScheme,
+                  label: 'Route tools',
+                  color: colorScheme.primary,
                 ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _ReadyPreviewCard(
-                  icon: Icons.local_atm_rounded,
-                  label: 'Fare tools',
-                  progress: _phase(safeIntroProgress, 0.68, 1),
-                  colorScheme: colorScheme,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _ReadyPreviewCard(
+                HalaStatusChip(
                   icon: Icons.event_available_rounded,
                   label: 'Plans',
-                  progress: _phase(safeIntroProgress, 0.74, 1),
-                  colorScheme: colorScheme,
+                  color: colorScheme.secondary,
                 ),
-              ),
-            ],
+                HalaStatusChip(
+                  icon: Icons.notifications_active_rounded,
+                  label: 'Reminders',
+                  color: colorScheme.tertiary,
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -754,110 +697,6 @@ class _BoardPin extends StatelessWidget {
                   color: colorScheme.onSurface,
                   fontWeight: FontWeight.w900,
                   fontSize: 11,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ModePrepChip extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final double progress;
-  final Color color;
-
-  const _ModePrepChip({
-    required this.icon,
-    required this.label,
-    required this.progress,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final clamped = _safeUnit(progress);
-    return Opacity(
-      opacity: clamped,
-      child: Transform.translate(
-        offset: Offset(0, (1 - clamped) * 8),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.10),
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(color: color.withValues(alpha: 0.22)),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 16, color: color),
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: TextStyle(
-                  color: colorScheme.onSurface,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ReadyPreviewCard extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final double progress;
-  final ColorScheme colorScheme;
-
-  const _ReadyPreviewCard({
-    required this.icon,
-    required this.label,
-    required this.progress,
-    required this.colorScheme,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final clamped = _safeUnit(progress);
-    return Opacity(
-      opacity: clamped,
-      child: Transform.translate(
-        offset: Offset(0, (1 - clamped) * 10),
-        child: Container(
-          constraints: const BoxConstraints(minHeight: 58),
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.55),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: colorScheme.outlineVariant.withValues(alpha: 0.45),
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 18, color: colorScheme.primary),
-              const SizedBox(height: 5),
-              Text(
-                label,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: colorScheme.onSurface,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w900,
-                  height: 1.1,
                 ),
               ),
             ],
@@ -1070,15 +909,8 @@ class _StatusPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return HalaCard(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: colorScheme.surface.withValues(alpha: 0.94),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withValues(alpha: 0.45),
-        ),
-      ),
       child: Column(
         children: [
           for (var i = 0; i < children.length; i++) ...[

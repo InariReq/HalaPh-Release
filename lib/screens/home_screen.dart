@@ -16,6 +16,7 @@ import 'package:halaph/services/app_public_config_service.dart';
 import 'package:halaph/services/user_ads_service.dart';
 import 'package:halaph/services/simple_plan_service.dart';
 import 'package:halaph/models/plan.dart';
+import 'package:halaph/widgets/hala_mobile_ui.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../utils/sponsored_ad_link_launcher.dart';
 
@@ -765,54 +766,33 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   Widget _buildHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 14),
       child: Row(
         children: [
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ShaderMask(
-                  shaderCallback: (bounds) {
-                    return const LinearGradient(
-                      colors: [
-                        Color(0xFF0D47A1),
-                        Color(0xFF1976D2),
-                        Color(0xFF03A9F4),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ).createShader(
-                      Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-                    );
-                  },
-                  child: Text(
-                    'Where Every Trip\nFinds Its Line',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.w900,
-                      height: 1.02,
-                      letterSpacing: -0.8,
-                      shadows: [
-                        Shadow(
-                          color: Color(0x22000000),
-                          offset: Offset(0, 2),
-                          blurRadius: 4,
-                        ),
-                      ],
-                    ),
+                Text(
+                  'Where Every Trip\nFinds Its Line',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    height: 1.04,
+                    letterSpacing: -0.7,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
                 Row(
                   children: [
                     Text(
                       'Discover Philippines',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
@@ -956,61 +936,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
 
     if (_plansLoading) {
-      return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20),
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: Theme.of(context).brightness == Brightness.dark
-                ? [
-                    Theme.of(context).colorScheme.surfaceContainerHigh,
-                    Theme.of(context).colorScheme.surfaceContainer,
-                  ]
-                : const [
-                    Color(0xFFFFFFFF),
-                    Color(0xFFF3F8FF),
-                  ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: Theme.of(context)
-                .colorScheme
-                .outlineVariant
-                .withValues(alpha: 0.28),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.blue.withValues(alpha: 0.10),
-              blurRadius: 24,
-              offset: const Offset(0, 12),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            SizedBox(
-              height: 34,
-              width: 34,
-              child: CircularProgressIndicator(
-                strokeWidth: 3,
-                color: Colors.blue[700],
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Text(
-                'Loading your next plan...',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-              ),
-            ),
-          ],
-        ),
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: const HalaLoadingState(label: 'Loading your next plan...'),
       );
     }
 
@@ -1018,38 +946,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       return _buildNextPlanCard(context, _nextPlan!);
     }
 
-    return Container(
+    return HalaCard(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: Theme.of(context).brightness == Brightness.dark
-              ? [
-                  Theme.of(context).colorScheme.surfaceContainerHigh,
-                  Theme.of(context).colorScheme.surfaceContainer,
-                ]
-              : const [
-                  Color(0xFFFFFFFF),
-                  Color(0xFFF3F8FF),
-                ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: Theme.of(context)
-              .colorScheme
-              .outlineVariant
-              .withValues(alpha: 0.28),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.withValues(alpha: 0.10),
-            blurRadius: 28,
-            offset: const Offset(0, 14),
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1090,41 +989,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ),
           ),
           const SizedBox(height: 12),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.blue[700],
-              borderRadius: BorderRadius.circular(22),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blue.withValues(alpha: 0.20),
-                  blurRadius: 14,
-                  offset: const Offset(0, 6),
-                ),
-              ],
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  debugPrint('Create Plan tapped!');
-                  GoRouter.of(context).push('/create-plan');
-                },
-                borderRadius: BorderRadius.circular(16),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: Text(
-                    'Create Plan',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-              ),
+          SizedBox(
+            width: double.infinity,
+            child: HalaPrimaryButton(
+              onPressed: () {
+                debugPrint('Create Plan tapped!');
+                GoRouter.of(context).push('/create-plan');
+              },
+              icon: Icons.add_rounded,
+              child: const Text('Create Plan'),
             ),
           ),
         ],
@@ -1616,42 +1489,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Nearby Trending Places',
-                      style: TextStyle(
-                        fontSize: 21,
-                        fontWeight: FontWeight.w900,
-                        color: Theme.of(context).colorScheme.onSurface,
-                        letterSpacing: -0.3,
-                      ),
-                    ),
-                    if (hasFewResults)
-                      Text(
-                        'Only ${_trendingDestinations.length} found',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.orange[700],
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ],
+          child: HalaSectionHeader(
+            title: 'Explore places',
+            subtitle: hasFewResults
+                ? 'Only ${_trendingDestinations.length} nearby places found'
+                : 'Nearby places worth checking before your next trip',
           ),
         ),
         const SizedBox(height: 16),
         _isLoading
-            ? Padding(
-                padding: EdgeInsets.symmetric(vertical: 40),
-                child: Center(child: CircularProgressIndicator()),
+            ? const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: HalaLoadingState(label: 'Finding nearby places...'),
               )
             : _trendingDestinations.isEmpty
                 ? _buildEmptyPlacesState()
