@@ -10,10 +10,10 @@ import 'package:halaph/services/simple_plan_service.dart';
 import 'package:halaph/models/plan.dart';
 import 'package:halaph/models/destination.dart';
 import 'package:halaph/screens/explore_details_screen.dart';
-import 'package:halaph/widgets/motion_widgets.dart';
 import 'package:halaph/models/sponsored_ad.dart';
 import 'package:halaph/services/app_public_config_service.dart';
 import 'package:halaph/services/user_ads_service.dart';
+import 'package:halaph/widgets/hala_mobile_ui.dart';
 import '../utils/sponsored_ad_link_launcher.dart';
 
 class MyPlansScreen extends StatefulWidget {
@@ -135,7 +135,7 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         title: Text(
-          'My Plans',
+          'Plans',
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurface,
             fontSize: 18,
@@ -145,13 +145,16 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
       ),
       body: SafeArea(
         child: _isLoading
-            ? const LoadingStatePanel(label: 'Loading plans')
+            ? const Padding(
+                padding: EdgeInsets.all(20),
+                child: HalaLoadingState(label: 'Loading plans'),
+              )
             : SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 24),
-                    _buildCreateNewPlan(context),
+                    const SizedBox(height: 12),
+                    _buildPlansHero(context, personalPlans, sharedPlans),
                     const SizedBox(height: 24),
                     _buildPersonalPlans(personalPlans),
                     const SizedBox(height: 24),
@@ -243,64 +246,26 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainer,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: Theme.of(context)
-                .colorScheme
-                .outlineVariant
-                .withValues(alpha: 0.28),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 42,
+            width: 42,
+            decoration: BoxDecoration(
+              color: iconColor.withValues(alpha: 0.10),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Icon(icon, color: iconColor, size: 22),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.18),
-              blurRadius: 18,
-              offset: const Offset(0, 8),
+          const SizedBox(width: 12),
+          Expanded(
+            child: HalaSectionHeader(
+              title: title,
+              subtitle: subtitle,
             ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              height: 42,
-              width: 42,
-              decoration: BoxDecoration(
-                color: iconColor.withValues(alpha: 0.10),
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Icon(icon, color: iconColor, size: 22),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w900,
-                      color: Theme.of(context).colorScheme.onSurface,
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                  const SizedBox(height: 3),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -896,16 +861,16 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: EmptyStatePanel(
+      child: HalaEmptyState(
         icon: Icons.folder_open_rounded,
         title: title,
         message: message,
         action: actionLabel == null || onAction == null
             ? null
-            : ElevatedButton.icon(
+            : HalaPrimaryButton(
                 onPressed: onAction,
-                icon: const Icon(Icons.add_rounded),
-                label: Text(actionLabel),
+                icon: Icons.add_rounded,
+                child: Text(actionLabel),
               ),
       ),
     );
@@ -997,85 +962,108 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
     );
   }
 
-  Widget _buildCreateNewPlan(BuildContext context) {
+  Widget _buildPlansHero(
+    BuildContext context,
+    List<TravelPlan> personalPlans,
+    List<TravelPlan> sharedPlans,
+  ) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final activePlanCount = personalPlans.length + sharedPlans.length;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: InkWell(
-        onTap: widget.guideModeDemo
-            ? null
-            : () {
-                debugPrint('My Plans Create New Plan tapped!');
-                GoRouter.of(context).push('/create-plan');
-              },
-        borderRadius: BorderRadius.circular(22),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(18),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [
-                Color(0xFF1976D2),
-                Color(0xFF03A9F4),
+      child: HalaCard(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary.withValues(alpha: 0.10),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(
+                    Icons.route_rounded,
+                    color: colorScheme.primary,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Organize every trip',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -0.25,
+                            ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        'Create plans, keep shared trips close, and return to finished journeys when you need them.',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                              height: 1.35,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(22),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.blue.withValues(alpha: 0.22),
-                blurRadius: 24,
-                offset: const Offset(0, 12),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              Container(
-                height: 44,
-                width: 44,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.18),
-                  borderRadius: BorderRadius.circular(16),
+            const SizedBox(height: 18),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                HalaStatusChip(
+                  icon: Icons.map_rounded,
+                  label:
+                      '$activePlanCount active plan${activePlanCount == 1 ? '' : 's'}',
                 ),
-                child: Icon(
-                  Icons.add_rounded,
-                  color: Colors.white,
-                  size: 26,
+                HalaStatusChip(
+                  icon: Icons.groups_rounded,
+                  label:
+                      '${sharedPlans.length} shared plan${sharedPlans.length == 1 ? '' : 's'}',
+                  color: const Color(0xFF7B1FA2),
                 ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Create New Plan',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(height: 3),
-                    Text(
-                      'Start a route, add stops, and organize your trip.',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white70,
-                      ),
-                    ),
-                  ],
+              ],
+            ),
+            const SizedBox(height: 18),
+            Row(
+              children: [
+                Expanded(
+                  child: HalaPrimaryButton(
+                    onPressed: widget.guideModeDemo
+                        ? null
+                        : () {
+                            debugPrint('My Plans Create New Plan tapped!');
+                            GoRouter.of(context).push('/create-plan');
+                          },
+                    icon: Icons.add_rounded,
+                    child: const Text('Create New Plan'),
+                  ),
                 ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              child: HalaSecondaryButton(
+                onPressed: widget.guideModeDemo
+                    ? null
+                    : () => GoRouter.of(context).push('/trip-history'),
+                icon: Icons.history_rounded,
+                child: const Text('Open Trip History'),
               ),
-              Icon(
-                Icons.arrow_forward_rounded,
-                color: Colors.white,
-                size: 20,
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -13,6 +13,7 @@ import 'package:halaph/services/guide_mode_demo_state.dart';
 import 'package:halaph/services/guide_presenter_controller.dart';
 import 'package:halaph/models/user.dart';
 import 'package:halaph/models/destination.dart';
+import 'package:halaph/widgets/hala_mobile_ui.dart';
 
 // Data models for easier implementation
 class UserProfile {
@@ -196,7 +197,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          'My Profile',
+          'Profile',
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurface,
             fontSize: 20,
@@ -226,14 +227,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 20),
               _buildProfileEntrance(
                 order: 1,
+                child: _buildAccountHub(),
+              ),
+              const SizedBox(height: 20),
+              _buildProfileEntrance(
+                order: 2,
                 child: _buildCommuterTypeSection(),
               ),
               const SizedBox(height: 20),
-              _buildProfileEntrance(order: 2, child: _buildTripHistoryButton()),
+              _buildProfileEntrance(order: 3, child: _buildAccountsButton()),
               const SizedBox(height: 20),
-              _buildProfileEntrance(order: 3, child: _buildLogoutButton()),
-              const SizedBox(height: 20),
-              _buildProfileEntrance(order: 4, child: _buildAccountsButton()),
+              _buildProfileEntrance(order: 4, child: _buildLogoutButton()),
               const SizedBox(height: 30),
             ],
           ),
@@ -264,83 +268,222 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfileHeader() {
-    return Container(
-      width: double.infinity,
+    return HalaCard(
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
-      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
+          Row(
             children: [
-              GestureDetector(
-                onTap:
-                    widget.guideModeDemo ? null : _pickAndUploadProfilePicture,
-                child: CircleAvatar(
-                  radius: 52,
-                  backgroundColor:
-                      Theme.of(context).colorScheme.surfaceContainerHighest,
-                  backgroundImage: _userProfile.avatarUrl != null
-                      ? NetworkImage(_userProfile.avatarUrl!)
-                      : null,
-                  child: _userProfile.avatarUrl == null
-                      ? Icon(
-                          Icons.person,
-                          size: 52,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        )
-                      : null,
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: GestureDetector(
-                  onTap: widget.guideModeDemo
-                      ? null
-                      : _pickAndUploadProfilePicture,
-                  child: Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF2196F3),
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.surfaceContainer,
-                        width: 3,
-                      ),
-                    ),
-                    child: Icon(
-                      Icons.edit,
-                      size: 16,
-                      color: Colors.white,
+              Stack(
+                children: [
+                  GestureDetector(
+                    onTap: widget.guideModeDemo
+                        ? null
+                        : _pickAndUploadProfilePicture,
+                    child: CircleAvatar(
+                      radius: 42,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.surfaceContainerHighest,
+                      backgroundImage: _userProfile.avatarUrl != null
+                          ? NetworkImage(_userProfile.avatarUrl!)
+                          : null,
+                      child: _userProfile.avatarUrl == null
+                          ? Icon(
+                              Icons.person,
+                              size: 42,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            )
+                          : null,
                     ),
                   ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: widget.guideModeDemo
+                          ? null
+                          : _pickAndUploadProfilePicture,
+                      child: Container(
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2196F3),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color:
+                                Theme.of(context).colorScheme.surfaceContainer,
+                            width: 3,
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.edit,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _userProfile.name,
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      _userProfile.email,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Text(
-            _userProfile.name,
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            _userProfile.email,
-            style: TextStyle(
-              fontSize: 14,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
+          const SizedBox(height: 18),
+          HalaStatusChip(
+            icon: Icons.badge_rounded,
+            label: _userProfile.userCode,
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildAccountHub() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const HalaSectionHeader(
+          title: 'Account hub',
+          subtitle: 'Saved places, friends, and trip tools stay here.',
+        ),
+        const SizedBox(height: 12),
+        HalaCard(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              _buildHubAction(
+                icon: Icons.favorite_rounded,
+                title: 'Saved Places',
+                subtitle: 'Open your favorites',
+                onTap: widget.guideModeDemo
+                    ? null
+                    : widget.onViewAllFavoritesTap ??
+                        () => GoRouter.of(context).push('/favorites'),
+              ),
+              _buildHubDivider(),
+              _buildHubAction(
+                icon: Icons.people_alt_rounded,
+                title: 'Friends',
+                subtitle: 'Requests, codes, and your friend list',
+                onTap: widget.guideModeDemo
+                    ? null
+                    : () => GoRouter.of(context).push('/friends'),
+              ),
+              _buildHubDivider(),
+              _buildHubAction(
+                icon: Icons.history_rounded,
+                title: 'Trip History',
+                subtitle: 'Review completed plans',
+                onTap: widget.onTripHistoryTap ??
+                    () => GoRouter.of(context).push('/trip-history'),
+              ),
+              _buildHubDivider(),
+              _buildHubAction(
+                icon: Icons.settings_rounded,
+                title: 'Settings',
+                subtitle: 'Preferences and Guide Mode',
+                onTap: widget.onSettingsTap ??
+                    () => GoRouter.of(context).push('/settings'),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHubAction({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback? onTap,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+        child: Row(
+          children: [
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: colorScheme.primary.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Icon(icon, color: colorScheme.primary, size: 21),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: colorScheme.onSurface,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: colorScheme.onSurfaceVariant,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.chevron_right_rounded,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHubDivider() {
+    return Divider(
+      height: 1,
+      indent: 62,
+      color:
+          Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.4),
     );
   }
 
@@ -472,61 +615,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildTripHistoryButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: widget.onTripHistoryTap ??
-            () {
-              GoRouter.of(context).push('/trip-history');
-            },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          foregroundColor: Theme.of(context).colorScheme.onSurface,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: BorderSide(
-              color: Theme.of(context)
-                  .colorScheme
-                  .outlineVariant
-                  .withValues(alpha: 0.28),
-            ),
-          ),
-          elevation: 0,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.flight,
-                  color: const Color(0xFF64B5F6), // Light blue
-                  size: 18,
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  'Trip History',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                ),
-              ],
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildLogoutButton() {
     return SizedBox(
       width: double.infinity,
@@ -586,22 +674,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildAccountsButton() {
     return SizedBox(
       width: double.infinity,
-      child: ElevatedButton.icon(
+      child: HalaSecondaryButton(
         onPressed: widget.guideModeDemo
             ? null
             : () {
                 GoRouter.of(context).push('/accounts');
               },
-        icon: Icon(Icons.account_circle),
-        label: Text('Accounts'),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
+        icon: Icons.account_circle_rounded,
+        child: const Text('Switch Accounts'),
       ),
     );
   }
