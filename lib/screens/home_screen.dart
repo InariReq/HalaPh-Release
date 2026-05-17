@@ -500,7 +500,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }) {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
-      duration: Duration(milliseconds: 360 + (order * 90)),
+      duration: Duration(milliseconds: 220 + (order.clamp(0, 4) * 30)),
       curve: Curves.easeOutCubic,
       builder: (context, value, child) {
         return Opacity(

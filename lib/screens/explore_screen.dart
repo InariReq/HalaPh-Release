@@ -1014,7 +1014,7 @@ class _ExploreScreenState extends State<ExploreScreen>
               return TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0, end: 1),
                 duration:
-                    Duration(milliseconds: 280 + (index.clamp(0, 6) * 55)),
+                    Duration(milliseconds: 220 + (index.clamp(0, 6) * 30)),
                 curve: Curves.easeOutCubic,
                 builder: (context, value, child) {
                   return Opacity(

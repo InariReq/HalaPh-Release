@@ -276,7 +276,7 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
   }) {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
-      duration: Duration(milliseconds: 300 + (order.clamp(0, 4) * 45)),
+      duration: Duration(milliseconds: 220 + (order.clamp(0, 4) * 30)),
       curve: Curves.easeOutCubic,
       builder: (context, value, child) {
         return Opacity(
@@ -525,8 +525,8 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
                       tooltip: 'Mark as finished',
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(
-                        minWidth: 32,
-                        minHeight: 32,
+                        minWidth: 44,
+                        minHeight: 44,
                       ),
                     ),
                   if (!widget.guideModeDemo)
@@ -546,8 +546,8 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
                       tooltip: shouldLeave ? 'Leave plan' : 'Delete plan',
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(
-                        minWidth: 32,
-                        minHeight: 32,
+                        minWidth: 44,
+                        minHeight: 44,
                       ),
                     ),
                   Icon(
