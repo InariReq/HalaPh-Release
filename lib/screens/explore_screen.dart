@@ -727,7 +727,8 @@ class _ExploreScreenState extends State<ExploreScreen>
           children: [
             const HalaSectionHeader(
               title: 'Explore',
-              subtitle: 'Find places, compare options, and start the route.',
+              subtitle:
+                  'Find places, compare route options, and save trips for later.',
             ),
             const SizedBox(height: 16),
             _buildSearchBar(),
@@ -966,8 +967,9 @@ class _ExploreScreenState extends State<ExploreScreen>
 
   Widget _buildSearchResults() {
     if (_destinations.isEmpty) {
-      final title =
-          _placesUnavailable ? 'Places unavailable' : 'No places found';
+      final title = _placesUnavailable
+          ? 'Showing saved data while we reconnect.'
+          : 'No places found';
       final message = _placesUnavailable
           ? 'Check your connection or try again later.'
           : 'Try a simpler search or choose another category.';

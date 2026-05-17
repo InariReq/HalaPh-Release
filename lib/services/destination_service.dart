@@ -13,6 +13,7 @@ import 'package:halaph/services/google_maps_service.dart';
 import 'package:halaph/services/user_admin_locations_service.dart';
 import 'package:halaph/utils/dev_mode.dart';
 import 'package:halaph/utils/place_display_name_utils.dart';
+import 'package:halaph/utils/app_log.dart';
 
 class DestinationService {
   static const LatLng _defaultSearchLocation = LatLng(14.5995, 120.9842);
@@ -23,6 +24,10 @@ class DestinationService {
   static LatLng? _cachedLocation;
   static DateTime? _locationCacheTime;
   static const _cacheValidity = Duration(minutes: 30);
+  static const Duration _trendingCacheValidity = Duration(minutes: 5);
+  static List<Destination>? _cachedTrendingDestinations;
+  static DateTime? _trendingCacheTime;
+  static Future<List<Destination>>? _trendingLoadInFlight;
   static bool _useTestLocation = false;
   static LatLng? _manualTestLocation;
   static final Map<String, String> _imageUrlCache = {};
@@ -277,7 +282,26 @@ class DestinationService {
     return _hydrateMissingImages(ranked, location, maxHydration: 5);
   }
 
-  static Future<List<Destination>> getTrendingDestinations() async {
+  static Future<List<Destination>> getTrendingDestinations({
+    bool forceRefresh = false,
+  }) {
+    final cached = _freshTrendingDestinations;
+    if (!forceRefresh && cached != null) {
+      return Future.value(cached);
+    }
+    final inFlight = _trendingLoadInFlight;
+    if (!forceRefresh && inFlight != null) return inFlight;
+
+    final future = _fetchTrendingDestinations();
+    _trendingLoadInFlight = future;
+    return future.whenComplete(() {
+      if (identical(_trendingLoadInFlight, future)) {
+        _trendingLoadInFlight = null;
+      }
+    });
+  }
+
+  static Future<List<Destination>> _fetchTrendingDestinations() async {
     try {
       // Start with popular malls
       final adminLocations =
@@ -287,18 +311,37 @@ class DestinationService {
       final location = await _getSearchLocation();
 
       if (!DevModeService.allowPaidGoogleApis) {
-        return _rankAndLimit(trending, location, limit: 5);
+        return _cacheTrending(_rankAndLimit(trending, location, limit: 5));
       }
 
       final places = await _discoverPlaces(location);
       trending.addAll(places);
 
       final ranked = _rankAndLimit(trending, location, limit: 5);
-      return _hydrateMissingImages(ranked, location, maxHydration: 5);
+      return _cacheTrending(
+        await _hydrateMissingImages(ranked, location, maxHydration: 5),
+      );
     } catch (e) {
       debugPrint('Error fetching trending destinations: $e');
-      return _popularMalls; // Fallback to malls
+      return _cachedTrendingDestinations ??
+          _popularMalls; // Fallback to saved or local data.
     }
+  }
+
+  static List<Destination>? get _freshTrendingDestinations {
+    final cached = _cachedTrendingDestinations;
+    final cachedAt = _trendingCacheTime;
+    if (cached == null || cachedAt == null) return null;
+    if (DateTime.now().difference(cachedAt) > _trendingCacheValidity) {
+      return null;
+    }
+    return cached;
+  }
+
+  static List<Destination> _cacheTrending(List<Destination> destinations) {
+    _cachedTrendingDestinations = List<Destination>.unmodifiable(destinations);
+    _trendingCacheTime = DateTime.now();
+    return _cachedTrendingDestinations!;
   }
 
   static Future<List<Destination>> searchRealPlaces({
@@ -834,12 +877,10 @@ class DestinationService {
         ? ''
         : GoogleMapsService.buildPhotoUrl(photoReference);
     if (photoReference == null) {
-      debugPrint('Google place photo reference missing: $id');
-    } else {
-      debugPrint('Google place photo reference found: $id');
-      if (imageUrl.isNotEmpty) {
-        debugPrint('Google photo URL built: $id');
-      }
+      AppLog.throttledInfo(
+        'destination-google-photo-missing',
+        'Google photo unavailable for some destinations in this result set.',
+      );
     }
 
     return Destination(
@@ -878,8 +919,10 @@ class DestinationService {
     final name = destination.name.trim();
     final coordinates = destination.coordinates;
     if (name.isEmpty || coordinates == null) {
-      debugPrint(
-          'Cached destination upsert skipped: missing name or coordinates');
+      AppLog.throttledInfo(
+        'cached-destination-missing-fields',
+        'Cached destination upsert skipped: missing name or coordinates',
+      );
       return;
     }
 
@@ -919,11 +962,17 @@ class DestinationService {
       );
       if (_cachedDestinationSessionFingerprints[cacheKey] ==
           incomingFingerprint) {
-        debugPrint('Cached destination upsert skipped: unchanged this session');
+        AppLog.throttledInfo(
+          'cached-destination-unchanged',
+          'Cached destination upsert skipped: unchanged this session',
+        );
         return;
       }
       if (_cachedDestinationUpsertsInFlight.contains(cacheKey)) {
-        debugPrint('Cached destination upsert skipped: already in flight');
+        AppLog.throttledInfo(
+          'cached-destination-inflight',
+          'Cached destination upsert skipped: already in flight',
+        );
         return;
       }
       final lastAttempt = _cachedDestinationLastAttempts[cacheKey];
@@ -932,7 +981,10 @@ class DestinationService {
           _cachedDestinationLastAttemptFingerprints[cacheKey] ==
               incomingFingerprint &&
           now.difference(lastAttempt) < _cachedDestinationWriteDebounce) {
-        debugPrint('Cached destination upsert skipped: debounced');
+        AppLog.throttledInfo(
+          'cached-destination-debounced',
+          'Cached destination upsert skipped: debounced',
+        );
         return;
       }
       _cachedDestinationLastAttempts[cacheKey] = now;
@@ -1000,7 +1052,10 @@ class DestinationService {
       if (existing != null &&
           !_cachedDestinationRequiredFieldsChanged(existingData, writeData)) {
         _cachedDestinationSessionFingerprints[cacheKey] = incomingFingerprint;
-        debugPrint('Cached destination upsert skipped: no field changes');
+        AppLog.throttledInfo(
+          'cached-destination-no-field-changes',
+          'Cached destination upsert skipped: no field changes',
+        );
         return;
       }
 

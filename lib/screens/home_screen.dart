@@ -400,21 +400,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     });
 
     try {
-      debugPrint('=== HOME SCREEN: Loading trending destinations ===');
       final destinations = await DestinationService.getTrendingDestinations();
-      debugPrint(
-        'Home screen loaded ${destinations.take(5).length} nearby popular destinations',
-      );
-
-      // Debug: Check if we got any real data
-      if (destinations.isEmpty) {
-        debugPrint('❌ NO DESTINATIONS RETURNED');
-      } else {
-        debugPrint('✅ Got ${destinations.length} destinations');
-        for (var dest in destinations.take(3)) {
-          debugPrint('- ${dest.name} (${dest.category}) - ID: ${dest.id}');
-        }
-      }
 
       if (!mounted) return;
       setState(() {
@@ -806,7 +792,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Where Every Trip Meets Its Line.',
+                        'Where Every Trip Meets Its Line',
                         style: TextStyle(
                           color: colorScheme.onSurface,
                           fontSize: 24,

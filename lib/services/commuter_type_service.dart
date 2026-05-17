@@ -11,6 +11,7 @@ class CommuterTypeService {
   CommuterTypeService._internal();
 
   final Map<String, PassengerType> _cacheByUid = {};
+  final Map<String, Future<PassengerType>> _loadInFlightByUid = {};
 
   static const allowedKeys = <String>{
     'regular',
@@ -35,18 +36,16 @@ class CommuterTypeService {
       if (!forceRefresh && _cacheByUid.containsKey(uid)) {
         return _cacheByUid[uid]!;
       }
+      final inFlight = _loadInFlightByUid[uid];
+      if (!forceRefresh && inFlight != null) return inFlight;
 
-      final code = await FriendService().getMyCode();
-      final profile = await FirestoreService.getPublicProfile(code)
-          .timeout(const Duration(seconds: 5));
-      final rawType = profile?['commuterType'] as String?;
-
-      final loadedType = fromKey(rawType);
-      _cacheByUid[uid] = loadedType;
-      debugPrint(
-        'Loaded commuter type ${keyFor(loadedType)} for uid=$uid code=$code',
-      );
-      return loadedType;
+      final future = _loadRemoteCommuterType(uid);
+      _loadInFlightByUid[uid] = future;
+      return await future.whenComplete(() {
+        if (identical(_loadInFlightByUid[uid], future)) {
+          _loadInFlightByUid.remove(uid);
+        }
+      });
     } catch (error) {
       debugPrint('Failed to load commuter type: $error');
 
@@ -56,6 +55,20 @@ class CommuterTypeService {
 
       return PassengerType.regular;
     }
+  }
+
+  Future<PassengerType> _loadRemoteCommuterType(String uid) async {
+    final code = await FriendService().getMyCode();
+    final profile = await FirestoreService.getPublicProfile(code)
+        .timeout(const Duration(seconds: 5));
+    final rawType = profile?['commuterType'] as String?;
+
+    final loadedType = fromKey(rawType);
+    _cacheByUid[uid] = loadedType;
+    debugPrint(
+      'Loaded commuter type ${keyFor(loadedType)} for uid=$uid code=$code',
+    );
+    return loadedType;
   }
 
   Future<void> saveCommuterType(PassengerType type) async {
@@ -101,12 +114,14 @@ class CommuterTypeService {
 
   void clearCache() {
     _cacheByUid.clear();
+    _loadInFlightByUid.clear();
   }
 
   void clearCurrentUserCache() {
     final uid = firebase_auth.FirebaseAuth.instance.currentUser?.uid;
     if (uid != null && uid.isNotEmpty) {
       _cacheByUid.remove(uid);
+      _loadInFlightByUid.remove(uid);
     }
   }
 

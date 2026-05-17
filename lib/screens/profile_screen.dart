@@ -110,8 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _loadCommuterType() async {
     if (widget.guideModeDemo) return;
-    final commuterType =
-        await _commuterTypeService.loadCommuterType(forceRefresh: true);
+    final commuterType = await _commuterTypeService.loadCommuterType();
     if (!mounted) return;
     setState(() {
       _commuterType = commuterType;

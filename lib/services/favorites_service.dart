@@ -21,6 +21,8 @@ class FavoritesService {
   String? _cachedUserId;
   List<String>? _cachedIds;
   Map<String, Destination>? _cachedDestinations;
+  Future<List<String>>? _loadInFlight;
+  String? _loadInFlightScope;
 
   Future<List<String>> getFavorites({bool forceRefresh = false}) async {
     final userId = await _currentUserId();
@@ -29,7 +31,27 @@ class FavoritesService {
     if (!forceRefresh && _cachedUserId == cacheScope && _cachedIds != null) {
       return List<String>.from(_cachedIds!);
     }
+    if (!forceRefresh &&
+        _loadInFlightScope == cacheScope &&
+        _loadInFlight != null) {
+      return _loadInFlight!;
+    }
 
+    final future = _loadFavoritesForScope(userId, cacheScope);
+    _loadInFlight = future;
+    _loadInFlightScope = cacheScope;
+    return future.whenComplete(() {
+      if (identical(_loadInFlight, future)) {
+        _loadInFlight = null;
+        _loadInFlightScope = null;
+      }
+    });
+  }
+
+  Future<List<String>> _loadFavoritesForScope(
+    String? userId,
+    String cacheScope,
+  ) async {
     if (userId == null) {
       return _loadLocalFavorites(scope: _localScope(null));
     }
@@ -149,6 +171,8 @@ class FavoritesService {
     _cachedUserId = null;
     _cachedIds = null;
     _cachedDestinations = null;
+    _loadInFlight = null;
+    _loadInFlightScope = null;
   }
 
   Future<bool> _persistFavorites(
@@ -162,6 +186,13 @@ class FavoritesService {
       for (final id in deduped)
         if (destinations[id] != null) id: destinations[id]!,
     };
+    if (_favoritesMatchCurrentCache(
+      cacheScope,
+      deduped,
+      savedDestinations,
+    )) {
+      return true;
+    }
 
     if (userId != null) {
       final savedRemotely = await RemoteSyncService.instance.saveNamespace(
@@ -216,6 +247,29 @@ class FavoritesService {
     _cachedIds = <String>{...ids}.toList();
     _cachedDestinations = _parseLocalDestinations(placesJson);
     return List<String>.from(_cachedIds!);
+  }
+
+  bool _favoritesMatchCurrentCache(
+    String cacheScope,
+    List<String> ids,
+    Map<String, Destination> destinations,
+  ) {
+    if (_cachedUserId != cacheScope || _cachedIds == null) return false;
+    if (_cachedIds!.length != ids.length) return false;
+    for (var index = 0; index < ids.length; index++) {
+      if (_cachedIds![index] != ids[index]) return false;
+    }
+    final cachedDestinations =
+        _cachedDestinations ?? const <String, Destination>{};
+    if (cachedDestinations.length != destinations.length) return false;
+    for (final entry in destinations.entries) {
+      final cached = cachedDestinations[entry.key];
+      if (cached == null ||
+          jsonEncode(cached.toJson()) != jsonEncode(entry.value.toJson())) {
+        return false;
+      }
+    }
+    return true;
   }
 
   Future<void> _saveLocalFavorites(

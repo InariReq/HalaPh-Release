@@ -41,9 +41,9 @@ class _HalaPhLaunchPreflightState extends State<HalaPhLaunchPreflight>
   bool _startTriggered = false;
   bool _readyLogged = false;
 
-  String _notificationMessage = 'Checking notifications';
-  String _locationMessage = 'Checking location';
-  String _accountMessage = 'Checking account session';
+  String _notificationMessage = 'Plans and reminders ready.';
+  String _locationMessage = 'Route tools ready.';
+  String _accountMessage = 'Your commute workspace is ready.';
   late final Stopwatch _preflightStopwatch;
 
   bool get _canStart => _animationComplete && _checksComplete;

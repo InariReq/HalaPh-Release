@@ -57,7 +57,8 @@ class _TerminalRoutesScreenState extends State<TerminalRoutesScreen> {
                   children: [
                     const HalaSectionHeader(
                       title: 'Terminals',
-                      subtitle: 'Browse verified terminal and bus routes.',
+                      subtitle:
+                          'Browse terminal and bus route data with source and confidence cues.',
                     ),
                     const SizedBox(height: 16),
                     TextField(

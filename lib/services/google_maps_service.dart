@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:halaph/models/destination.dart';
 import 'package:halaph/utils/dev_mode.dart';
+import 'package:halaph/utils/app_log.dart';
 
 class GooglePlacesSearchResult {
   final List<Destination> destinations;
@@ -21,6 +22,7 @@ class GooglePlacesSearchResult {
 }
 
 class GoogleMapsService {
+  static final Map<String, String> _photoUrlCache = {};
   static String get _googleApiKey => (dotenv.env['MAPS_API_KEY'] ?? '').trim();
 
   // Determine if Google Maps API key is actually configured in the environment.
@@ -31,6 +33,9 @@ class GoogleMapsService {
   static String buildPhotoUrl(String photoReference, {int maxWidth = 1200}) {
     final reference = photoReference.trim();
     if (reference.isEmpty || !isConfigured) return '';
+    final cacheKey = '$maxWidth:$reference';
+    final cachedUrl = _photoUrlCache[cacheKey];
+    if (cachedUrl != null) return cachedUrl;
     final uri = Uri.parse(
       'https://maps.googleapis.com/maps/api/place/photo',
     ).replace(queryParameters: {
@@ -38,7 +43,9 @@ class GoogleMapsService {
       'photoreference': reference,
       'key': _googleApiKey,
     });
-    return uri.toString();
+    final url = uri.toString();
+    _photoUrlCache[cacheKey] = url;
+    return url;
   }
 
   /// Get directions using Google Directions API.
@@ -337,12 +344,10 @@ class GoogleMapsService {
       final imageUrl =
           photoReference == null ? '' : buildPhotoUrl(photoReference);
       if (photoReference == null) {
-        debugPrint('Google place photo reference missing: $placeId');
-      } else {
-        debugPrint('Google place photo reference found: $placeId');
-      }
-      if (imageUrl.isNotEmpty) {
-        debugPrint('Google photo URL built: $placeId');
+        AppLog.throttledInfo(
+          'google-photo-missing',
+          'Google photo unavailable for some places in this result set.',
+        );
       }
 
       return Destination(

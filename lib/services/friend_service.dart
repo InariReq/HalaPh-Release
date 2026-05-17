@@ -28,13 +28,28 @@ class FriendService {
 
   String? _cachedUserId;
   String? _cachedCode;
+  Future<String>? _myCodeLoadInFlight;
+  final Set<String> _publishedProfileFingerprints = {};
   List<Friend>? _cachedFriends;
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _friendsSubscription;
   final _friendsController = StreamController<List<Friend>>.broadcast();
 
   Stream<List<Friend>> get friendsStream => _friendsController.stream;
 
-  Future<String> getMyCode({bool forceRefresh = false}) async {
+  Future<String> getMyCode({bool forceRefresh = false}) {
+    final inFlight = _myCodeLoadInFlight;
+    if (!forceRefresh && inFlight != null) return inFlight;
+
+    final future = _loadMyCode(forceRefresh: forceRefresh);
+    _myCodeLoadInFlight = future;
+    return future.whenComplete(() {
+      if (identical(_myCodeLoadInFlight, future)) {
+        _myCodeLoadInFlight = null;
+      }
+    });
+  }
+
+  Future<String> _loadMyCode({required bool forceRefresh}) async {
     final userId = await _currentUserId();
     if (userId == null) return 'HP-0000';
 
@@ -42,20 +57,7 @@ class FriendService {
     final seed = firebaseUser?.email ?? firebaseUser?.displayName ?? 'traveler';
 
     if (!forceRefresh && _cachedUserId == userId && _cachedCode != null) {
-      final claimedCode = await _claimOrGenerateAvailableCode(
-        preferredCode: _cachedCode!,
-        uid: userId,
-        seed: seed,
-      );
-      if (claimedCode == _cachedCode) {
-        return _cachedCode!;
-      }
-      _cachedCode = claimedCode;
-      await RemoteSyncService.instance.saveNamespace('profile', {
-        'code': claimedCode,
-      });
-      await _publishPublicProfile(claimedCode);
-      return claimedCode;
+      return _cachedCode!;
     }
 
     if (forceRefresh) {
@@ -872,6 +874,8 @@ class FriendService {
   void clearCache() {
     _cachedUserId = null;
     _cachedCode = null;
+    _myCodeLoadInFlight = null;
+    _publishedProfileFingerprints.clear();
     _cachedFriends = null;
     _friendsSubscription?.cancel();
     _friendsSubscription = null;
@@ -1014,31 +1018,41 @@ class FriendService {
     final code = _normalizeCode(rawCode);
     final firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
     if (code.isEmpty || firebaseUser == null) return;
+    final displayName = bestEffortDisplayNameFromValues(
+          displayName: firebaseUser.displayName,
+          email: firebaseUser.email,
+        ) ??
+        'Traveler';
+    final effectiveAvatarUrl = avatarUrl?.trim().isNotEmpty == true
+        ? avatarUrl!.trim()
+        : firebaseUser.photoURL?.trim() ?? '';
+    final fingerprint = [
+      firebaseUser.uid,
+      code,
+      displayName,
+      firebaseUser.email ?? '',
+      effectiveAvatarUrl,
+    ].join('|');
+    if (_publishedProfileFingerprints.contains(fingerprint)) return;
 
     try {
       final data = {
         'uid': firebaseUser.uid,
         'code': code,
-        'name': bestEffortDisplayNameFromValues(
-              displayName: firebaseUser.displayName,
-              email: firebaseUser.email,
-            ) ??
-            'Traveler',
+        'name': displayName,
         'email': firebaseUser.email,
         'updatedAt': FieldValue.serverTimestamp(),
       };
 
-      final usableAvatarUrl = avatarUrl?.trim();
-      if (usableAvatarUrl != null && usableAvatarUrl.isNotEmpty) {
-        data['avatarUrl'] = usableAvatarUrl;
-      } else if (firebaseUser.photoURL?.isNotEmpty == true) {
-        data['avatarUrl'] = firebaseUser.photoURL!;
+      if (effectiveAvatarUrl.isNotEmpty) {
+        data['avatarUrl'] = effectiveAvatarUrl;
       }
 
       await FirestoreService.updatePublicProfile(
         code,
         data,
       ).timeout(const Duration(seconds: 5));
+      _publishedProfileFingerprints.add(fingerprint);
     } catch (_) {
       try {
         final profileRef =
@@ -1047,26 +1061,20 @@ class FriendService {
         final fallbackData = <String, dynamic>{
           'uid': firebaseUser.uid,
           'code': code,
-          'name': bestEffortDisplayNameFromValues(
-                displayName: firebaseUser.displayName,
-                email: firebaseUser.email,
-              ) ??
-              'Traveler',
+          'name': displayName,
           'email': firebaseUser.email,
           'createdAt': FieldValue.serverTimestamp(),
           'updatedAt': FieldValue.serverTimestamp(),
         };
 
-        final usableAvatarUrl = avatarUrl?.trim();
-        if (usableAvatarUrl != null && usableAvatarUrl.isNotEmpty) {
-          fallbackData['avatarUrl'] = usableAvatarUrl;
-        } else if (firebaseUser.photoURL?.isNotEmpty == true) {
-          fallbackData['avatarUrl'] = firebaseUser.photoURL!;
+        if (effectiveAvatarUrl.isNotEmpty) {
+          fallbackData['avatarUrl'] = effectiveAvatarUrl;
         }
 
         await profileRef
             .set(fallbackData, SetOptions(merge: true))
             .timeout(const Duration(seconds: 5));
+        _publishedProfileFingerprints.add(fingerprint);
       } catch (_) {}
     }
   }

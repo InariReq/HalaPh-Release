@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:halaph/models/destination.dart';
 import 'package:halaph/services/google_maps_service.dart';
+import 'package:halaph/utils/app_log.dart';
 import 'package:halaph/utils/place_display_name_utils.dart';
 
 class UserFeaturedPlacesService {
@@ -21,18 +24,51 @@ class UserFeaturedPlacesService {
     'locationId',
     'targetId',
   ];
+  static const Duration _cacheTtl = Duration(minutes: 5);
+  static List<Destination>? _cachedActivePlaces;
+  static DateTime? _cachedAt;
+  static Future<List<Destination>>? _loadInFlight;
 
   static Future<List<Destination>> getActiveFeaturedPlaces({
     DestinationCategory? category,
     String query = '',
+    bool forceRefresh = false,
   }) async {
+    final allPlaces = await _loadActiveFeaturedPlaces(
+      forceRefresh: forceRefresh,
+    );
+    return _filterDestinations(allPlaces, category: category, query: query);
+  }
+
+  static Future<List<Destination>> _loadActiveFeaturedPlaces({
+    required bool forceRefresh,
+  }) {
+    final cached = _freshCache;
+    if (!forceRefresh && cached != null) {
+      return Future.value(cached);
+    }
+    final inFlight = _loadInFlight;
+    if (!forceRefresh && inFlight != null) return inFlight;
+
+    final future = _fetchActiveFeaturedPlaces();
+    _loadInFlight = future;
+    return future.whenComplete(() {
+      if (identical(_loadInFlight, future)) {
+        _loadInFlight = null;
+      }
+    });
+  }
+
+  static Future<List<Destination>> _fetchActiveFeaturedPlaces() async {
     try {
-      debugPrint('Featured places query started');
+      AppLog.throttledInfo(
+        'featured-places-query',
+        'Featured places query started',
+      );
       final now = DateTime.now();
       final candidates = <_FeaturedDestination>[];
 
       final featuredDocs = await _readCollection(_featuredCollection);
-      debugPrint('Featured places collection loaded: ${featuredDocs.length}');
       for (final doc in featuredDocs) {
         final candidate = await _featuredCollectionCandidate(doc, now);
         if (candidate != null) {
@@ -42,42 +78,64 @@ class UserFeaturedPlacesService {
 
       final existingDestinationCandidates =
           await _loadExistingFeaturedDestinations(now);
-      debugPrint(
-        'Existing featured destinations loaded: '
-        '${existingDestinationCandidates.length}',
-      );
       candidates.addAll(existingDestinationCandidates);
 
       final adminLocationCandidates =
           await _loadExistingFeaturedAdminLocations(now);
-      debugPrint(
-        'Existing featured admin locations loaded: '
-        '${adminLocationCandidates.length}',
-      );
       candidates.addAll(adminLocationCandidates);
 
-      final filtered = _filterCandidates(
-        candidates,
-        category: category,
-        query: query,
+      final merged = _mergeAndSort(candidates);
+      final destinations = merged
+          .map((candidate) => candidate.destination)
+          .toList(growable: false);
+      _cachedActivePlaces = destinations;
+      _cachedAt = DateTime.now();
+      AppLog.throttledInfo(
+        'featured-places-loaded',
+        'Featured places loaded: ${destinations.length}',
       );
-      final merged = _mergeAndSort(filtered);
-      debugPrint('Featured place merged: ${merged.length}');
-      debugPrint('Featured places loaded: ${merged.length}');
-      return merged.map((candidate) => candidate.destination).toList(
-            growable: false,
-          );
+      return destinations;
     } on FirebaseException catch (error) {
       if (error.code == 'permission-denied') {
-        debugPrint('Featured places permission-denied: ${error.message}');
-        return const <Destination>[];
+        AppLog.throttledInfo(
+          'featured-places-denied',
+          'Featured places permission-denied; showing saved data if available.',
+        );
+        return _cachedActivePlaces ?? const <Destination>[];
       }
-      debugPrint('Featured places read failed: ${error.code}');
-      return const <Destination>[];
+      AppLog.error('Featured places read failed: ${error.code}');
+      return _cachedActivePlaces ?? const <Destination>[];
     } catch (error) {
-      debugPrint('Featured places read failed: $error');
-      return const <Destination>[];
+      AppLog.error('Featured places read failed: $error');
+      return _cachedActivePlaces ?? const <Destination>[];
     }
+  }
+
+  static List<Destination>? get _freshCache {
+    final cached = _cachedActivePlaces;
+    final cachedAt = _cachedAt;
+    if (cached == null || cachedAt == null) return null;
+    if (DateTime.now().difference(cachedAt) > _cacheTtl) return null;
+    return cached;
+  }
+
+  static List<Destination> _filterDestinations(
+    List<Destination> destinations, {
+    required DestinationCategory? category,
+    required String query,
+  }) {
+    final normalizedQuery = query.trim().toLowerCase();
+    return destinations.where((destination) {
+      if (category != null && destination.category != category) return false;
+      if (normalizedQuery.isEmpty) return true;
+      final searchable = [
+        destination.name,
+        destination.location,
+        destination.description,
+        destination.tags.join(' '),
+      ].join(' ').toLowerCase();
+      return searchable.contains(normalizedQuery);
+    }).toList(growable: false);
   }
 
   static Future<_FeaturedDestination?> _featuredCollectionCandidate(
@@ -87,7 +145,10 @@ class UserFeaturedPlacesService {
     final data = doc.data();
     final skipReason = _skipReason(data, now, requiresFeatureFlag: false);
     if (skipReason != null) {
-      debugPrint('Skipping featured place ${doc.id}: $skipReason');
+      AppLog.throttledInfo(
+        'featured-skip-${doc.id}-$skipReason',
+        'Skipping featured place ${doc.id}: $skipReason',
+      );
       return null;
     }
 
@@ -102,9 +163,6 @@ class UserFeaturedPlacesService {
         featuredData: data,
       );
       if (resolved != null) {
-        debugPrint(
-          'Featured place resolved reference: $sourceCollection/$sourceId',
-        );
         return _FeaturedDestination(
           destination: _markFeatured(
             _applyFeaturedDisplayName(resolved.destination, data),
@@ -114,8 +172,9 @@ class UserFeaturedPlacesService {
           sourceId: '$sourceCollection/$sourceId',
         );
       }
-      debugPrint(
-        'Featured place skipped invalid: reference not found $sourceCollection/$sourceId',
+      AppLog.throttledInfo(
+        'featured-reference-not-found',
+        'Some featured place references could not be resolved.',
       );
     }
 
@@ -123,15 +182,15 @@ class UserFeaturedPlacesService {
     if (referenceId != null) {
       final resolved = await _resolveReferencedDestination(referenceId, now);
       if (resolved != null) {
-        debugPrint('Featured place resolved reference: $referenceId');
         return _FeaturedDestination(
           destination: _markFeatured(resolved.destination, priority),
           priority: priority,
           sourceId: doc.id,
         );
       }
-      debugPrint(
-        'Featured place skipped invalid: reference not found $referenceId',
+      AppLog.throttledInfo(
+        'featured-reference-not-found',
+        'Some featured place references could not be resolved.',
       );
     }
 
@@ -141,8 +200,9 @@ class UserFeaturedPlacesService {
       sourceLabel: 'Admin Featured',
     );
     if (destination == null) {
-      debugPrint(
-        'Featured place skipped invalid: ${doc.id} missing name, location, or category',
+      AppLog.throttledInfo(
+        'featured-invalid-shape',
+        'Some featured places are missing required fields.',
       );
       return null;
     }
@@ -168,9 +228,6 @@ class UserFeaturedPlacesService {
           allowMissingActive: true,
         );
         if (skipReason != null) {
-          debugPrint(
-            'Featured place skipped invalid: ${doc.id} $skipReason',
-          );
           continue;
         }
 
@@ -209,7 +266,6 @@ class UserFeaturedPlacesService {
       final data = doc.data();
       final skipReason = _skipReason(data, now);
       if (skipReason != null) {
-        debugPrint('Featured place skipped invalid: ${doc.id} $skipReason');
         continue;
       }
 
@@ -262,9 +318,6 @@ class UserFeaturedPlacesService {
           allowMissingActive: true,
         );
         if (skipReason != null) {
-          debugPrint(
-            'Featured place skipped invalid: $referenceId $skipReason',
-          );
           return null;
         }
 
@@ -310,8 +363,9 @@ class UserFeaturedPlacesService {
               const <String, dynamic>{}}) async {
     if (collectionPath != _adminLocationsCollection &&
         !_destinationCollections.contains(collectionPath)) {
-      debugPrint(
-        'Featured place skipped invalid: unsupported source collection $collectionPath',
+      AppLog.throttledInfo(
+        'featured-unsupported-source',
+        'Some featured places use an unsupported source collection.',
       );
       return null;
     }
@@ -332,7 +386,6 @@ class UserFeaturedPlacesService {
         allowMissingActive: true,
       );
       if (skipReason != null) {
-        debugPrint('Featured place skipped invalid: $referenceId $skipReason');
         return null;
       }
 
@@ -432,41 +485,6 @@ class UserFeaturedPlacesService {
     }
   }
 
-  static List<_FeaturedDestination> _filterCandidates(
-    List<_FeaturedDestination> candidates, {
-    required DestinationCategory? category,
-    required String query,
-  }) {
-    final queryLower = query.trim().toLowerCase();
-    return candidates.where((candidate) {
-      final destination = candidate.destination;
-      if (category != null && destination.category != category) {
-        debugPrint(
-          'Featured place skipped invalid: ${candidate.sourceId} category does not match selected filter',
-        );
-        return false;
-      }
-
-      if (queryLower.isEmpty) return true;
-
-      final searchable = [
-        destination.name,
-        destination.location,
-        destination.description,
-        destination.tags.join(' '),
-      ].join(' ').toLowerCase();
-
-      if (!searchable.contains(queryLower)) {
-        debugPrint(
-          'Featured place skipped invalid: ${candidate.sourceId} query "$query" did not match',
-        );
-        return false;
-      }
-
-      return true;
-    }).toList(growable: false);
-  }
-
   static List<_FeaturedDestination> _mergeAndSort(
     List<_FeaturedDestination> candidates,
   ) {
@@ -484,10 +502,6 @@ class UserFeaturedPlacesService {
       final keys = _dedupeKeys(candidate.destination);
       final duplicate = keys.any(seen.contains);
       if (duplicate) {
-        debugPrint(
-          'Featured place skipped duplicate: '
-          '${candidate.sourceId.isNotEmpty ? candidate.sourceId : candidate.destination.name}',
-        );
         continue;
       }
 
@@ -610,9 +624,7 @@ class UserFeaturedPlacesService {
     ]) {
       final value = _stringValue(data[field]);
       if (value.isNotEmpty) {
-        if (field == 'displayNameOverride') {
-          debugPrint('Featured place display name override used: $value');
-        }
+        if (field == 'displayNameOverride') {}
         return value;
       }
     }
@@ -780,7 +792,6 @@ class UserFeaturedPlacesService {
     }.entries) {
       final value = entry.value;
       if (value is String && value.trim().startsWith('http')) {
-        debugPrint('Featured place image resolved from field: ${entry.key}');
         return value.trim();
       }
     }
@@ -789,14 +800,14 @@ class UserFeaturedPlacesService {
     if (reference.isNotEmpty) {
       final imageUrl = GoogleMapsService.buildPhotoUrl(reference);
       if (imageUrl.isNotEmpty) {
-        debugPrint(
-          'Google photo URL built: ${data['googlePlaceId'] ?? data['placeId'] ?? name}',
-        );
         return imageUrl;
       }
     }
 
-    debugPrint('Featured place image missing: $name');
+    AppLog.throttledInfo(
+      'featured-image-missing',
+      'Some featured places do not have an image.',
+    );
     return '';
   }
 

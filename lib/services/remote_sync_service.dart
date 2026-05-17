@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:flutter/foundation.dart';
 import 'package:halaph/services/firebase_app_service.dart';
+import 'package:halaph/utils/app_log.dart';
 
 class RemoteSyncService {
   RemoteSyncService._internal();
@@ -21,7 +21,10 @@ class RemoteSyncService {
       data.remove('_updatedAt');
       return data;
     } catch (error) {
-      debugPrint('Firebase sync load failed for $namespace: $error');
+      AppLog.throttledInfo(
+        'firebase-sync-load-$namespace',
+        'Firebase sync load failed for $namespace; showing saved data if available.',
+      );
       return null;
     }
   }
@@ -38,7 +41,7 @@ class RemoteSyncService {
       await doc.set(data, SetOptions(merge: true)).timeout(_timeout);
       return true;
     } catch (error) {
-      debugPrint('Firebase sync save failed for $namespace: $error');
+      AppLog.error('Firebase sync save failed for $namespace: $error');
       return false;
     }
   }
@@ -50,7 +53,7 @@ class RemoteSyncService {
       await doc.delete().timeout(_timeout);
       return true;
     } catch (error) {
-      debugPrint('Firebase sync delete failed for $namespace: $error');
+      AppLog.error('Firebase sync delete failed for $namespace: $error');
       return false;
     }
   }
