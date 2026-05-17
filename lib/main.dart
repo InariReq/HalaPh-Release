@@ -922,17 +922,20 @@ class MainNavigation extends StatefulWidget {
 
 class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
+  bool _terminalsTabInitialized = false;
   final _guidePresenterController = GuidePresenterController();
   final _homeNavKey = GlobalKey();
   final _exploreNavKey = GlobalKey();
+  final _terminalsNavKey = GlobalKey();
   final _plansNavKey = GlobalKey();
-  final _favoritesNavKey = GlobalKey();
-  final _friendsNavKey = GlobalKey();
   final _profileNavKey = GlobalKey();
 
   void _onTabChanged(int index) {
     setState(() {
       _currentIndex = index;
+      if (index == 2) {
+        _terminalsTabInitialized = true;
+      }
     });
     if (!widget.showGuideMode) return;
     switch (index) {
@@ -940,18 +943,10 @@ class _MainNavigationState extends State<MainNavigation> {
         _guidePresenterController
             .signalSafely(GuidePresenterSignal.openExplore);
         break;
-      case 2:
+      case 3:
         _guidePresenterController.signalSafely(GuidePresenterSignal.openPlans);
         break;
-      case 3:
-        _guidePresenterController
-            .signalSafely(GuidePresenterSignal.openFavorites);
-        break;
       case 4:
-        _guidePresenterController
-            .signalSafely(GuidePresenterSignal.openFriends);
-        break;
-      case 5:
         _guidePresenterController
             .signalSafely(GuidePresenterSignal.openSettings);
         break;
@@ -968,11 +963,11 @@ class _MainNavigationState extends State<MainNavigation> {
       5 => 1,
       6 => 3,
       7 => 3,
-      8 => 2,
-      9 => 2,
-      10 => 4,
-      11 => 5,
-      12 => 5,
+      8 => 3,
+      9 => 3,
+      10 => 3,
+      11 => 4,
+      12 => 4,
       _ => _currentIndex,
     };
     if (targetIndex == _currentIndex) return;
@@ -1011,17 +1006,10 @@ class _MainNavigationState extends State<MainNavigation> {
                     ? _guidePresenterController.selectDestination
                     : null,
               ),
+              _terminalsTabInitialized
+                  ? const TerminalRoutesScreen()
+                  : const SizedBox.shrink(),
               MyPlansScreen(
-                guideModeDemo: widget.showGuideMode,
-                guidePresenterController:
-                    widget.showGuideMode ? _guidePresenterController : null,
-              ),
-              FavoritesScreen(
-                guideModeDemo: widget.showGuideMode,
-                guidePresenterController:
-                    widget.showGuideMode ? _guidePresenterController : null,
-              ),
-              FriendsScreen(
                 guideModeDemo: widget.showGuideMode,
                 guidePresenterController:
                     widget.showGuideMode ? _guidePresenterController : null,
@@ -1063,27 +1051,21 @@ class _MainNavigationState extends State<MainNavigation> {
                       _exploreNavKey,
                     ),
                     _buildNavItem(
+                      Icons.departure_board_rounded,
+                      'Terminals',
+                      2,
+                      _terminalsNavKey,
+                    ),
+                    _buildNavItem(
                       Icons.calendar_month_rounded,
                       'Plans',
-                      2,
-                      _plansNavKey,
-                    ),
-                    _buildNavItem(
-                      Icons.favorite_rounded,
-                      'Favorites',
                       3,
-                      _favoritesNavKey,
-                    ),
-                    _buildNavItem(
-                      Icons.people_alt_rounded,
-                      'Friends',
-                      4,
-                      _friendsNavKey,
+                      _plansNavKey,
                     ),
                     _buildNavItem(
                       Icons.person_rounded,
                       'Profile',
-                      5,
+                      4,
                       _profileNavKey,
                     ),
                   ],
@@ -1100,8 +1082,6 @@ class _MainNavigationState extends State<MainNavigation> {
                 homeNavKey: _homeNavKey,
                 exploreNavKey: _exploreNavKey,
                 plansNavKey: _plansNavKey,
-                favoritesNavKey: _favoritesNavKey,
-                friendsNavKey: _friendsNavKey,
                 profileNavKey: _profileNavKey,
               ),
               presenterController: _guidePresenterController,
