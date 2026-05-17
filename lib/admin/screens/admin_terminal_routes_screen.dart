@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../models/admin_terminal_route.dart';
 import '../services/admin_terminal_route_service.dart';
+import '../widgets/admin_ui.dart';
 import 'admin_terminal_route_form_screen.dart';
 
 class AdminTerminalRoutesScreen extends StatefulWidget {
@@ -22,17 +23,28 @@ class _AdminTerminalRoutesScreenState extends State<AdminTerminalRoutesScreen> {
       stream: _service.streamAll(),
       builder: (context, snapshot) {
         final routes = snapshot.data ?? const <AdminTerminalRoute>[];
-        return ListView(
-          padding: const EdgeInsets.all(28),
+        return AdminPageScaffold(
           children: [
             _buildHeader(context),
             const SizedBox(height: 16),
             if (snapshot.connectionState == ConnectionState.waiting)
-              const _LoadingCard()
+              const AdminLoadingState(label: 'Loading terminal routes...')
             else if (snapshot.hasError)
-              _ErrorCard(error: snapshot.error)
+              AdminErrorState(
+                title: 'Terminal routes unavailable',
+                message: snapshot.error is FirebaseException &&
+                        (snapshot.error as FirebaseException).code ==
+                            'permission-denied'
+                    ? 'Firestore rules do not allow this admin to read terminal routes yet.'
+                    : 'Terminal routes could not be loaded. Try again later.',
+              )
             else if (routes.isEmpty)
-              const _EmptyTerminalRoutesCard()
+              const AdminEmptyState(
+                icon: Icons.route_rounded,
+                title: 'No terminal routes yet',
+                message:
+                    'Create the first verified terminal route to start building the reference set.',
+              )
             else
               _TerminalRoutesList(
                 routes: routes,
@@ -46,55 +58,19 @@ class _AdminTerminalRoutesScreenState extends State<AdminTerminalRoutesScreen> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          alignment: WrapAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 560,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.route_rounded,
-                    size: 42,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Terminal Routes',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
-                              ?.copyWith(fontWeight: FontWeight.w800),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Maintain verified terminal and bus-route references for future user-facing route features.',
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            FilledButton.icon(
-              onPressed: _openAddScreen,
-              icon: const Icon(Icons.add_rounded),
-              label: const Text('Add Terminal Route'),
-            ),
-          ],
+    return AdminSectionHeader(
+      icon: Icons.route_rounded,
+      eyebrow: 'Transit',
+      title: 'Terminal routes',
+      description:
+          'Maintain verified terminal and bus-route references for future user-facing route features.',
+      actions: [
+        AdminActionButton(
+          onPressed: _openAddScreen,
+          icon: Icons.add_rounded,
+          label: 'Add terminal route',
         ),
-      ),
+      ],
     );
   }
 
@@ -161,75 +137,68 @@ class _TerminalRoutesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth < 920) {
-          return Column(
-            children: [
-              for (final route in routes)
-                _TerminalRouteCard(
-                  route: route,
-                  onEdit: onEdit,
-                  onDelete: onDelete,
+    return AdminResponsiveTable(
+      breakpoint: 1000,
+      mobile: Column(
+        children: [
+          for (final route in routes)
+            _TerminalRouteCard(
+              route: route,
+              onEdit: onEdit,
+              onDelete: onDelete,
+            ),
+        ],
+      ),
+      desktop: DataTable(
+        columns: const [
+          DataColumn(label: Text('Terminal')),
+          DataColumn(label: Text('Destination')),
+          DataColumn(label: Text('City')),
+          DataColumn(label: Text('Operator')),
+          DataColumn(label: Text('Source')),
+          DataColumn(label: Text('Confidence')),
+          DataColumn(label: Text('Status')),
+          DataColumn(label: Text('Actions')),
+        ],
+        rows: [
+          for (final route in routes)
+            DataRow(
+              cells: [
+                DataCell(
+                  SizedBox(
+                    width: 280,
+                    child: _TerminalTextSummary(route: route),
+                  ),
                 ),
-            ],
-          );
-        }
-
-        return Card(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-              columns: const [
-                DataColumn(label: Text('Terminal')),
-                DataColumn(label: Text('Destination')),
-                DataColumn(label: Text('City')),
-                DataColumn(label: Text('Operator')),
-                DataColumn(label: Text('Confidence')),
-                DataColumn(label: Text('Status')),
-                DataColumn(label: Text('Actions')),
-              ],
-              rows: [
-                for (final route in routes)
-                  DataRow(
-                    cells: [
-                      DataCell(
-                        SizedBox(
-                          width: 280,
-                          child: _TerminalTextSummary(route: route),
-                        ),
+                DataCell(Text(route.destination)),
+                DataCell(Text(route.city)),
+                DataCell(Text(
+                  route.operatorName.isEmpty ? '—' : route.operatorName,
+                )),
+                DataCell(_SourceBadge(sourceType: route.sourceType)),
+                DataCell(Text(_labelize(route.confidenceLevel))),
+                DataCell(_StatusBadge(status: route.status)),
+                DataCell(
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        tooltip: 'Edit',
+                        onPressed: () => onEdit(route),
+                        icon: const Icon(Icons.edit_rounded),
                       ),
-                      DataCell(Text(route.destination)),
-                      DataCell(Text(route.city)),
-                      DataCell(Text(
-                        route.operatorName.isEmpty ? '—' : route.operatorName,
-                      )),
-                      DataCell(Text(_labelize(route.confidenceLevel))),
-                      DataCell(_StatusBadge(status: route.status)),
-                      DataCell(
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              tooltip: 'Edit',
-                              onPressed: () => onEdit(route),
-                              icon: const Icon(Icons.edit_rounded),
-                            ),
-                            IconButton(
-                              tooltip: 'Delete',
-                              onPressed: () => onDelete(route),
-                              icon: const Icon(Icons.delete_rounded),
-                            ),
-                          ],
-                        ),
+                      IconButton(
+                        tooltip: 'Delete',
+                        onPressed: () => onDelete(route),
+                        icon: const Icon(Icons.delete_rounded),
                       ),
                     ],
                   ),
+                ),
               ],
             ),
-          ),
-        );
-      },
+        ],
+      ),
     );
   }
 }
@@ -282,6 +251,7 @@ class _TerminalRouteCard extends StatelessWidget {
                       ? 'Operator unset'
                       : route.operatorName,
                 ),
+                _SourceBadge(sourceType: route.sourceType),
                 _InfoChip(
                   icon: Icons.fact_check_rounded,
                   label: _labelize(route.confidenceLevel),
@@ -334,36 +304,20 @@ class _StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final normalized = status.trim().toLowerCase();
-    final (label, backgroundColor, foregroundColor, icon) =
-        switch (normalized) {
-      'active' => (
-          'Active',
-          Colors.green.shade100,
-          Colors.green.shade800,
-          Icons.check_circle_rounded,
-        ),
-      'needs_review' => (
-          'Needs review',
-          Colors.orange.shade100,
-          Colors.orange.shade900,
-          Icons.rate_review_rounded,
-        ),
-      _ => (
-          'Inactive',
-          Colors.grey.shade300,
-          Colors.grey.shade800,
-          Icons.block_rounded,
-        ),
+    final (label, icon) = switch (normalized) {
+      'active' => ('Active', Icons.check_circle_rounded),
+      'needs_review' => ('Needs review', Icons.rate_review_rounded),
+      _ => ('Inactive', Icons.block_rounded),
     };
 
-    return Chip(
-      visualDensity: VisualDensity.compact,
-      backgroundColor: backgroundColor,
-      avatar: Icon(icon, size: 16, color: foregroundColor),
-      label: Text(
-        label,
-        style: TextStyle(color: foregroundColor, fontWeight: FontWeight.w700),
-      ),
+    return AdminStatusBadge(
+      label: label,
+      icon: icon,
+      tone: switch (normalized) {
+        'active' => AdminStatusTone.success,
+        'needs_review' => AdminStatusTone.warning,
+        _ => AdminStatusTone.neutral,
+      },
     );
   }
 }
@@ -380,6 +334,32 @@ class _InfoChip extends StatelessWidget {
       visualDensity: VisualDensity.compact,
       avatar: Icon(icon, size: 16),
       label: Text(label),
+    );
+  }
+}
+
+class _SourceBadge extends StatelessWidget {
+  final String sourceType;
+
+  const _SourceBadge({required this.sourceType});
+
+  @override
+  Widget build(BuildContext context) {
+    final normalized = sourceType.trim().toLowerCase();
+    return AdminStatusBadge(
+      label: _labelize(sourceType),
+      icon: switch (normalized) {
+        'official' => Icons.verified_rounded,
+        'operator' => Icons.business_rounded,
+        'user' => Icons.person_rounded,
+        'estimated' => Icons.analytics_rounded,
+        _ => Icons.source_rounded,
+      },
+      tone: switch (normalized) {
+        'official' => AdminStatusTone.success,
+        'estimated' => AdminStatusTone.warning,
+        _ => AdminStatusTone.info,
+      },
     );
   }
 }
@@ -414,7 +394,7 @@ class _DeleteConfirmDialogState extends State<_DeleteConfirmDialog> {
     return AlertDialog(
       title: Text(widget.title),
       content: SizedBox(
-        width: 420,
+        width: adminDialogWidth(context, 420),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -444,86 +424,6 @@ class _DeleteConfirmDialogState extends State<_DeleteConfirmDialog> {
           child: const Text('Delete'),
         ),
       ],
-    );
-  }
-}
-
-class _LoadingCard extends StatelessWidget {
-  const _LoadingCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Card(
-      child: Padding(
-        padding: EdgeInsets.all(28),
-        child: Center(child: CircularProgressIndicator()),
-      ),
-    );
-  }
-}
-
-class _EmptyTerminalRoutesCard extends StatelessWidget {
-  const _EmptyTerminalRoutesCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Card(
-      child: Padding(
-        padding: EdgeInsets.all(28),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.route_rounded, size: 42),
-            SizedBox(height: 12),
-            Text('No terminal routes yet.'),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ErrorCard extends StatelessWidget {
-  final Object? error;
-
-  const _ErrorCard({this.error});
-
-  @override
-  Widget build(BuildContext context) {
-    final message = error is FirebaseException &&
-            (error as FirebaseException).code == 'permission-denied'
-        ? 'Firestore rules do not allow this admin to read terminal routes yet.'
-        : 'Terminal routes could not be loaded. Try again later.';
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(
-              Icons.error_outline_rounded,
-              color: Theme.of(context).colorScheme.error,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Terminal routes unavailable',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w800),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(message),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

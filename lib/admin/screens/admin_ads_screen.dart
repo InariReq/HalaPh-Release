@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../models/admin_ad.dart';
 import '../models/admin_user.dart';
 import '../services/admin_ads_service.dart';
+import '../widgets/admin_ui.dart';
 
 class AdminAdsScreen extends StatefulWidget {
   final AdminUser currentAdmin;
@@ -28,21 +29,32 @@ class _AdminAdsScreenState extends State<AdminAdsScreen> {
       stream: _service.watchAds(),
       builder: (context, snapshot) {
         final ads = snapshot.data ?? const <AdminAd>[];
-        return ListView(
-          padding: const EdgeInsets.all(28),
+        return AdminPageScaffold(
           children: [
             _buildHeader(context),
             const SizedBox(height: 16),
             if (!_canManage) ...[
-              const _ReadOnlyNotice(),
+              const AdminReadOnlyNotice(
+                message:
+                    'Admins can view advertisements. Owner or Head Admin access is required to make changes.',
+              ),
               const SizedBox(height: 16),
             ],
             if (snapshot.connectionState == ConnectionState.waiting)
-              const _LoadingCard()
+              const AdminLoadingState(label: 'Loading advertisements...')
             else if (snapshot.hasError)
-              _ErrorCard(error: snapshot.error)
+              AdminErrorState(
+                title: 'Advertisements unavailable',
+                message:
+                    'Could not load advertisement records. Check admin permissions and try again. ${snapshot.error ?? ''}',
+              )
             else if (ads.isEmpty)
-              const _EmptyAdsCard()
+              const AdminEmptyState(
+                icon: Icons.campaign_rounded,
+                title: 'No advertisements yet',
+                message:
+                    'Add sponsored card or fullscreen ads when they are ready for admin management.',
+              )
             else
               _AdsList(
                 ads: ads,
@@ -58,55 +70,18 @@ class _AdminAdsScreenState extends State<AdminAdsScreen> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          alignment: WrapAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 560,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.campaign_rounded,
-                    size: 42,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Advertisements Management',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
-                              ?.copyWith(fontWeight: FontWeight.w800),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Manage sponsored card and fullscreen ads for HalaPH.',
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            FilledButton.icon(
-              onPressed: _canManage ? _openAddDialog : null,
-              icon: const Icon(Icons.add_rounded),
-              label: const Text('Add Advertisement'),
-            ),
-          ],
+    return AdminSectionHeader(
+      icon: Icons.campaign_rounded,
+      eyebrow: 'Revenue',
+      title: 'Advertisements',
+      description: 'Manage sponsored card and fullscreen ads for HalaPH.',
+      actions: [
+        AdminActionButton(
+          onPressed: _canManage ? _openAddDialog : null,
+          icon: Icons.add_rounded,
+          label: 'Add advertisement',
         ),
-      ),
+      ],
     );
   }
 
@@ -209,84 +184,75 @@ class _AdsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth < 960) {
-          return Column(
-            children: [
-              for (final ad in ads)
-                _AdCard(
-                  ad: ad,
-                  canManage: canManage,
-                  onEdit: onEdit,
-                  onToggleActive: onToggleActive,
-                  onDelete: onDelete,
+    return AdminResponsiveTable(
+      breakpoint: 1000,
+      mobile: Column(
+        children: [
+          for (final ad in ads)
+            _AdCard(
+              ad: ad,
+              canManage: canManage,
+              onEdit: onEdit,
+              onToggleActive: onToggleActive,
+              onDelete: onDelete,
+            ),
+        ],
+      ),
+      desktop: DataTable(
+        columns: const [
+          DataColumn(label: Text('Priority')),
+          DataColumn(label: Text('Advertisement')),
+          DataColumn(label: Text('Advertiser')),
+          DataColumn(label: Text('Placement')),
+          DataColumn(label: Text('Schedule')),
+          DataColumn(label: Text('Status')),
+          DataColumn(label: Text('Actions')),
+        ],
+        rows: [
+          for (final ad in ads)
+            DataRow(
+              cells: [
+                DataCell(Text(ad.priority.toString())),
+                DataCell(
+                  SizedBox(
+                    width: 320,
+                    child: _AdTextSummary(ad: ad),
+                  ),
                 ),
-            ],
-          );
-        }
-        return Card(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-              columns: const [
-                DataColumn(label: Text('Priority')),
-                DataColumn(label: Text('Advertisement')),
-                DataColumn(label: Text('Advertiser')),
-                DataColumn(label: Text('Placement')),
-                DataColumn(label: Text('Schedule')),
-                DataColumn(label: Text('Status')),
-                DataColumn(label: Text('Actions')),
-              ],
-              rows: [
-                for (final ad in ads)
-                  DataRow(
-                    cells: [
-                      DataCell(Text(ad.priority.toString())),
-                      DataCell(
-                        SizedBox(
-                          width: 320,
-                          child: _AdTextSummary(ad: ad),
+                DataCell(Text(ad.advertiserName)),
+                DataCell(Text(ad.placement.label)),
+                DataCell(_ScheduleText(ad: ad)),
+                DataCell(_StatusBadge(isActive: ad.isActive)),
+                DataCell(
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        tooltip: 'Edit',
+                        onPressed: canManage ? () => onEdit(ad) : null,
+                        icon: const Icon(Icons.edit_rounded),
+                      ),
+                      IconButton(
+                        tooltip: ad.isActive ? 'Disable' : 'Enable',
+                        onPressed: canManage ? () => onToggleActive(ad) : null,
+                        icon: Icon(
+                          ad.isActive
+                              ? Icons.block_rounded
+                              : Icons.check_circle_rounded,
                         ),
                       ),
-                      DataCell(Text(ad.advertiserName)),
-                      DataCell(Text(ad.placement.label)),
-                      DataCell(_ScheduleText(ad: ad)),
-                      DataCell(_StatusBadge(isActive: ad.isActive)),
-                      DataCell(
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              tooltip: 'Edit',
-                              onPressed: canManage ? () => onEdit(ad) : null,
-                              icon: const Icon(Icons.edit_rounded),
-                            ),
-                            IconButton(
-                              tooltip: ad.isActive ? 'Disable' : 'Enable',
-                              onPressed:
-                                  canManage ? () => onToggleActive(ad) : null,
-                              icon: Icon(
-                                ad.isActive
-                                    ? Icons.block_rounded
-                                    : Icons.check_circle_rounded,
-                              ),
-                            ),
-                            IconButton(
-                              tooltip: 'Delete',
-                              onPressed: canManage ? () => onDelete(ad) : null,
-                              icon: const Icon(Icons.delete_outline_rounded),
-                            ),
-                          ],
-                        ),
+                      IconButton(
+                        tooltip: 'Delete',
+                        onPressed: canManage ? () => onDelete(ad) : null,
+                        icon: const Icon(Icons.delete_outline_rounded),
                       ),
                     ],
                   ),
+                ),
               ],
             ),
-          ),
-        );
-      },
+        ],
+      ),
     );
   }
 }
@@ -315,6 +281,8 @@ class _AdCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            _SponsoredPreview(ad: ad),
+            const SizedBox(height: 14),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -430,6 +398,101 @@ class _AdTextSummary extends StatelessWidget {
   }
 }
 
+class _SponsoredPreview extends StatelessWidget {
+  final AdminAd ad;
+
+  const _SponsoredPreview({required this.ad});
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AspectRatio(
+            aspectRatio: 16 / 7,
+            child: ad.imageUrl.isEmpty
+                ? _AdImageFallback(
+                    label: ad.placement.label,
+                    icon: Icons.image_rounded,
+                  )
+                : Image.network(
+                    ad.imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                        _AdImageFallback(
+                      label: 'Image unavailable',
+                      icon: Icons.broken_image_rounded,
+                    ),
+                  ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(14),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    ad.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                AdminStatusBadge(
+                  label: ad.placement.label,
+                  icon: Icons.campaign_rounded,
+                  tone: AdminStatusTone.info,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AdImageFallback extends StatelessWidget {
+  final String label;
+  final IconData icon;
+
+  const _AdImageFallback({
+    required this.label,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return ColoredBox(
+      color: scheme.surfaceContainerLow,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: scheme.onSurfaceVariant),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                  ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _ScheduleText extends StatelessWidget {
   final AdminAd ad;
 
@@ -511,7 +574,7 @@ class _AdFormDialogState extends State<_AdFormDialog> {
     return AlertDialog(
       title: Text(_isEditing ? 'Edit Advertisement' : 'Add Advertisement'),
       content: SizedBox(
-        width: 620,
+        width: adminDialogWidth(context, 620),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -570,30 +633,25 @@ class _AdFormDialogState extends State<_AdFormDialog> {
                   keyboardType: TextInputType.url,
                 ),
                 const SizedBox(height: 12),
-                Row(
+                AdminResponsiveFormRow(
                   children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: _startsAtController,
-                        decoration: const InputDecoration(
-                          labelText: 'Starts at',
-                          hintText: 'YYYY-MM-DD or ISO date',
-                        ),
-                        keyboardType: TextInputType.datetime,
-                        validator: _optionalIsoDateValidator('Starts at'),
+                    TextFormField(
+                      controller: _startsAtController,
+                      decoration: const InputDecoration(
+                        labelText: 'Starts at',
+                        hintText: 'YYYY-MM-DD or ISO date',
                       ),
+                      keyboardType: TextInputType.datetime,
+                      validator: _optionalIsoDateValidator('Starts at'),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: TextFormField(
-                        controller: _endsAtController,
-                        decoration: const InputDecoration(
-                          labelText: 'Ends at',
-                          hintText: 'YYYY-MM-DD or ISO date',
-                        ),
-                        keyboardType: TextInputType.datetime,
-                        validator: _optionalIsoDateValidator('Ends at'),
+                    TextFormField(
+                      controller: _endsAtController,
+                      decoration: const InputDecoration(
+                        labelText: 'Ends at',
+                        hintText: 'YYYY-MM-DD or ISO date',
                       ),
+                      keyboardType: TextInputType.datetime,
+                      validator: _optionalIsoDateValidator('Ends at'),
                     ),
                   ],
                 ),
@@ -709,7 +767,7 @@ class _DeleteConfirmDialogState extends State<_DeleteConfirmDialog> {
     return AlertDialog(
       title: Text(widget.title),
       content: SizedBox(
-        width: 420,
+        width: adminDialogWidth(context, 420),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -743,97 +801,6 @@ class _DeleteConfirmDialogState extends State<_DeleteConfirmDialog> {
   }
 }
 
-class _ReadOnlyNotice extends StatelessWidget {
-  const _ReadOnlyNotice();
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: Icon(
-          Icons.visibility_rounded,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        title: const Text('Read-only access'),
-        subtitle: const Text(
-          'Admin accounts can view advertisements. Owner or Head Admin access is required to add, edit, enable, or disable ads.',
-        ),
-      ),
-    );
-  }
-}
-
-class _LoadingCard extends StatelessWidget {
-  const _LoadingCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Card(
-      child: Padding(
-        padding: EdgeInsets.all(24),
-        child: Center(child: CircularProgressIndicator()),
-      ),
-    );
-  }
-}
-
-class _EmptyAdsCard extends StatelessWidget {
-  const _EmptyAdsCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            Icon(
-              Icons.campaign_outlined,
-              size: 44,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'No advertisements yet',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              'Add sponsored card or fullscreen ads when they are ready for admin management.',
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ErrorCard extends StatelessWidget {
-  final Object? error;
-
-  const _ErrorCard({required this.error});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: Icon(
-          Icons.error_outline_rounded,
-          color: Theme.of(context).colorScheme.error,
-        ),
-        title: const Text('Advertisements unavailable'),
-        subtitle: Text(
-          'Could not load advertisement records. Check admin permissions and try again. ${error ?? ''}',
-        ),
-      ),
-    );
-  }
-}
-
 class _InfoChip extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -857,13 +824,10 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      visualDensity: VisualDensity.compact,
-      avatar: Icon(
-        isActive ? Icons.check_circle_rounded : Icons.block_rounded,
-        size: 16,
-      ),
-      label: Text(isActive ? 'Active' : 'Inactive'),
+    return AdminStatusBadge(
+      label: isActive ? 'Active' : 'Inactive',
+      icon: isActive ? Icons.check_circle_rounded : Icons.block_rounded,
+      tone: isActive ? AdminStatusTone.success : AdminStatusTone.neutral,
     );
   }
 }

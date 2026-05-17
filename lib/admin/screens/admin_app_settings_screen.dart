@@ -4,6 +4,7 @@ import '../models/admin_app_settings.dart';
 import '../models/admin_user.dart';
 import '../models/admin_user_role.dart';
 import '../services/admin_app_settings_service.dart';
+import '../widgets/admin_ui.dart';
 
 class AdminAppSettingsScreen extends StatefulWidget {
   final AdminUser currentAdmin;
@@ -28,21 +29,30 @@ class _AdminAppSettingsScreenState extends State<AdminAppSettingsScreen> {
       stream: _service.watchPublicConfig(),
       builder: (context, snapshot) {
         final config = snapshot.data;
-        return ListView(
-          padding: const EdgeInsets.all(28),
+        return AdminPageScaffold(
           children: [
             _buildHeader(context, config),
             const SizedBox(height: 16),
             if (!_canEdit) ...[
-              const _ReadOnlyNotice(),
+              const AdminReadOnlyNotice(
+                message:
+                    'Head Admin and Admin accounts can view app settings. Owner access is required to save changes.',
+              ),
               const SizedBox(height: 16),
             ],
             if (snapshot.connectionState == ConnectionState.waiting)
-              const _LoadingCard()
+              const AdminLoadingState(label: 'Loading app settings...')
             else if (snapshot.hasError)
-              _ErrorCard(error: snapshot.error)
+              AdminErrorState(
+                title: 'App settings unavailable',
+                message:
+                    'Could not load app settings. Check admin permissions and try again. ${snapshot.error ?? ''}',
+              )
             else if (config == null)
-              const _ErrorCard(error: 'Settings response was empty.')
+              const AdminErrorState(
+                title: 'App settings unavailable',
+                message: 'Settings response was empty.',
+              )
             else
               _SettingsCard(
                 snapshot: config,
@@ -59,59 +69,22 @@ class _AdminAppSettingsScreenState extends State<AdminAppSettingsScreen> {
     BuildContext context,
     AdminAppSettingsSnapshot? snapshot,
   ) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          alignment: WrapAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 560,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.tune_rounded,
-                    size: 42,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'App Settings',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
-                              ?.copyWith(fontWeight: FontWeight.w800),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Configure public app content and admin-controlled flags.',
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            FilledButton.icon(
-              onPressed: _canEdit && snapshot != null
-                  ? () => _openEditDialog(snapshot.settings)
-                  : null,
-              icon: const Icon(Icons.save_as_rounded),
-              label: Text(snapshot?.exists == false
-                  ? 'Save Initial Config'
-                  : 'Edit Settings'),
-            ),
-          ],
+    return AdminSectionHeader(
+      icon: Icons.tune_rounded,
+      eyebrow: 'Configuration',
+      title: 'App settings',
+      description: 'Configure public app content and admin-controlled flags.',
+      actions: [
+        AdminActionButton(
+          onPressed: _canEdit && snapshot != null
+              ? () => _openEditDialog(snapshot.settings)
+              : null,
+          icon: Icons.save_as_rounded,
+          label: snapshot?.exists == false
+              ? 'Save initial config'
+              : 'Edit settings',
         ),
-      ),
+      ],
     );
   }
 
@@ -152,107 +125,104 @@ class _SettingsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = snapshot.settings;
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              alignment: WrapAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      settings.appName,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(fontWeight: FontWeight.w800),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(snapshot.exists
-                        ? 'Document: admin_app_settings/public_config'
-                        : 'Using default values. Owner can save initial config.'),
-                  ],
-                ),
-                OutlinedButton.icon(
-                  onPressed: canEdit ? onEdit : null,
-                  icon: const Icon(Icons.edit_rounded),
-                  label: const Text('Edit'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 18),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                _SettingChip(
-                  icon: Icons.construction_rounded,
-                  label: settings.maintenanceMode
-                      ? 'Maintenance on'
-                      : 'Maintenance off',
-                ),
-                _SettingChip(
-                  icon: Icons.tour_rounded,
-                  label: settings.guideModeDefaultEnabled
-                      ? 'Guide default on'
-                      : 'Guide default off',
-                ),
-                _SettingChip(
-                  icon: Icons.star_rounded,
-                  label: settings.featuredPlacesEnabled
-                      ? 'Featured places on'
-                      : 'Featured places off',
-                ),
-                _SettingChip(
-                  icon: Icons.campaign_rounded,
-                  label: settings.adsEnabled ? 'Ads on' : 'Ads off',
-                ),
-                _SettingChip(
-                  icon: Icons.fullscreen_rounded,
-                  label: settings.fullscreenAdsEnabled
-                      ? 'Fullscreen ads on'
-                      : 'Fullscreen ads off',
-                ),
-              ],
-            ),
-            const SizedBox(height: 18),
-            _InfoRow(
-              label: 'Announcement title',
-              value: settings.announcementTitle.isEmpty
-                  ? 'None'
-                  : settings.announcementTitle,
-            ),
-            const SizedBox(height: 10),
-            _InfoRow(
-              label: 'Announcement body',
-              value: settings.announcementBody.isEmpty
-                  ? 'None'
-                  : settings.announcementBody,
-            ),
-            const Divider(height: 28),
-            Wrap(
-              spacing: 16,
-              runSpacing: 8,
-              children: [
-                Text(
-                  'Updated: ${settings.updatedAt == null ? 'Not saved yet' : _formatDateTime(settings.updatedAt!)}',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                Text(
-                  'Updated by: ${settings.updatedBy.isEmpty ? '—' : settings.updatedBy}',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
-            ),
-          ],
-        ),
+    return AdminDataCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            alignment: WrapAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    settings.appName,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(fontWeight: FontWeight.w800),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(snapshot.exists
+                      ? 'Document: admin_app_settings/public_config'
+                      : 'Using default values. Owner can save initial config.'),
+                ],
+              ),
+              OutlinedButton.icon(
+                onPressed: canEdit ? onEdit : null,
+                icon: const Icon(Icons.edit_rounded),
+                label: const Text('Edit'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _SettingChip(
+                icon: Icons.construction_rounded,
+                label: settings.maintenanceMode
+                    ? 'Maintenance on'
+                    : 'Maintenance off',
+              ),
+              _SettingChip(
+                icon: Icons.tour_rounded,
+                label: settings.guideModeDefaultEnabled
+                    ? 'Guide default on'
+                    : 'Guide default off',
+              ),
+              _SettingChip(
+                icon: Icons.star_rounded,
+                label: settings.featuredPlacesEnabled
+                    ? 'Featured places on'
+                    : 'Featured places off',
+              ),
+              _SettingChip(
+                icon: Icons.campaign_rounded,
+                label: settings.adsEnabled ? 'Ads on' : 'Ads off',
+              ),
+              _SettingChip(
+                icon: Icons.fullscreen_rounded,
+                label: settings.fullscreenAdsEnabled
+                    ? 'Fullscreen ads on'
+                    : 'Fullscreen ads off',
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          _InfoRow(
+            label: 'Announcement title',
+            value: settings.announcementTitle.isEmpty
+                ? 'None'
+                : settings.announcementTitle,
+          ),
+          const SizedBox(height: 10),
+          _InfoRow(
+            label: 'Announcement body',
+            value: settings.announcementBody.isEmpty
+                ? 'None'
+                : settings.announcementBody,
+          ),
+          const Divider(height: 28),
+          Wrap(
+            spacing: 16,
+            runSpacing: 8,
+            children: [
+              Text(
+                'Updated: ${settings.updatedAt == null ? 'Not saved yet' : _formatDateTime(settings.updatedAt!)}',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              Text(
+                'Updated by: ${settings.updatedBy.isEmpty ? '—' : settings.updatedBy}',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -307,7 +277,7 @@ class _SettingsFormDialogState extends State<_SettingsFormDialog> {
     return AlertDialog(
       title: const Text('Edit App Settings'),
       content: SizedBox(
-        width: 620,
+        width: adminDialogWidth(context, 620),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -448,62 +418,6 @@ class _SettingsSwitch extends StatelessWidget {
       subtitle: Text(subtitle),
       value: value,
       onChanged: onChanged,
-    );
-  }
-}
-
-class _ReadOnlyNotice extends StatelessWidget {
-  const _ReadOnlyNotice();
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: Icon(
-          Icons.visibility_rounded,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        title: const Text('Read-only access'),
-        subtitle: const Text(
-          'Head Admin and Admin accounts can view app settings. Owner access is required to save changes.',
-        ),
-      ),
-    );
-  }
-}
-
-class _LoadingCard extends StatelessWidget {
-  const _LoadingCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Card(
-      child: Padding(
-        padding: EdgeInsets.all(24),
-        child: Center(child: CircularProgressIndicator()),
-      ),
-    );
-  }
-}
-
-class _ErrorCard extends StatelessWidget {
-  final Object? error;
-
-  const _ErrorCard({required this.error});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: Icon(
-          Icons.error_outline_rounded,
-          color: Theme.of(context).colorScheme.error,
-        ),
-        title: const Text('App settings unavailable'),
-        subtitle: Text(
-          'Could not load app settings. Check admin permissions and try again. ${error ?? ''}',
-        ),
-      ),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../models/admin_featured_place.dart';
 import '../models/admin_user.dart';
 import '../services/admin_featured_places_service.dart';
+import '../widgets/admin_ui.dart';
 
 class AdminFeaturedPlacesScreen extends StatefulWidget {
   final AdminUser currentAdmin;
@@ -29,21 +30,35 @@ class _AdminFeaturedPlacesScreenState extends State<AdminFeaturedPlacesScreen> {
       stream: _service.watchFeaturedPlaces(),
       builder: (context, snapshot) {
         final places = snapshot.data ?? const <AdminFeaturedPlace>[];
-        return ListView(
-          padding: const EdgeInsets.all(28),
+        return AdminPageScaffold(
           children: [
             _buildHeader(context),
             const SizedBox(height: 16),
             if (!_canManage) ...[
-              const _ReadOnlyNotice(),
+              const AdminReadOnlyNotice(
+                message:
+                    'Admins can view featured places. Owner or Head Admin access is required to make changes.',
+              ),
               const SizedBox(height: 16),
             ],
             if (snapshot.connectionState == ConnectionState.waiting)
-              const _LoadingCard()
+              const AdminLoadingState(label: 'Loading featured places...')
             else if (snapshot.hasError)
-              _ErrorCard(error: snapshot.error)
+              AdminErrorState(
+                title: 'Featured places unavailable',
+                message: snapshot.error is FirebaseException &&
+                        (snapshot.error as FirebaseException).code ==
+                            'permission-denied'
+                    ? 'Firestore rules do not allow this admin to read featured places yet.'
+                    : 'Featured places could not be loaded. Try again later.',
+              )
             else if (places.isEmpty)
-              const _EmptyFeaturedPlacesCard()
+              const AdminEmptyState(
+                icon: Icons.star_rounded,
+                title: 'No featured places yet',
+                message:
+                    'Owner or Head Admin users can add featured destinations here.',
+              )
             else
               _FeaturedPlacesList(
                 places: places,
@@ -59,60 +74,25 @@ class _AdminFeaturedPlacesScreenState extends State<AdminFeaturedPlacesScreen> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          alignment: WrapAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 520,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.star_rounded,
-                    size: 42,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Featured Places',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
-                              ?.copyWith(fontWeight: FontWeight.w800),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Prioritize destinations for Explore, Search, and recommendations.',
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            FilledButton.icon(
-              onPressed: _canManage ? _openAddDialog : null,
-              icon: const Icon(Icons.add_location_alt_rounded),
-              label: const Text('Add Featured Place'),
-            ),
-            FilledButton.tonalIcon(
-              onPressed: _canManage ? _openFeatureExistingDialog : null,
-              icon: const Icon(Icons.manage_search_rounded),
-              label: const Text('Feature Existing Place'),
-            ),
-          ],
+    return AdminSectionHeader(
+      icon: Icons.star_rounded,
+      eyebrow: 'Content',
+      title: 'Featured places',
+      description:
+          'Prioritize destinations for Explore, Search, and recommendations.',
+      actions: [
+        AdminActionButton(
+          onPressed: _canManage ? _openAddDialog : null,
+          icon: Icons.add_location_alt_rounded,
+          label: 'Add featured place',
         ),
-      ),
+        AdminActionButton(
+          onPressed: _canManage ? _openFeatureExistingDialog : null,
+          icon: Icons.manage_search_rounded,
+          label: 'Feature existing',
+          tonal: true,
+        ),
+      ],
     );
   }
 
@@ -245,84 +225,74 @@ class _FeaturedPlacesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth < 820) {
-          return Column(
-            children: [
-              for (final place in places)
-                _FeaturedPlaceCard(
-                  place: place,
-                  canManage: canManage,
-                  onEdit: onEdit,
-                  onToggleActive: onToggleActive,
-                  onDelete: onDelete,
+    return AdminResponsiveTable(
+      breakpoint: 1000,
+      mobile: Column(
+        children: [
+          for (final place in places)
+            _FeaturedPlaceCard(
+              place: place,
+              canManage: canManage,
+              onEdit: onEdit,
+              onToggleActive: onToggleActive,
+              onDelete: onDelete,
+            ),
+        ],
+      ),
+      desktop: DataTable(
+        columns: const [
+          DataColumn(label: Text('Priority')),
+          DataColumn(label: Text('Place')),
+          DataColumn(label: Text('Category')),
+          DataColumn(label: Text('City')),
+          DataColumn(label: Text('Status')),
+          DataColumn(label: Text('Actions')),
+        ],
+        rows: [
+          for (final place in places)
+            DataRow(
+              cells: [
+                DataCell(Text(place.priority.toString())),
+                DataCell(
+                  SizedBox(
+                    width: 280,
+                    child: _PlaceTextSummary(place: place),
+                  ),
                 ),
-            ],
-          );
-        }
-        return Card(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-              columns: const [
-                DataColumn(label: Text('Priority')),
-                DataColumn(label: Text('Place')),
-                DataColumn(label: Text('Category')),
-                DataColumn(label: Text('City')),
-                DataColumn(label: Text('Status')),
-                DataColumn(label: Text('Actions')),
-              ],
-              rows: [
-                for (final place in places)
-                  DataRow(
-                    cells: [
-                      DataCell(Text(place.priority.toString())),
-                      DataCell(
-                        SizedBox(
-                          width: 280,
-                          child: _PlaceTextSummary(place: place),
+                DataCell(Text(place.category)),
+                DataCell(Text(place.city)),
+                DataCell(_StatusBadge(isActive: place.isActive)),
+                DataCell(
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        tooltip: 'Edit',
+                        onPressed: canManage ? () => onEdit(place) : null,
+                        icon: const Icon(Icons.edit_rounded),
+                      ),
+                      IconButton(
+                        tooltip: place.isActive ? 'Disable' : 'Activate',
+                        onPressed:
+                            canManage ? () => onToggleActive(place) : null,
+                        icon: Icon(
+                          place.isActive
+                              ? Icons.block_rounded
+                              : Icons.check_circle_rounded,
                         ),
                       ),
-                      DataCell(Text(place.category)),
-                      DataCell(Text(place.city)),
-                      DataCell(_StatusBadge(isActive: place.isActive)),
-                      DataCell(
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              tooltip: 'Edit',
-                              onPressed: canManage ? () => onEdit(place) : null,
-                              icon: const Icon(Icons.edit_rounded),
-                            ),
-                            IconButton(
-                              tooltip: place.isActive ? 'Disable' : 'Activate',
-                              onPressed: canManage
-                                  ? () => onToggleActive(place)
-                                  : null,
-                              icon: Icon(
-                                place.isActive
-                                    ? Icons.block_rounded
-                                    : Icons.check_circle_rounded,
-                              ),
-                            ),
-                            IconButton(
-                              tooltip: 'Delete',
-                              onPressed:
-                                  canManage ? () => onDelete(place) : null,
-                              icon: const Icon(Icons.delete_outline_rounded),
-                            ),
-                          ],
-                        ),
+                      IconButton(
+                        tooltip: 'Delete',
+                        onPressed: canManage ? () => onDelete(place) : null,
+                        icon: const Icon(Icons.delete_outline_rounded),
                       ),
                     ],
                   ),
+                ),
               ],
             ),
-          ),
-        );
-      },
+        ],
+      ),
     );
   }
 }
@@ -516,7 +486,7 @@ class _FeaturedPlaceFormDialogState extends State<_FeaturedPlaceFormDialog> {
     return AlertDialog(
       title: Text(_isEditing ? 'Edit Featured Place' : 'Add Featured Place'),
       content: SizedBox(
-        width: 560,
+        width: adminDialogWidth(context, 560),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -670,7 +640,7 @@ class _FeatureExistingPlaceDialogState
     return AlertDialog(
       title: const Text('Feature Existing Place'),
       content: SizedBox(
-        width: 760,
+        width: adminDialogWidth(context, 760),
         height: MediaQuery.sizeOf(context).height * 0.72,
         child: Form(
           key: _formKey,
@@ -892,7 +862,7 @@ class _FeatureDisplayNameDialogState extends State<_FeatureDisplayNameDialog> {
     return AlertDialog(
       title: const Text('Feature Place'),
       content: SizedBox(
-        width: 460,
+        width: adminDialogWidth(context, 460),
         child: Form(
           key: _formKey,
           child: Column(
@@ -1182,7 +1152,7 @@ class _DeleteConfirmDialogState extends State<_DeleteConfirmDialog> {
     return AlertDialog(
       title: Text(widget.title),
       content: SizedBox(
-        width: 420,
+        width: adminDialogWidth(context, 420),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1239,114 +1209,10 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      visualDensity: VisualDensity.compact,
-      avatar: Icon(
-        isActive ? Icons.check_circle_rounded : Icons.block_rounded,
-        size: 16,
-      ),
-      label: Text(isActive ? 'Active' : 'Inactive'),
-    );
-  }
-}
-
-class _ReadOnlyNotice extends StatelessWidget {
-  const _ReadOnlyNotice();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Card(
-      child: ListTile(
-        leading: Icon(Icons.visibility_rounded),
-        title: Text('Read-only access'),
-        subtitle: Text(
-          'Admins can view featured places. Owner or Head Admin access is required to make changes.',
-        ),
-      ),
-    );
-  }
-}
-
-class _LoadingCard extends StatelessWidget {
-  const _LoadingCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Card(
-      child: Padding(
-        padding: EdgeInsets.all(28),
-        child: Center(child: CircularProgressIndicator()),
-      ),
-    );
-  }
-}
-
-class _ErrorCard extends StatelessWidget {
-  final Object? error;
-
-  const _ErrorCard({this.error});
-
-  @override
-  Widget build(BuildContext context) {
-    final message = error is FirebaseException &&
-            (error as FirebaseException).code == 'permission-denied'
-        ? 'Firestore rules do not allow this admin to read featured places yet.'
-        : 'Featured places could not be loaded. Try again later.';
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(
-              Icons.error_outline_rounded,
-              color: Theme.of(context).colorScheme.error,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Featured places unavailable',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w800),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(message),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _EmptyFeaturedPlacesCard extends StatelessWidget {
-  const _EmptyFeaturedPlacesCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Card(
-      child: Padding(
-        padding: EdgeInsets.all(28),
-        child: Column(
-          children: [
-            Icon(Icons.star_border_rounded, size: 44),
-            SizedBox(height: 12),
-            Text('No featured places yet'),
-            SizedBox(height: 6),
-            Text(
-              'Owner or Head Admin users can add featured destinations here.',
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
+    return AdminStatusBadge(
+      label: isActive ? 'Active' : 'Inactive',
+      icon: isActive ? Icons.check_circle_rounded : Icons.block_rounded,
+      tone: isActive ? AdminStatusTone.success : AdminStatusTone.neutral,
     );
   }
 }

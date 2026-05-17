@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/admin_terminal_route.dart';
 import '../services/admin_terminal_route_service.dart';
+import '../widgets/admin_ui.dart';
 
 class AdminTerminalRouteFormScreen extends StatefulWidget {
   final AdminTerminalRoute? existing;
@@ -147,9 +148,17 @@ class _AdminTerminalRouteFormScreenState
       appBar: AppBar(
         title: Text(_isEditing ? 'Edit Terminal Route' : 'Add Terminal Route'),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(28),
+      body: AdminPageScaffold(
+        maxWidth: 1120,
         children: [
+          AdminSectionHeader(
+            icon: Icons.route_rounded,
+            eyebrow: 'Transit record',
+            title: _isEditing ? 'Edit terminal route' : 'Add terminal route',
+            description:
+                'Keep terminal, route, and verification details tidy so the reference stays trustworthy.',
+          ),
+          const SizedBox(height: 16),
           Form(
             key: _formKey,
             child: Column(
@@ -178,34 +187,27 @@ class _AdminTerminalRouteFormScreenState
                       validator: _requiredValidator('City'),
                     ),
                     const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _latitudeController,
-                            decoration:
-                                const InputDecoration(labelText: 'Latitude'),
-                            keyboardType: const TextInputType.numberWithOptions(
-                              signed: true,
-                              decimal: true,
-                            ),
-                            validator: _requiredDoubleValidator('Latitude'),
-                          ),
+                    _ResponsiveFieldPair(
+                      first: TextFormField(
+                        controller: _latitudeController,
+                        decoration:
+                            const InputDecoration(labelText: 'Latitude'),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          signed: true,
+                          decimal: true,
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _longitudeController,
-                            decoration:
-                                const InputDecoration(labelText: 'Longitude'),
-                            keyboardType: const TextInputType.numberWithOptions(
-                              signed: true,
-                              decimal: true,
-                            ),
-                            validator: _requiredDoubleValidator('Longitude'),
-                          ),
+                        validator: _requiredDoubleValidator('Latitude'),
+                      ),
+                      second: TextFormField(
+                        controller: _longitudeController,
+                        decoration:
+                            const InputDecoration(labelText: 'Longitude'),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          signed: true,
+                          decimal: true,
                         ),
-                      ],
+                        validator: _requiredDoubleValidator('Longitude'),
+                      ),
                     ),
                     const SizedBox(height: 12),
                     DropdownButtonFormField<String>(
@@ -308,32 +310,25 @@ class _AdminTerminalRouteFormScreenState
                       },
                     ),
                     const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _fareMinController,
-                            decoration:
-                                const InputDecoration(labelText: 'Fare min'),
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
-                            ),
-                            validator: _optionalDoubleValidator('Fare min'),
-                          ),
+                    _ResponsiveFieldPair(
+                      first: TextFormField(
+                        controller: _fareMinController,
+                        decoration:
+                            const InputDecoration(labelText: 'Fare min'),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _fareMaxController,
-                            decoration:
-                                const InputDecoration(labelText: 'Fare max'),
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
-                            ),
-                            validator: _optionalDoubleValidator('Fare max'),
-                          ),
+                        validator: _optionalDoubleValidator('Fare min'),
+                      ),
+                      second: TextFormField(
+                        controller: _fareMaxController,
+                        decoration:
+                            const InputDecoration(labelText: 'Fare max'),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
                         ),
-                      ],
+                        validator: _optionalDoubleValidator('Fare max'),
+                      ),
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
@@ -342,24 +337,17 @@ class _AdminTerminalRouteFormScreenState
                           const InputDecoration(labelText: 'Schedule text'),
                     ),
                     const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _firstTripController,
-                            decoration:
-                                const InputDecoration(labelText: 'First trip'),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _lastTripController,
-                            decoration:
-                                const InputDecoration(labelText: 'Last trip'),
-                          ),
-                        ),
-                      ],
+                    _ResponsiveFieldPair(
+                      first: TextFormField(
+                        controller: _firstTripController,
+                        decoration:
+                            const InputDecoration(labelText: 'First trip'),
+                      ),
+                      second: TextFormField(
+                        controller: _lastTripController,
+                        decoration:
+                            const InputDecoration(labelText: 'Last trip'),
+                      ),
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
@@ -368,26 +356,19 @@ class _AdminTerminalRouteFormScreenState
                           const InputDecoration(labelText: 'Frequency text'),
                     ),
                     const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _boardingGateController,
-                            decoration: const InputDecoration(
-                              labelText: 'Boarding gate',
-                            ),
-                          ),
+                    _ResponsiveFieldPair(
+                      first: TextFormField(
+                        controller: _boardingGateController,
+                        decoration: const InputDecoration(
+                          labelText: 'Boarding gate',
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _dropOffPointController,
-                            decoration: const InputDecoration(
-                              labelText: 'Drop-off point',
-                            ),
-                          ),
+                      ),
+                      second: TextFormField(
+                        controller: _dropOffPointController,
+                        decoration: const InputDecoration(
+                          labelText: 'Drop-off point',
                         ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
@@ -452,69 +433,61 @@ class _AdminTerminalRouteFormScreenState
                           const InputDecoration(labelText: 'Verified by'),
                     ),
                     const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: DropdownButtonFormField<String>(
-                            initialValue: _confidenceLevel,
-                            decoration: const InputDecoration(
-                              labelText: 'Confidence level',
-                            ),
-                            items: const [
-                              DropdownMenuItem(
-                                value: 'high',
-                                child: Text('High'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'medium',
-                                child: Text('Medium'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'low',
-                                child: Text('Low'),
-                              ),
-                            ],
-                            onChanged: (value) {
-                              if (value != null) {
-                                setState(() => _confidenceLevel = value);
-                              }
-                            },
-                            validator: (value) => value == null || value.isEmpty
-                                ? 'Confidence level is required.'
-                                : null,
-                          ),
+                    _ResponsiveFieldPair(
+                      first: DropdownButtonFormField<String>(
+                        initialValue: _confidenceLevel,
+                        decoration: const InputDecoration(
+                          labelText: 'Confidence level',
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: DropdownButtonFormField<String>(
-                            initialValue: _status,
-                            decoration:
-                                const InputDecoration(labelText: 'Status'),
-                            items: const [
-                              DropdownMenuItem(
-                                value: 'active',
-                                child: Text('Active'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'needs_review',
-                                child: Text('Needs review'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'inactive',
-                                child: Text('Inactive'),
-                              ),
-                            ],
-                            onChanged: (value) {
-                              if (value != null) {
-                                setState(() => _status = value);
-                              }
-                            },
-                            validator: (value) => value == null || value.isEmpty
-                                ? 'Status is required.'
-                                : null,
+                        items: const [
+                          DropdownMenuItem(
+                            value: 'high',
+                            child: Text('High'),
                           ),
-                        ),
-                      ],
+                          DropdownMenuItem(
+                            value: 'medium',
+                            child: Text('Medium'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'low',
+                            child: Text('Low'),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() => _confidenceLevel = value);
+                          }
+                        },
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Confidence level is required.'
+                            : null,
+                      ),
+                      second: DropdownButtonFormField<String>(
+                        initialValue: _status,
+                        decoration: const InputDecoration(labelText: 'Status'),
+                        items: const [
+                          DropdownMenuItem(
+                            value: 'active',
+                            child: Text('Active'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'needs_review',
+                            child: Text('Needs review'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'inactive',
+                            child: Text('Inactive'),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() => _status = value);
+                          }
+                        },
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Status is required.'
+                            : null,
+                      ),
                     ),
                   ],
                 ),
@@ -667,30 +640,61 @@ class _SectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, color: Theme.of(context).colorScheme.primary),
-                const SizedBox(width: 10),
-                Text(
-                  title,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(fontWeight: FontWeight.w800),
-                ),
-              ],
-            ),
-            const SizedBox(height: 18),
-            ...children,
-          ],
-        ),
+    return AdminDataCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: Theme.of(context).colorScheme.primary),
+              const SizedBox(width: 10),
+              Text(
+                title,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(fontWeight: FontWeight.w800),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          ...children,
+        ],
       ),
+    );
+  }
+}
+
+class _ResponsiveFieldPair extends StatelessWidget {
+  final Widget first;
+  final Widget second;
+
+  const _ResponsiveFieldPair({
+    required this.first,
+    required this.second,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 560) {
+          return Column(
+            children: [
+              first,
+              const SizedBox(height: 12),
+              second,
+            ],
+          );
+        }
+        return Row(
+          children: [
+            Expanded(child: first),
+            const SizedBox(width: 12),
+            Expanded(child: second),
+          ],
+        );
+      },
     );
   }
 }

@@ -14,6 +14,7 @@ import 'screens/admin_users_screen.dart';
 import 'services/admin_auth_service.dart';
 import 'widgets/admin_guard.dart';
 import 'widgets/admin_nav_item.dart';
+import 'widgets/admin_ui.dart';
 
 class AdminShell extends StatefulWidget {
   final AdminUser adminUser;
@@ -30,31 +31,55 @@ class AdminShell extends StatefulWidget {
 }
 
 class _AdminShellState extends State<AdminShell> {
+  static const _sidebarWidth = 292.0;
+  static const _minimumWideContentWidth = 900.0;
+
   AdminRouteId _selectedRoute = AdminRouteId.dashboard;
 
   AdminRouteConfig get _route => AdminRoutes.byId(_selectedRoute);
 
   @override
   Widget build(BuildContext context) {
-    final isWide = MediaQuery.sizeOf(context).width >= 900;
-    final content = Row(
-      children: [
-        if (isWide) _buildSidebar(context),
-        Expanded(child: _buildMainContent(context)),
-      ],
-    );
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide =
+            constraints.maxWidth >= _sidebarWidth + _minimumWideContentWidth;
+        final content = Row(
+          children: [
+            if (isWide) _buildSidebar(context),
+            Expanded(child: _buildMainContent(context)),
+          ],
+        );
 
-    return Scaffold(
-      appBar: isWide ? null : _buildAppBar(context),
-      drawer: isWide ? null : Drawer(child: _buildNavigation(context)),
-      body: SafeArea(child: content),
+        return Scaffold(
+          appBar: isWide ? null : _buildAppBar(context),
+          drawer: isWide
+              ? null
+              : Drawer(
+                  backgroundColor: const Color(0xFF0B1220),
+                  child: _buildNavigation(context),
+                ),
+          body: SafeArea(child: content),
+        );
+      },
     );
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
+      toolbarHeight: 72,
       title: Text(_route.title),
       actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: Center(
+            child: AdminStatusBadge(
+              label: widget.adminUser.role.label,
+              icon: Icons.verified_user_rounded,
+              tone: AdminStatusTone.info,
+            ),
+          ),
+        ),
         IconButton(
           tooltip: 'Sign out',
           onPressed: widget.authService.signOut,
@@ -66,29 +91,29 @@ class _AdminShellState extends State<AdminShell> {
 
   Widget _buildSidebar(BuildContext context) {
     return Container(
-      width: 284,
+      width: _sidebarWidth,
       decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(right: BorderSide(color: Color(0xFFE1EAF5))),
+        color: Color(0xFF0B1220),
       ),
       child: _buildNavigation(context),
     );
   }
 
   Widget _buildNavigation(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 24, 20, 14),
+          padding: const EdgeInsets.fromLTRB(20, 24, 20, 18),
           child: Row(
             children: [
               Container(
-                width: 42,
-                height: 42,
+                width: 46,
+                height: 46,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: BorderRadius.circular(12),
+                  color: scheme.primary,
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: const Icon(Icons.route_rounded, color: Colors.white),
               ),
@@ -101,11 +126,14 @@ class _AdminShellState extends State<AdminShell> {
                       'HalaPH Admin',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w800,
+                            color: Colors.white,
                           ),
                     ),
                     Text(
-                      widget.adminUser.role.label,
-                      style: Theme.of(context).textTheme.bodySmall,
+                      'Operations console',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.white.withValues(alpha: 0.62),
+                          ),
                     ),
                   ],
                 ),
@@ -113,10 +141,58 @@ class _AdminShellState extends State<AdminShell> {
             ],
           ),
         ),
-        const Divider(height: 1),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 18,
+                  backgroundColor: Colors.white.withValues(alpha: 0.10),
+                  child: const Icon(
+                    Icons.person_rounded,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.adminUser.displayName.isEmpty
+                            ? widget.adminUser.email
+                            : widget.adminUser.displayName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        widget.adminUser.role.label,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Colors.white.withValues(alpha: 0.62),
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         Expanded(
           child: ListView(
-            padding: const EdgeInsets.symmetric(vertical: 12),
+            padding: const EdgeInsets.symmetric(vertical: 18),
             children: [
               for (final route in AdminRoutes.routes)
                 AdminNavItem(
@@ -132,25 +208,16 @@ class _AdminShellState extends State<AdminShell> {
             ],
           ),
         ),
-        const Divider(height: 1),
         Padding(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.adminUser.email,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 10),
-              OutlinedButton.icon(
-                onPressed: widget.authService.signOut,
-                icon: const Icon(Icons.logout_rounded),
-                label: const Text('Sign out'),
-              ),
-            ],
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+          child: OutlinedButton.icon(
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.white,
+              side: BorderSide(color: Colors.white.withValues(alpha: 0.16)),
+            ),
+            onPressed: widget.authService.signOut,
+            icon: const Icon(Icons.logout_rounded),
+            label: const Text('Sign out'),
           ),
         ),
       ],
@@ -161,10 +228,14 @@ class _AdminShellState extends State<AdminShell> {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.fromLTRB(28, 22, 28, 16),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            border: Border(bottom: BorderSide(color: Color(0xFFE1EAF5))),
+          padding: const EdgeInsets.fromLTRB(28, 22, 28, 18),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceContainerLowest,
+            border: Border(
+              bottom: BorderSide(
+                color: Theme.of(context).colorScheme.outlineVariant,
+              ),
+            ),
           ),
           child: Row(
             children: [
@@ -174,22 +245,25 @@ class _AdminShellState extends State<AdminShell> {
                   children: [
                     Text(
                       _route.title,
-                      style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.w800,
-                              ),
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'Signed in as ${widget.adminUser.email}',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
                     ),
                   ],
                 ),
               ),
-              Chip(
-                avatar: const Icon(Icons.verified_user_rounded, size: 18),
-                label: Text(widget.adminUser.role.label),
+              AdminStatusBadge(
+                label: widget.adminUser.role.label,
+                icon: Icons.verified_user_rounded,
+                tone: AdminStatusTone.info,
               ),
             ],
           ),

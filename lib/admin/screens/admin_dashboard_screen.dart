@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../services/admin_dashboard_service.dart';
-import '../widgets/admin_stat_card.dart';
+import '../widgets/admin_ui.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -36,62 +36,54 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         final loading = snapshot.connectionState == ConnectionState.waiting;
         final error = snapshot.hasError;
 
-        return ListView(
-          padding: const EdgeInsets.all(28),
+        return AdminPageScaffold(
           children: [
-            Wrap(
-              alignment: WrapAlignment.spaceBetween,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 16,
-              runSpacing: 12,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Operations overview',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w800,
-                          ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      loading
-                          ? 'Loading admin metrics...'
-                          : error
-                              ? 'Some dashboard metrics could not be loaded.'
-                              : 'Live Firestore metrics for HalaPH operations.',
-                    ),
-                  ],
-                ),
-                FilledButton.icon(
+            AdminSectionHeader(
+              icon: Icons.dashboard_rounded,
+              eyebrow: 'Command center',
+              title: 'Operations overview',
+              description: loading
+                  ? 'Loading live Firestore metrics...'
+                  : error
+                      ? 'Some dashboard metrics could not be loaded.'
+                      : 'A live pulse across users, routes, content, and admin access.',
+              actions: [
+                AdminActionButton(
                   onPressed: loading ? null : _refreshStats,
-                  icon: const Icon(Icons.refresh_rounded),
-                  label: const Text('Refresh'),
+                  icon: Icons.refresh_rounded,
+                  label: 'Refresh',
                 ),
               ],
             ),
             const SizedBox(height: 24),
             if (error) ...[
-              _DashboardNotice(
-                icon: Icons.error_outline_rounded,
+              AdminErrorState(
                 title: 'Dashboard metrics unavailable',
                 message:
                     'The dashboard could not complete the stats request. Try refreshing, then check Firestore rules if the issue continues.',
-                color: Theme.of(context).colorScheme.error,
+                onRetry: _refreshStats,
               ),
               const SizedBox(height: 16),
             ],
+            _DashboardGroupLabel(
+              title: 'Audience and network',
+              subtitle: 'User-facing activity signals.',
+            ),
+            const SizedBox(height: 12),
             LayoutBuilder(
               builder: (context, constraints) {
-                final wide = constraints.maxWidth >= 760;
+                final columns = constraints.maxWidth >= 1080
+                    ? 4
+                    : constraints.maxWidth >= 720
+                        ? 2
+                        : 1;
                 return GridView.count(
-                  crossAxisCount: wide ? 3 : 1,
+                  crossAxisCount: columns,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: wide ? 1.7 : 3.2,
+                  childAspectRatio: columns == 1 ? 2.2 : 1.35,
                   children: [
                     _statCard(
                       stats: stats,
@@ -117,6 +109,31 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       icon: Icons.qr_code_2_rounded,
                       title: 'Friend Codes',
                     ),
+                  ],
+                );
+              },
+            ),
+            const SizedBox(height: 24),
+            _DashboardGroupLabel(
+              title: 'Content and operations',
+              subtitle: 'Admin-managed surfaces and staff controls.',
+            ),
+            const SizedBox(height: 12),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final columns = constraints.maxWidth >= 1080
+                    ? 4
+                    : constraints.maxWidth >= 720
+                        ? 2
+                        : 1;
+                return GridView.count(
+                  crossAxisCount: columns,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: columns == 1 ? 2.2 : 1.35,
+                  children: [
                     _statCard(
                       stats: stats,
                       keyName: 'locations',
@@ -128,6 +145,18 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       keyName: 'featuredPlaces',
                       icon: Icons.star_rounded,
                       title: 'Featured Places',
+                    ),
+                    _statCard(
+                      stats: stats,
+                      keyName: 'terminalRoutes',
+                      icon: Icons.route_rounded,
+                      title: 'Terminal Routes',
+                    ),
+                    _statCard(
+                      stats: stats,
+                      keyName: 'routeReports',
+                      icon: Icons.fact_check_rounded,
+                      title: 'Route Reports',
                     ),
                     _statCard(
                       stats: stats,
@@ -152,12 +181,24 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               },
             ),
             const SizedBox(height: 24),
-            _DashboardNotice(
-              icon: Icons.security_rounded,
-              title: 'Security status',
-              message:
-                  'Dashboard reads are protected by Firestore rules. Restricted cards mean the admin UI is ready but the matching collection read rule has not been opened yet.',
-              color: Theme.of(context).colorScheme.primary,
+            AdminDataCard(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const AdminStatusBadge(
+                    label: 'Protected',
+                    icon: Icons.security_rounded,
+                    tone: AdminStatusTone.info,
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Text(
+                      'Dashboard reads are protected by Firestore rules. Restricted cards mean the UI is ready, but the matching collection read rule has not been opened yet.',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                ],
+              ),
             ),
             if (stats != null) ...[
               const SizedBox(height: 12),
@@ -179,11 +220,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     required String title,
   }) {
     final metric = stats?.metric(keyName);
-    return AdminStatCard(
+    return AdminMetricCard(
       icon: icon,
       title: title,
       value: metric?.value ?? 'Loading',
       subtitle: metric?.subtitle ?? 'Fetching latest count...',
+      restricted: metric?.restricted ?? false,
+      emphasized: keyName == 'userbase',
     );
   }
 
@@ -195,47 +238,29 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 }
 
-class _DashboardNotice extends StatelessWidget {
-  final IconData icon;
+class _DashboardGroupLabel extends StatelessWidget {
   final String title;
-  final String message;
-  final Color color;
+  final String subtitle;
 
-  const _DashboardNotice({
-    required this.icon,
+  const _DashboardGroupLabel({
     required this.title,
-    required this.message,
-    required this.color,
+    required this.subtitle,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(18),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, color: color),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(message),
-                ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: 4),
+        Text(
+          subtitle,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
-            ),
-          ],
         ),
-      ),
+      ],
     );
   }
 }

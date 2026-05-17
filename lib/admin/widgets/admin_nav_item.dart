@@ -19,28 +19,44 @@ class AdminNavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final foreground =
+        selected ? Colors.white : Colors.white.withValues(alpha: 0.82);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: Material(
-        color: selected ? colorScheme.primaryContainer : Colors.transparent,
-        borderRadius: BorderRadius.circular(14),
+        color: selected
+            ? colorScheme.primary.withValues(alpha: 0.18)
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
         child: ListTile(
           dense: true,
+          minLeadingWidth: 22,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(16),
           ),
           leading: Icon(
             locked ? Icons.lock_outline_rounded : icon,
-            color:
-                selected ? colorScheme.primary : colorScheme.onSurfaceVariant,
+            color: foreground,
           ),
           title: Text(
             label,
             style: TextStyle(
               fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
-              color: selected ? colorScheme.primary : colorScheme.onSurface,
+              color: foreground,
             ),
           ),
+          trailing: selected
+              ? Container(
+                  width: 6,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                )
+              : null,
           onTap: onTap,
         ),
       ),

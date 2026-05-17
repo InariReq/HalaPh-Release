@@ -72,6 +72,16 @@ class AdminDashboardService {
         successSubtitle: 'Admin-managed featured destination records.',
       ),
       _countCollection(
+        key: 'terminalRoutes',
+        collectionPath: 'admin_terminal_routes',
+        successSubtitle: 'Verified terminal route references.',
+      ),
+      _countCollection(
+        key: 'routeReports',
+        collectionPath: 'route_correction_reports',
+        successSubtitle: 'Submitted terminal route correction reports.',
+      ),
+      _countCollection(
         key: 'ads',
         collectionPath: 'admin_ads',
         successSubtitle: 'Admin-managed advertisement records.',

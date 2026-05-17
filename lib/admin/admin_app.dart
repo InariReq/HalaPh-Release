@@ -4,6 +4,7 @@ import 'admin_shell.dart';
 import 'admin_theme.dart';
 import 'screens/admin_login_screen.dart';
 import 'services/admin_auth_service.dart';
+import 'widgets/admin_ui.dart';
 
 class AdminApp extends StatelessWidget {
   const AdminApp({super.key});
@@ -76,13 +77,9 @@ class _AdminLoadingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text('Checking admin access...'),
-          ],
+        child: SizedBox(
+          width: 360,
+          child: AdminLoadingState(label: 'Checking admin access...'),
         ),
       ),
     );
@@ -104,40 +101,25 @@ class _AccessProblemScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 620),
-            child: Card(
-              margin: const EdgeInsets.all(24),
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.admin_panel_settings_rounded,
-                      size: 48,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(title,
-                        style: Theme.of(context).textTheme.headlineSmall),
-                    const SizedBox(height: 8),
-                    Text(message),
-                    const SizedBox(height: 20),
-                    const _FirstOwnerSetupNote(),
-                    const SizedBox(height: 20),
-                    FilledButton.icon(
-                      onPressed: authService.signOut,
-                      icon: const Icon(Icons.logout_rounded),
-                      label: const Text('Sign out'),
-                    ),
-                  ],
+        child: AdminPageScaffold(
+          maxWidth: 720,
+          children: [
+            AdminSectionHeader(
+              icon: Icons.admin_panel_settings_rounded,
+              eyebrow: 'Admin access',
+              title: title,
+              description: message,
+              actions: [
+                AdminActionButton(
+                  onPressed: authService.signOut,
+                  icon: Icons.logout_rounded,
+                  label: 'Sign out',
                 ),
-              ),
+              ],
             ),
-          ),
+            const SizedBox(height: 16),
+            const _FirstOwnerSetupNote(),
+          ],
         ),
       ),
     );
@@ -149,24 +131,16 @@ class _FirstOwnerSetupNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = Theme.of(context).textTheme.bodySmall;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context)
-            .colorScheme
-            .primaryContainer
-            .withValues(alpha: 0.45),
-        borderRadius: BorderRadius.circular(14),
-      ),
+    return AdminDataCard(
+      backgroundColor:
+          Theme.of(context).colorScheme.primary.withValues(alpha: 0.04),
       child: Text(
         'First owner setup: create admin_users/{uid} manually in Firestore '
         'for jeraldforschool@gmail.com with displayName '
         '"Cheong, C Jerald Jia Le D.", role owner, isActive true, and '
         'createdBy/updatedBy manual_setup. Firestore rules must enforce '
         'admin-only access before production.',
-        style: style,
+        style: Theme.of(context).textTheme.bodySmall,
       ),
     );
   }

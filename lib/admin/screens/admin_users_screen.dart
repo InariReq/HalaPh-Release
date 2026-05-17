@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/admin_user.dart';
 import '../models/admin_user_role.dart';
 import '../services/admin_users_service.dart';
+import '../widgets/admin_ui.dart';
 
 class AdminUsersScreen extends StatefulWidget {
   final AdminUser currentAdmin;
@@ -32,8 +33,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
       builder: (context, snapshot) {
         final users = snapshot.data ?? const <AdminUser>[];
         final filtered = _filterUsers(users);
-        return ListView(
-          padding: const EdgeInsets.all(28),
+        return AdminPageScaffold(
           children: [
             _buildHeader(context),
             const SizedBox(height: 16),
@@ -42,11 +42,18 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
             _buildFilters(context),
             const SizedBox(height: 16),
             if (snapshot.connectionState == ConnectionState.waiting)
-              const _LoadingCard()
+              const AdminLoadingState(label: 'Loading admin users...')
             else if (snapshot.hasError)
-              _ErrorCard(error: snapshot.error)
+              const AdminErrorState(
+                title: 'Admin users unavailable',
+                message: 'Admin users could not be loaded. Try again later.',
+              )
             else if (filtered.isEmpty)
-              const _EmptyAdminUsersCard()
+              const AdminEmptyState(
+                icon: Icons.manage_accounts_rounded,
+                title: 'No admin users match',
+                message: 'Try widening the current search or filters.',
+              )
             else
               _AdminUsersList(
                 users: filtered,
@@ -61,107 +68,100 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Admin Users',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
-              ),
-              const SizedBox(height: 6),
-              const Text(
-                'Owners can manage all admins. Head Admins can manage Admin accounts only. Admins can manage content only.',
-              ),
-            ],
-          ),
-        ),
-        FilledButton.icon(
+    return AdminSectionHeader(
+      icon: Icons.admin_panel_settings_rounded,
+      eyebrow: 'Access control',
+      title: 'Admin users',
+      description:
+          'Owners can manage all admins. Head Admins can manage Admin accounts only. Admins can manage content only.',
+      actions: [
+        AdminActionButton(
           onPressed: widget.currentAdmin.role.canManageAdminUsers
               ? _openAddDialog
               : null,
-          icon: const Icon(Icons.person_add_alt_1_rounded),
-          label: const Text('Add Admin'),
+          icon: Icons.person_add_alt_1_rounded,
+          label: 'Add admin',
         ),
       ],
     );
   }
 
   Widget _buildWarning(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(
-              Icons.info_outline_rounded,
-              color: Theme.of(context).colorScheme.primary,
+    return AdminDataCard(
+      padding: const EdgeInsets.all(18),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.info_outline_rounded,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(width: 12),
+          const Expanded(
+            child: Text(
+              'The user must already have a Firebase account. Add the UID from Firebase Authentication.',
             ),
-            const SizedBox(width: 12),
-            const Expanded(
-              child: Text(
-                'The user must already have a Firebase account. Add the UID from Firebase Authentication.',
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildFilters(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            SizedBox(
-              width: 320,
-              child: TextField(
-                controller: _searchController,
-                decoration: const InputDecoration(
-                  labelText: 'Search UID, email, or name',
-                  prefixIcon: Icon(Icons.search_rounded),
+    return AdminDataCard(
+      padding: const EdgeInsets.all(18),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final fieldWidth =
+              constraints.maxWidth < 420 ? constraints.maxWidth : null;
+          return Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              SizedBox(
+                width: fieldWidth ?? 320,
+                child: TextField(
+                  controller: _searchController,
+                  decoration: const InputDecoration(
+                    labelText: 'Search UID, email, or name',
+                    prefixIcon: Icon(Icons.search_rounded),
+                  ),
+                  onChanged: (_) => setState(() {}),
                 ),
-                onChanged: (_) => setState(() {}),
               ),
-            ),
-            SizedBox(
-              width: 190,
-              child: DropdownButtonFormField<AdminUserRole?>(
-                initialValue: _roleFilter,
-                decoration: const InputDecoration(labelText: 'Role'),
-                items: [
-                  const DropdownMenuItem(value: null, child: Text('All roles')),
-                  for (final role in AdminUserRole.values)
-                    DropdownMenuItem(value: role, child: Text(role.label)),
-                ],
-                onChanged: (value) => setState(() => _roleFilter = value),
+              SizedBox(
+                width: fieldWidth ?? 190,
+                child: DropdownButtonFormField<AdminUserRole?>(
+                  initialValue: _roleFilter,
+                  decoration: const InputDecoration(labelText: 'Role'),
+                  items: [
+                    const DropdownMenuItem(
+                      value: null,
+                      child: Text('All roles'),
+                    ),
+                    for (final role in AdminUserRole.values)
+                      DropdownMenuItem(value: role, child: Text(role.label)),
+                  ],
+                  onChanged: (value) => setState(() => _roleFilter = value),
+                ),
               ),
-            ),
-            SizedBox(
-              width: 190,
-              child: DropdownButtonFormField<bool?>(
-                initialValue: _activeFilter,
-                decoration: const InputDecoration(labelText: 'Status'),
-                items: const [
-                  DropdownMenuItem(value: null, child: Text('All status')),
-                  DropdownMenuItem(value: true, child: Text('Active')),
-                  DropdownMenuItem(value: false, child: Text('Disabled')),
-                ],
-                onChanged: (value) => setState(() => _activeFilter = value),
+              SizedBox(
+                width: fieldWidth ?? 190,
+                child: DropdownButtonFormField<bool?>(
+                  initialValue: _activeFilter,
+                  decoration: const InputDecoration(labelText: 'Status'),
+                  items: const [
+                    DropdownMenuItem(value: null, child: Text('All status')),
+                    DropdownMenuItem(value: true, child: Text('Active')),
+                    DropdownMenuItem(value: false, child: Text('Disabled')),
+                  ],
+                  onChanged: (value) => setState(() => _activeFilter = value),
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -287,74 +287,91 @@ class _AdminUsersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth < 760) {
-          return Column(
-            children: [
-              for (final user in users)
-                _AdminUserCard(
-                  user: user,
-                  currentAdmin: currentAdmin,
-                  onEdit: onEdit,
-                  onToggleActive: onToggleActive,
+    return AdminResponsiveTable(
+      breakpoint: 1000,
+      mobile: Column(
+        children: [
+          for (final user in users)
+            _AdminUserCard(
+              user: user,
+              currentAdmin: currentAdmin,
+              onEdit: onEdit,
+              onToggleActive: onToggleActive,
+            ),
+        ],
+      ),
+      desktop: DataTable(
+        columns: const [
+          DataColumn(label: Text('Name')),
+          DataColumn(label: Text('Email')),
+          DataColumn(label: Text('UID')),
+          DataColumn(label: Text('Role')),
+          DataColumn(label: Text('Status')),
+          DataColumn(label: Text('Actions')),
+        ],
+        rows: [
+          for (final user in users)
+            DataRow(
+              cells: [
+                DataCell(
+                  SizedBox(
+                    width: 180,
+                    child: Text(
+                      user.displayName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
-            ],
-          );
-        }
-        return Card(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-              columns: const [
-                DataColumn(label: Text('Name')),
-                DataColumn(label: Text('Email')),
-                DataColumn(label: Text('UID')),
-                DataColumn(label: Text('Role')),
-                DataColumn(label: Text('Status')),
-                DataColumn(label: Text('Actions')),
-              ],
-              rows: [
-                for (final user in users)
-                  DataRow(
-                    cells: [
-                      DataCell(Text(user.displayName)),
-                      DataCell(Text(user.email)),
-                      DataCell(SelectableText(user.uid)),
-                      DataCell(_RoleBadge(role: user.role)),
-                      DataCell(_StatusBadge(isActive: user.isActive)),
-                      DataCell(
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              tooltip: 'Edit',
-                              onPressed: _canManageTarget(user)
-                                  ? () => onEdit(user)
-                                  : null,
-                              icon: const Icon(Icons.edit_rounded),
-                            ),
-                            IconButton(
-                              tooltip: user.isActive ? 'Disable' : 'Enable',
-                              onPressed: _canToggleActive(user)
-                                  ? () => onToggleActive(user)
-                                  : null,
-                              icon: Icon(
-                                user.isActive
-                                    ? Icons.block_rounded
-                                    : Icons.check_circle_rounded,
-                              ),
-                            ),
-                          ],
+                DataCell(
+                  SizedBox(
+                    width: 240,
+                    child: Text(
+                      user.email,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+                DataCell(
+                  SizedBox(
+                    width: 220,
+                    child: SelectableText(
+                      user.uid,
+                      maxLines: 1,
+                    ),
+                  ),
+                ),
+                DataCell(_RoleBadge(role: user.role)),
+                DataCell(_StatusBadge(isActive: user.isActive)),
+                DataCell(
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        tooltip: 'Edit',
+                        onPressed:
+                            _canManageTarget(user) ? () => onEdit(user) : null,
+                        icon: const Icon(Icons.edit_rounded),
+                      ),
+                      IconButton(
+                        tooltip: user.isActive ? 'Disable' : 'Enable',
+                        onPressed: _canToggleActive(user)
+                            ? () => onToggleActive(user)
+                            : null,
+                        icon: Icon(
+                          user.isActive
+                              ? Icons.block_rounded
+                              : Icons.check_circle_rounded,
                         ),
                       ),
                     ],
                   ),
+                ),
               ],
             ),
-          ),
-        );
-      },
+        ],
+      ),
     );
   }
 }
@@ -407,14 +424,23 @@ class _AdminUserCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            Text(user.email),
+            Text(
+              user.email,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
             const SizedBox(height: 8),
-            SelectableText(user.uid),
+            SelectableText(
+              user.uid,
+              maxLines: 1,
+            ),
             const SizedBox(height: 12),
-            Row(
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 _RoleBadge(role: user.role),
-                const Spacer(),
                 TextButton.icon(
                   onPressed: _canManageTarget(user) ? () => onEdit(user) : null,
                   icon: const Icon(Icons.edit_rounded),
@@ -499,7 +525,7 @@ class _AdminUserFormDialogState extends State<_AdminUserFormDialog> {
     return AlertDialog(
       title: Text(_isEditing ? 'Edit Admin' : 'Add Admin'),
       content: SizedBox(
-        width: 520,
+        width: adminDialogWidth(context, 520),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -619,10 +645,12 @@ class _RoleBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      visualDensity: VisualDensity.compact,
-      avatar: const Icon(Icons.shield_rounded, size: 16),
-      label: Text(role.label),
+    return AdminStatusBadge(
+      label: role.label,
+      icon: Icons.shield_rounded,
+      tone: role == AdminUserRole.owner
+          ? AdminStatusTone.info
+          : AdminStatusTone.neutral,
     );
   }
 }
@@ -634,66 +662,10 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      visualDensity: VisualDensity.compact,
-      avatar: Icon(
-        isActive ? Icons.check_circle_rounded : Icons.block_rounded,
-        size: 16,
-      ),
-      label: Text(isActive ? 'Active' : 'Disabled'),
-    );
-  }
-}
-
-class _LoadingCard extends StatelessWidget {
-  const _LoadingCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Card(
-      child: Padding(
-        padding: EdgeInsets.all(24),
-        child: Center(child: CircularProgressIndicator()),
-      ),
-    );
-  }
-}
-
-class _ErrorCard extends StatelessWidget {
-  final Object? error;
-
-  const _ErrorCard({this.error});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Row(
-          children: [
-            Icon(Icons.error_outline_rounded,
-                color: Theme.of(context).colorScheme.error),
-            const SizedBox(width: 12),
-            const Expanded(
-              child: Text('Admin users could not be loaded. Try again later.'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _EmptyAdminUsersCard extends StatelessWidget {
-  const _EmptyAdminUsersCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Card(
-      child: Padding(
-        padding: EdgeInsets.all(24),
-        child: Center(child: Text('No admin users match the current filters.')),
-      ),
+    return AdminStatusBadge(
+      label: isActive ? 'Active' : 'Disabled',
+      icon: isActive ? Icons.check_circle_rounded : Icons.block_rounded,
+      tone: isActive ? AdminStatusTone.success : AdminStatusTone.neutral,
     );
   }
 }

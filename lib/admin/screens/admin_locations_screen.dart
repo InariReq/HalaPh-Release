@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../models/admin_location.dart';
 import '../models/admin_user.dart';
 import '../services/admin_locations_service.dart';
+import '../widgets/admin_ui.dart';
 
 class AdminLocationsScreen extends StatefulWidget {
   final AdminUser currentAdmin;
@@ -28,21 +29,35 @@ class _AdminLocationsScreenState extends State<AdminLocationsScreen> {
       stream: _service.watchLocations(),
       builder: (context, snapshot) {
         final locations = snapshot.data ?? const <AdminLocation>[];
-        return ListView(
-          padding: const EdgeInsets.all(28),
+        return AdminPageScaffold(
           children: [
             _buildHeader(context),
             const SizedBox(height: 16),
             if (!_canManage) ...[
-              const _ReadOnlyNotice(),
+              const AdminReadOnlyNotice(
+                message:
+                    'Admins can view locations. Owner or Head Admin access is required to make changes.',
+              ),
               const SizedBox(height: 16),
             ],
             if (snapshot.connectionState == ConnectionState.waiting)
-              const _LoadingCard()
+              const AdminLoadingState(label: 'Loading locations...')
             else if (snapshot.hasError)
-              _ErrorCard(error: snapshot.error)
+              AdminErrorState(
+                title: 'Locations unavailable',
+                message: snapshot.error is FirebaseException &&
+                        (snapshot.error as FirebaseException).code ==
+                            'permission-denied'
+                    ? 'Firestore rules do not allow this admin to read locations yet.'
+                    : 'Locations could not be loaded. Try again later.',
+              )
             else if (locations.isEmpty)
-              const _EmptyLocationsCard()
+              const AdminEmptyState(
+                icon: Icons.place_rounded,
+                title: 'No locations yet',
+                message:
+                    'Owner or Head Admin users can add admin-managed locations here.',
+              )
             else
               _LocationsList(
                 locations: locations,
@@ -59,55 +74,18 @@ class _AdminLocationsScreenState extends State<AdminLocationsScreen> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          alignment: WrapAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 520,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.place_rounded,
-                    size: 42,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Locations Management',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
-                              ?.copyWith(fontWeight: FontWeight.w800),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Add and manage places shown in HalaPH Explore and Search.',
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            FilledButton.icon(
-              onPressed: _canManage ? _openAddDialog : null,
-              icon: const Icon(Icons.add_location_alt_rounded),
-              label: const Text('Add Location'),
-            ),
-          ],
+    return AdminSectionHeader(
+      icon: Icons.place_rounded,
+      eyebrow: 'Content',
+      title: 'Locations',
+      description: 'Manage places shown in HalaPH Explore and Search.',
+      actions: [
+        AdminActionButton(
+          onPressed: _canManage ? _openAddDialog : null,
+          icon: Icons.add_location_alt_rounded,
+          label: 'Add location',
         ),
-      ),
+      ],
     );
   }
 
@@ -234,106 +212,94 @@ class _LocationsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth < 900) {
-          return Column(
-            children: [
-              for (final location in locations)
-                _LocationCard(
-                  location: location,
-                  canManage: canManage,
-                  onEdit: onEdit,
-                  onToggleActive: onToggleActive,
-                  onToggleFeatured: onToggleFeatured,
-                  onDelete: onDelete,
+    return AdminResponsiveTable(
+      breakpoint: 1000,
+      mobile: Column(
+        children: [
+          for (final location in locations)
+            _LocationCard(
+              location: location,
+              canManage: canManage,
+              onEdit: onEdit,
+              onToggleActive: onToggleActive,
+              onToggleFeatured: onToggleFeatured,
+              onDelete: onDelete,
+            ),
+        ],
+      ),
+      desktop: DataTable(
+        columns: const [
+          DataColumn(label: Text('Priority')),
+          DataColumn(label: Text('Location')),
+          DataColumn(label: Text('Category')),
+          DataColumn(label: Text('City')),
+          DataColumn(label: Text('Province')),
+          DataColumn(label: Text('Source')),
+          DataColumn(label: Text('Featured')),
+          DataColumn(label: Text('Status')),
+          DataColumn(label: Text('Actions')),
+        ],
+        rows: [
+          for (final location in locations)
+            DataRow(
+              cells: [
+                DataCell(Text(location.priority.toString())),
+                DataCell(
+                  SizedBox(
+                    width: 300,
+                    child: _LocationTextSummary(location: location),
+                  ),
                 ),
-            ],
-          );
-        }
-        return Card(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-              columns: const [
-                DataColumn(label: Text('Priority')),
-                DataColumn(label: Text('Location')),
-                DataColumn(label: Text('Category')),
-                DataColumn(label: Text('City')),
-                DataColumn(label: Text('Province')),
-                DataColumn(label: Text('Source')),
-                DataColumn(label: Text('Featured')),
-                DataColumn(label: Text('Status')),
-                DataColumn(label: Text('Actions')),
-              ],
-              rows: [
-                for (final location in locations)
-                  DataRow(
-                    cells: [
-                      DataCell(Text(location.priority.toString())),
-                      DataCell(
-                        SizedBox(
-                          width: 300,
-                          child: _LocationTextSummary(location: location),
+                DataCell(Text(location.category)),
+                DataCell(Text(location.city)),
+                DataCell(
+                    Text(location.province.isEmpty ? '—' : location.province)),
+                DataCell(_SourceBadge(location: location)),
+                DataCell(_FeaturedBadge(location: location)),
+                DataCell(_StatusBadge(isActive: location.isActive)),
+                DataCell(
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        tooltip: 'Edit',
+                        onPressed: canManage ? () => onEdit(location) : null,
+                        icon: const Icon(Icons.edit_rounded),
+                      ),
+                      IconButton(
+                        tooltip: location.isFeatured
+                            ? 'Remove from Featured'
+                            : 'Mark as Featured',
+                        onPressed:
+                            canManage ? () => onToggleFeatured(location) : null,
+                        icon: Icon(
+                          location.isFeatured
+                              ? Icons.star_rounded
+                              : Icons.star_border_rounded,
                         ),
                       ),
-                      DataCell(Text(location.category)),
-                      DataCell(Text(location.city)),
-                      DataCell(Text(
-                          location.province.isEmpty ? '—' : location.province)),
-                      DataCell(_SourceBadge(location: location)),
-                      DataCell(_FeaturedBadge(location: location)),
-                      DataCell(_StatusBadge(isActive: location.isActive)),
-                      DataCell(
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              tooltip: 'Edit',
-                              onPressed:
-                                  canManage ? () => onEdit(location) : null,
-                              icon: const Icon(Icons.edit_rounded),
-                            ),
-                            IconButton(
-                              tooltip: location.isFeatured
-                                  ? 'Remove from Featured'
-                                  : 'Mark as Featured',
-                              onPressed: canManage
-                                  ? () => onToggleFeatured(location)
-                                  : null,
-                              icon: Icon(
-                                location.isFeatured
-                                    ? Icons.star_rounded
-                                    : Icons.star_border_rounded,
-                              ),
-                            ),
-                            IconButton(
-                              tooltip: location.isActive ? 'Disable' : 'Enable',
-                              onPressed: canManage
-                                  ? () => onToggleActive(location)
-                                  : null,
-                              icon: Icon(
-                                location.isActive
-                                    ? Icons.block_rounded
-                                    : Icons.check_circle_rounded,
-                              ),
-                            ),
-                            IconButton(
-                              tooltip: 'Delete',
-                              onPressed:
-                                  canManage ? () => onDelete(location) : null,
-                              icon: const Icon(Icons.delete_outline_rounded),
-                            ),
-                          ],
+                      IconButton(
+                        tooltip: location.isActive ? 'Disable' : 'Enable',
+                        onPressed:
+                            canManage ? () => onToggleActive(location) : null,
+                        icon: Icon(
+                          location.isActive
+                              ? Icons.block_rounded
+                              : Icons.check_circle_rounded,
                         ),
+                      ),
+                      IconButton(
+                        tooltip: 'Delete',
+                        onPressed: canManage ? () => onDelete(location) : null,
+                        icon: const Icon(Icons.delete_outline_rounded),
                       ),
                     ],
                   ),
+                ),
               ],
             ),
-          ),
-        );
-      },
+        ],
+      ),
     );
   }
 }
@@ -577,7 +543,7 @@ class _LocationFormDialogState extends State<_LocationFormDialog> {
     return AlertDialog(
       title: Text(_isEditing ? 'Edit Location' : 'Add Location'),
       content: SizedBox(
-        width: 580,
+        width: adminDialogWidth(context, 580),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -614,32 +580,25 @@ class _LocationFormDialogState extends State<_LocationFormDialog> {
                   maxLines: 5,
                 ),
                 const SizedBox(height: 12),
-                Row(
+                AdminResponsiveFormRow(
                   children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: _latitudeController,
-                        decoration:
-                            const InputDecoration(labelText: 'Latitude'),
-                        keyboardType: const TextInputType.numberWithOptions(
-                          signed: true,
-                          decimal: true,
-                        ),
-                        validator: _optionalDoubleValidator('Latitude'),
+                    TextFormField(
+                      controller: _latitudeController,
+                      decoration: const InputDecoration(labelText: 'Latitude'),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        signed: true,
+                        decimal: true,
                       ),
+                      validator: _optionalDoubleValidator('Latitude'),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: TextFormField(
-                        controller: _longitudeController,
-                        decoration:
-                            const InputDecoration(labelText: 'Longitude'),
-                        keyboardType: const TextInputType.numberWithOptions(
-                          signed: true,
-                          decimal: true,
-                        ),
-                        validator: _optionalDoubleValidator('Longitude'),
+                    TextFormField(
+                      controller: _longitudeController,
+                      decoration: const InputDecoration(labelText: 'Longitude'),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        signed: true,
+                        decimal: true,
                       ),
+                      validator: _optionalDoubleValidator('Longitude'),
                     ),
                   ],
                 ),
@@ -799,13 +758,10 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      visualDensity: VisualDensity.compact,
-      avatar: Icon(
-        isActive ? Icons.check_circle_rounded : Icons.block_rounded,
-        size: 16,
-      ),
-      label: Text(isActive ? 'Active' : 'Inactive'),
+    return AdminStatusBadge(
+      label: isActive ? 'Active' : 'Inactive',
+      icon: isActive ? Icons.check_circle_rounded : Icons.block_rounded,
+      tone: isActive ? AdminStatusTone.success : AdminStatusTone.neutral,
     );
   }
 }
@@ -891,7 +847,7 @@ class _DeleteConfirmDialogState extends State<_DeleteConfirmDialog> {
     return AlertDialog(
       title: Text(widget.title),
       content: SizedBox(
-        width: 420,
+        width: adminDialogWidth(context, 420),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -921,107 +877,6 @@ class _DeleteConfirmDialogState extends State<_DeleteConfirmDialog> {
           child: const Text('Delete'),
         ),
       ],
-    );
-  }
-}
-
-class _ReadOnlyNotice extends StatelessWidget {
-  const _ReadOnlyNotice();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Card(
-      child: ListTile(
-        leading: Icon(Icons.visibility_rounded),
-        title: Text('Read-only access'),
-        subtitle: Text(
-          'Admins can view locations. Owner or Head Admin access is required to make changes.',
-        ),
-      ),
-    );
-  }
-}
-
-class _LoadingCard extends StatelessWidget {
-  const _LoadingCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Card(
-      child: Padding(
-        padding: EdgeInsets.all(28),
-        child: Center(child: CircularProgressIndicator()),
-      ),
-    );
-  }
-}
-
-class _ErrorCard extends StatelessWidget {
-  final Object? error;
-
-  const _ErrorCard({this.error});
-
-  @override
-  Widget build(BuildContext context) {
-    final message = error is FirebaseException &&
-            (error as FirebaseException).code == 'permission-denied'
-        ? 'Firestore rules do not allow this admin to read locations yet.'
-        : 'Locations could not be loaded. Try again later.';
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(
-              Icons.error_outline_rounded,
-              color: Theme.of(context).colorScheme.error,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Locations unavailable',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w800),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(message),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _EmptyLocationsCard extends StatelessWidget {
-  const _EmptyLocationsCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Card(
-      child: Padding(
-        padding: EdgeInsets.all(28),
-        child: Column(
-          children: [
-            Icon(Icons.place_outlined, size: 44),
-            SizedBox(height: 12),
-            Text('No locations yet'),
-            SizedBox(height: 6),
-            Text(
-              'Owner or Head Admin users can add admin-managed locations here.',
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
