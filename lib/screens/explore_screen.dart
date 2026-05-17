@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:halaph/models/app_public_config.dart';
 import 'package:halaph/models/destination.dart';
@@ -16,6 +15,7 @@ import 'package:halaph/services/guide_mode_demo_data.dart';
 import 'package:halaph/services/guide_presenter_controller.dart';
 import 'package:halaph/services/user_ads_service.dart';
 import 'package:halaph/screens/explore_details_screen.dart';
+import 'package:halaph/widgets/hala_mobile_ui.dart';
 import 'package:halaph/widgets/motion_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../utils/sponsored_ad_link_launcher.dart';
@@ -688,33 +688,16 @@ class _ExploreScreenState extends State<ExploreScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 0,
-        surfaceTintColor: Colors.transparent,
-        title: Text(
-          'Explore Philippines',
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ),
       body: SafeArea(
         child: FadeInPage(
           child: Column(
             children: [
-              _buildSearchBar(),
-              const SizedBox(height: 16),
+              _buildExploreHero(),
+              const SizedBox(height: 14),
               _buildFilterChips(),
               const SizedBox(height: 12),
               _buildExploreSummary(),
               const SizedBox(height: 16),
-              if (!widget.guideModeDemo) ...[
-                _buildTerminalRoutesEntry(),
-                const SizedBox(height: 16),
-              ],
               Expanded(
                 child: _isLoading
                     ? _buildLoadingIndicator()
@@ -728,12 +711,35 @@ class _ExploreScreenState extends State<ExploreScreen>
   }
 
   Widget _buildLoadingIndicator() {
-    return const LoadingStatePanel(label: 'Finding places...');
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: HalaLoadingState(label: 'Finding places...'),
+    );
+  }
+
+  Widget _buildExploreHero() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+      child: HalaCard(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const HalaSectionHeader(
+              title: 'Explore',
+              subtitle: 'Find places, compare options, and start the route.',
+            ),
+            const SizedBox(height: 16),
+            _buildSearchBar(),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildSearchBar() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
+      padding: EdgeInsets.zero,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         curve: Curves.easeOutCubic,
@@ -825,15 +831,12 @@ class _ExploreScreenState extends State<ExploreScreen>
       ..._categories,
     ];
 
-    return SizedBox(
-      height: 46,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
-        itemBuilder: (context, index) {
-          final category = categories[index];
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: categories.map((category) {
           final isSelected = _selectedCategory == category;
           final label = category == null
               ? 'All'
@@ -894,7 +897,7 @@ class _ExploreScreenState extends State<ExploreScreen>
               elevation: 0,
             ),
           );
-        },
+        }).toList(),
       ),
     );
   }
@@ -961,63 +964,6 @@ class _ExploreScreenState extends State<ExploreScreen>
     );
   }
 
-  Widget _buildTerminalRoutesEntry() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Material(
-        color: Theme.of(context).colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(18),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(18),
-          onTap: () => GoRouter.of(context).push('/terminal-routes'),
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.blue.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    Icons.directions_bus_rounded,
-                    color: Colors.blue[700],
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Terminal Routes',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        'Browse verified bus terminal references.',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
-                  ),
-                ),
-                Icon(
-                  Icons.chevron_right_rounded,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildSearchResults() {
     if (_destinations.isEmpty) {
       final title =
@@ -1029,13 +975,13 @@ class _ExploreScreenState extends State<ExploreScreen>
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: EmptyStatePanel(
+          child: HalaEmptyState(
             icon: _placesUnavailable
                 ? Icons.cloud_off_rounded
                 : Icons.search_off_rounded,
             title: title,
             message: message,
-            action: ElevatedButton(
+            action: HalaPrimaryButton(
               onPressed: () {
                 _searchController.clear();
                 _selectedCategory = null;
@@ -1102,23 +1048,9 @@ class _ExploreScreenState extends State<ExploreScreen>
   }
 
   Widget _buildFewResultsPrompt() {
-    return Container(
+    return HalaCard(
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 12),
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).brightness == Brightness.dark
-            ? Theme.of(context).colorScheme.surfaceContainerHigh
-            : Colors.blue[50],
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? Theme.of(context)
-                  .colorScheme
-                  .outlineVariant
-                  .withValues(alpha: 0.28)
-              : Colors.blue[200]!,
-        ),
-      ),
       child: Row(
         children: [
           Icon(Icons.info_outline, color: Colors.blue[700], size: 18),
@@ -1144,24 +1076,11 @@ class _ExploreScreenState extends State<ExploreScreen>
     final colorScheme = Theme.of(context).colorScheme;
     final hasImage = ad.hasHttpImage;
 
-    return Container(
+    return HalaCard(
       margin: const EdgeInsets.only(bottom: 22),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withValues(alpha: 0.34),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
+      padding: EdgeInsets.zero,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(22),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1418,27 +1337,11 @@ class _ExploreScreenState extends State<ExploreScreen>
     final isGuideIntramuros = widget.guideModeDemo &&
         destination.name.toLowerCase().contains('intramuros');
 
-    return Container(
+    return HalaCard(
       margin: const EdgeInsets.only(bottom: 22),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: Theme.of(context)
-              .colorScheme
-              .outlineVariant
-              .withValues(alpha: 0.28),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.07),
-            blurRadius: 24,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
+      padding: EdgeInsets.zero,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(22),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1446,13 +1349,13 @@ class _ExploreScreenState extends State<ExploreScreen>
               children: [
                 SizedBox(
                   width: double.infinity,
-                  height: 210,
+                  height: 188,
                   child: hasImage
                       ? CachedNetworkImage(
                           imageUrl: destination.imageUrl,
                           fit: BoxFit.cover,
                           width: double.infinity,
-                          height: 210,
+                          height: 188,
                           placeholder: (context, url) => Container(
                             color: const Color(0xFFF2F6FC),
                             child: Center(
@@ -1643,7 +1546,7 @@ class _ExploreScreenState extends State<ExploreScreen>
               ],
             ),
             Padding(
-              padding: const EdgeInsets.all(18),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1658,13 +1561,11 @@ class _ExploreScreenState extends State<ExploreScreen>
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 16),
-                  Material(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(18),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(18),
-                      onTap: () {
+                  const SizedBox(height: 14),
+                  SizedBox(
+                    width: double.infinity,
+                    child: HalaPrimaryButton(
+                      onPressed: () {
                         if (widget.guideModeDemo) {
                           unawaited(_openGuideDestinationDetails(destination));
                           return;
@@ -1676,55 +1577,14 @@ class _ExploreScreenState extends State<ExploreScreen>
                           destination: destination,
                         );
                       },
-                      child: Ink(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 14,
-                        ),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [
-                              Color(0xFF1976D2),
-                              Color(0xFF03A9F4),
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                          borderRadius: BorderRadius.circular(18),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.blue.withValues(alpha: 0.22),
-                              blurRadius: 16,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              widget.guideModeDemo &&
-                                      destination.name
-                                          .toLowerCase()
-                                          .contains('intramuros')
-                                  ? 'Select Intramuros'
-                                  : 'View Details',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: -0.1,
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Icon(
-                              Icons.arrow_forward_rounded,
-                              color: Colors.white,
-                              size: 17,
-                            ),
-                          ],
-                        ),
+                      icon: Icons.arrow_forward_rounded,
+                      child: Text(
+                        widget.guideModeDemo &&
+                                destination.name
+                                    .toLowerCase()
+                                    .contains('intramuros')
+                            ? 'Select Intramuros'
+                            : 'View Details',
                       ),
                     ),
                   ),
