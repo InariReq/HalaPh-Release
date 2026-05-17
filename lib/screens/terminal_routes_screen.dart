@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../admin/models/admin_terminal_route.dart';
 import '../services/user_terminal_route_service.dart';
+import '../widgets/hala_mobile_ui.dart';
 import '../widgets/route_accuracy_badge.dart';
 
 class TerminalRoutesScreen extends StatefulWidget {
@@ -43,23 +44,38 @@ class _TerminalRoutesScreenState extends State<TerminalRoutesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Terminal Routes')),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search terminals, destinations, or operators',
-                prefixIcon: const Icon(Icons.search_rounded),
-                suffixIcon: _searchController.text.trim().isEmpty
-                    ? null
-                    : IconButton(
-                        tooltip: 'Clear search',
-                        onPressed: _searchController.clear,
-                        icon: const Icon(Icons.close_rounded),
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 14),
+              child: HalaCard(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const HalaSectionHeader(
+                      title: 'Terminals',
+                      subtitle: 'Browse verified terminal and bus routes.',
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Search terminals, destinations, operators',
+                        prefixIcon: const Icon(Icons.search_rounded),
+                        suffixIcon: _searchController.text.trim().isEmpty
+                            ? null
+                            : IconButton(
+                                tooltip: 'Clear search',
+                                onPressed: _searchController.clear,
+                                icon: const Icon(Icons.close_rounded),
+                              ),
                       ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -69,7 +85,12 @@ class _TerminalRoutesScreenState extends State<TerminalRoutesScreen> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting &&
                     !snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: HalaLoadingState(
+                      label: 'Loading verified terminal routes...',
+                    ),
+                  );
                 }
 
                 if (snapshot.hasError) {
@@ -82,7 +103,7 @@ class _TerminalRoutesScreenState extends State<TerminalRoutesScreen> {
                 if (routes.isEmpty) return const _RoutesEmptyState();
 
                 return ListView.builder(
-                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
                   itemCount: routes.length,
                   itemBuilder: (context, index) {
                     final route = routes[index];
@@ -135,13 +156,14 @@ class _TerminalRouteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return HalaCard(
       margin: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.zero,
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(22),
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(18),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -149,18 +171,26 @@ class _TerminalRouteCard extends StatelessWidget {
                 route.terminalName,
                 style: Theme.of(context)
                     .textTheme
-                    .titleMedium
-                    ?.copyWith(fontWeight: FontWeight.w800),
+                    .titleLarge
+                    ?.copyWith(fontWeight: FontWeight.w900),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               Row(
                 children: [
-                  const Icon(Icons.arrow_forward_rounded, size: 18),
+                  Icon(
+                    Icons.arrow_forward_rounded,
+                    size: 18,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       route.destination,
-                      style: const TextStyle(fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ),
                 ],
@@ -174,21 +204,46 @@ class _TerminalRouteCard extends StatelessWidget {
               ],
               if (route.operatorName.isNotEmpty ||
                   route.busType.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                Text(
-                  [route.operatorName, route.busType]
-                      .where((value) => value.isNotEmpty)
-                      .join(' • '),
-                  style: Theme.of(context).textTheme.bodySmall,
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    if (route.operatorName.isNotEmpty)
+                      HalaStatusChip(
+                        icon: Icons.apartment_rounded,
+                        label: route.operatorName,
+                      ),
+                    if (route.busType.isNotEmpty)
+                      HalaStatusChip(
+                        icon: Icons.directions_bus_rounded,
+                        label: route.busType,
+                      ),
+                  ],
                 ),
               ],
-              const SizedBox(height: 10),
-              Text(
-                formatTerminalRouteFare(route),
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w800,
-                ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Icon(
+                    Icons.payments_rounded,
+                    size: 18,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: 7),
+                  Text(
+                    formatTerminalRouteFare(route),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const Spacer(),
+                  Icon(
+                    Icons.chevron_right_rounded,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ],
               ),
               const SizedBox(height: 10),
               Wrap(
@@ -246,18 +301,12 @@ class TerminalRouteDetailSheet extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 18),
-              Text(
-                route.routeName.isEmpty ? route.terminalName : route.routeName,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(fontWeight: FontWeight.w900),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                '${route.originTerminal} → ${route.destination}'
-                '${route.via.isEmpty ? '' : ' via ${route.via}'}',
-                style: Theme.of(context).textTheme.bodyLarge,
+              HalaSectionHeader(
+                title: route.routeName.isEmpty
+                    ? route.terminalName
+                    : route.routeName,
+                subtitle: '${route.originTerminal} → ${route.destination}'
+                    '${route.via.isEmpty ? '' : ' via ${route.via}'}',
               ),
               const SizedBox(height: 20),
               _DetailSection(
@@ -367,10 +416,13 @@ class TerminalRouteDetailSheet extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              OutlinedButton.icon(
-                onPressed: () => showReportCorrectionSheet(context, route),
-                icon: const Icon(Icons.report_outlined),
-                label: const Text('Report Correction'),
+              SizedBox(
+                width: double.infinity,
+                child: HalaSecondaryButton(
+                  onPressed: () => showReportCorrectionSheet(context, route),
+                  icon: Icons.report_outlined,
+                  child: const Text('Report correction'),
+                ),
               ),
             ],
           ),
@@ -460,7 +512,7 @@ class _ReportCorrectionSheetState extends State<_ReportCorrectionSheet> {
             Row(
               children: [
                 Expanded(
-                  child: OutlinedButton(
+                  child: HalaSecondaryButton(
                     onPressed: _isSubmitting
                         ? null
                         : () => Navigator.of(context).pop(),
@@ -469,7 +521,7 @@ class _ReportCorrectionSheetState extends State<_ReportCorrectionSheet> {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: FilledButton(
+                  child: HalaPrimaryButton(
                     onPressed: _isSubmitting ? null : _submit,
                     child: _isSubmitting
                         ? const SizedBox(
@@ -551,13 +603,8 @@ class _DetailSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return HalaCard(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(18),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -649,14 +696,12 @@ class _RoutesEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.directions_bus_outlined, size: 44),
-          SizedBox(height: 12),
-          Text('No terminal routes found.'),
-        ],
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: HalaEmptyState(
+        icon: Icons.directions_bus_outlined,
+        title: 'No terminal routes found',
+        message: 'Try another terminal, destination, or operator search.',
       ),
     );
   }
@@ -669,20 +714,18 @@ class _RoutesErrorState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.cloud_off_rounded, size: 44),
-          const SizedBox(height: 12),
-          const Text('Could not load routes.'),
-          const SizedBox(height: 12),
-          OutlinedButton.icon(
-            onPressed: onRetry,
-            icon: const Icon(Icons.refresh_rounded),
-            label: const Text('Retry'),
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: HalaEmptyState(
+        icon: Icons.cloud_off_rounded,
+        title: 'Could not load routes',
+        message:
+            'Check your connection, then try loading the route list again.',
+        action: HalaSecondaryButton(
+          onPressed: onRetry,
+          icon: Icons.refresh_rounded,
+          child: const Text('Retry'),
+        ),
       ),
     );
   }
