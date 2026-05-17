@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="burgundy">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -30,14 +30,12 @@
       <div class="theme-picker" data-theme-switcher>
         <button class="theme-trigger" type="button" aria-haspopup="true" aria-expanded="false">
           <span class="theme-trigger-label">Theme</span>
-          <span class="theme-trigger-value">Light</span>
+          <span class="theme-trigger-value">Burgundy</span>
           <span class="theme-trigger-icon" aria-hidden="true">▾</span>
         </button>
         <div class="theme-panel" role="menu" aria-label="Theme options">
-          <button class="theme-option" type="button" data-theme-option="light" aria-pressed="true" role="menuitem">Light</button>
-          <button hidden class="theme-option" type="button" data-theme-option="dark" aria-pressed="false" role="menuitem">Dark</button>
-          <button class="theme-option" type="button" data-theme-option="burgundy" aria-pressed="false" role="menuitem">Burgundy</button>
-          <button hidden class="theme-option" type="button" data-theme-option="navy" aria-pressed="false" role="menuitem">Navy</button>
+          <button class="theme-option" type="button" data-theme-option="burgundy" aria-pressed="true" role="menuitem">Burgundy</button>
+          <button class="theme-option" type="button" data-theme-option="light" aria-pressed="false" role="menuitem">Light</button>
         </div>
       </div>
 
@@ -60,7 +58,7 @@
     </header>
 
     <main>
-      <section class="hero section section-dark" id="home">
+      <section class="hero section section-brand" id="home">
         <div class="hero-bg-route" aria-hidden="true">
           <span class="route-dot dot-one"></span>
           <span class="route-dot dot-two"></span>
@@ -79,17 +77,17 @@
             <h1>HalaPH</h1>
             <p class="slogan">Where Every Trip Meets Its Line</p>
             <p class="hero-subtitle">
-              Plan Philippine commutes with route options, fare estimates,
-              shared trip plans, and admin-managed showcase updates.
+              Move through a cleaner five-tab commute experience with a dashboard-style Home,
+              destination-led Explore, verified Terminals, organized Plans, and a complete Profile hub.
             </p>
             <div class="hero-actions">
               <a class="btn btn-primary" href="#download">Download for Android</a>
               <a class="btn btn-secondary" href="#install-android">How to Install</a>
             </div>
             <div class="hero-proof" aria-label="App readiness highlights">
-              <span>Route options</span>
-              <span>Shared plans</span>
-              <span>Admin updates</span>
+              <span>Five-tab app</span>
+              <span>Verified terminals</span>
+              <span>Expo-ready reliability</span>
             </div>
           </div>
 
@@ -103,7 +101,7 @@
                     <img src="assets/app_icon.png" alt="" width="24" height="24" aria-hidden="true" />
                     HalaPH
                   </span>
-                  <span class="status-pill">Guide ready</span>
+                  <span class="status-pill">Home ready</span>
                 </div>
                 <div class="destination-card">
                   <span class="pin-icon">●</span>
@@ -132,8 +130,8 @@
                   <strong>₱45</strong>
                 </div>
                 <div class="ready-list">
-                  <span>Route guide ready</span>
-                  <span>Presenter Guide Mode ready</span>
+                  <span>Explore Places</span>
+                  <span>Terminal routes</span>
                 </div>
               </div>
               </div>
@@ -166,20 +164,19 @@
         <div class="section-inner">
           <div class="section-heading reveal">
             <p class="eyebrow">The HalaPH solution</p>
-            <h2>One commute flow from destination to trip plan.</h2>
+            <h2>One clearer app flow across five main tabs.</h2>
             <p>
-              HalaPH combines destination search, route comparison, fare
-              guidance, saved plans, collaboration, and Presenter Guide Mode in
-              one app experience.
+              HalaPH now centers the experience around Home, Explore, Terminals,
+              Plans, and Profile so commuters can move from overview to destination,
+              route detail, trip organization, and account tools without hunting.
             </p>
           </div>
           <div class="solution-strip reveal">
-            <span>Search</span>
-            <span>Compare</span>
-            <span>Guide</span>
-            <span>Save</span>
-            <span>Plan</span>
-            <span>Share</span>
+            <span>Home</span>
+            <span>Explore</span>
+            <span>Terminals</span>
+            <span>Plans</span>
+            <span>Profile</span>
           </div>
         </div>
       </section>
@@ -188,113 +185,78 @@
         <div class="section-inner">
           <div class="section-heading reveal">
             <p class="eyebrow">Feature showcase</p>
-            <h2>Built for real commute decisions.</h2>
+            <h2>The redesigned app, tab by tab.</h2>
           </div>
-          <div class="feature-grid">
+          <div class="feature-grid app-tab-grid">
             <article class="feature-card reveal">
-              <span class="feature-icon">⇄</span>
-              <h3>Smart Route Options</h3>
-              <p>Compare commute choices before committing to a trip.</p>
+              <span class="feature-icon">⌂</span>
+              <h3>Home</h3>
+              <p>Commute overview, Up Next, Plan a Trip, Explore Places, and a cleaner dashboard-style first screen.</p>
             </article>
             <article class="feature-card reveal">
+              <span class="feature-icon">⌕</span>
+              <h3>Explore</h3>
+              <p>Destination search, categories, featured places, destination cards, and route entry from destination context.</p>
+            </article>
+            <article class="feature-card feature-card-highlight reveal">
               <span class="feature-icon">▣</span>
-              <h3>Transport Mode Icons</h3>
-              <p>Understand each route mode at a glance.</p>
-            </article>
-            <article class="feature-card reveal">
-              <span class="feature-icon">◎</span>
-              <h3>Nearby Walking Routes</h3>
-              <p>See ₱0 walking options for nearby places.</p>
-            </article>
-            <article class="feature-card reveal">
-              <span class="feature-icon">₱</span>
-              <h3>Fare Estimates and Breakdown</h3>
-              <p>Prepare your budget with segment fares and totals.</p>
-            </article>
-            <article class="feature-card reveal">
-              <span class="feature-icon">✓</span>
-              <h3>Step-by-Step Route Guide</h3>
-              <p>Follow boarding, transfer, alighting, and walking steps.</p>
-            </article>
-            <article class="feature-card reveal">
-              <span class="feature-icon">♡</span>
-              <h3>Favorites</h3>
-              <p>Save important destinations for faster future planning.</p>
+              <h3>Terminals</h3>
+              <p>Now a main app tab with verified terminal and bus route data, source and confidence cues, route details, and a Report Correction flow.</p>
             </article>
             <article class="feature-card reveal">
               <span class="feature-icon">☷</span>
-              <h3>Trip Plans</h3>
-              <p>Organize destinations, dates, stops, and budgets.</p>
+              <h3>Plans</h3>
+              <p>Create New Plan, saved plans, shared plans, trip history, reminders, and an organized trip workspace.</p>
             </article>
             <article class="feature-card reveal">
-              <span class="feature-icon">☊</span>
-              <h3>Shared Planning</h3>
-              <p>Coordinate plans with friends and starting points.</p>
-            </article>
-            <article class="feature-card reveal">
-              <span class="feature-icon">◴</span>
-              <h3>Plan Reminders</h3>
-              <p>Prepare before stops with helpful reminder timing.</p>
-            </article>
-            <article class="feature-card reveal">
-              <span class="feature-icon">↺</span>
-              <h3>Trip History</h3>
-              <p>Review finished plans and completed trips.</p>
-            </article>
-            <article class="feature-card reveal">
-              <span class="feature-icon">✦</span>
-              <h3>Presenter Guide Mode</h3>
-              <p>Learn the app through a guided commute-planning story.</p>
-            </article>
-            <article class="feature-card reveal">
-              <span class="feature-icon">⚙</span>
-              <h3>Route and Fare Caching</h3>
-              <p>Reuse route and fare results to reduce repeated requests.</p>
+              <span class="feature-icon">◎</span>
+              <h3>Profile</h3>
+              <p>Account hub, Friends, Saved Places/Favorites, Settings, Guide Mode access, and logout controls.</p>
             </article>
           </div>
         </div>
       </section>
 
-      <section class="section section-dark" id="how-it-works">
+      <section class="section section-brand" id="how-it-works">
         <div class="section-inner">
           <div class="section-heading reveal">
             <p class="eyebrow">How it works</p>
-            <h2>A simple route-line workflow.</h2>
+            <h2>Find, verify, organize.</h2>
           </div>
           <ol class="timeline reveal">
             <li>
               <span>1</span>
               <div>
-                <h3>Search or choose a destination</h3>
-                <p>Start from a place like Intramuros, a museum, a mall, or a park.</p>
+                <h3>Start from Home or Explore</h3>
+                <p>Check your overview, tap Plan a Trip, or search a destination directly from Explore.</p>
               </div>
             </li>
             <li>
               <span>2</span>
               <div>
-                <h3>Compare routes, fares, and transport modes</h3>
-                <p>Review walking, jeepney, bus, train, and mixed route options.</p>
+                <h3>Open destination context</h3>
+                <p>Use destination cards, featured places, or categories to move naturally into route planning.</p>
               </div>
             </li>
             <li>
               <span>3</span>
               <div>
-                <h3>Open the step-by-step route guide</h3>
-                <p>See where to board, transfer, alight, and walk.</p>
+                <h3>Check Terminals when route certainty matters</h3>
+                <p>Review verified terminal details, source cues, confidence cues, and report corrections when needed.</p>
               </div>
             </li>
             <li>
               <span>4</span>
               <div>
-                <h3>Save the place or add it to a trip plan</h3>
-                <p>Turn a route into something reusable.</p>
+                <h3>Build the trip in Plans</h3>
+                <p>Create, save, share, revisit, and organize plans with reminders and history.</p>
               </div>
             </li>
             <li>
               <span>5</span>
               <div>
-                <h3>Share plans and coordinate with friends</h3>
-                <p>Plan group trips with better visibility and less confusion.</p>
+                <h3>Return through Profile</h3>
+                <p>Manage account tools, Friends, Saved Places, Settings, and replayable Guide Mode access.</p>
               </div>
             </li>
           </ol>
@@ -304,28 +266,28 @@
       <section class="section guide-mode section-light" id="guide-mode">
         <div class="section-inner guide-grid">
           <div class="reveal">
-            <p class="eyebrow">Premium onboarding</p>
-            <h2>Presenter Guide Mode teaches the app through a live walkthrough.</h2>
+            <p class="eyebrow">Guide Mode</p>
+            <h2>A simple five-tab onboarding guide.</h2>
             <p>
-              Presenter Guide Mode introduces first-time users to HalaPH through
-              a guided commute-planning story.
+              Guide Mode teaches Home, Explore, Terminals, Plans, and Profile through
+              Welcome, Home, Explore, Terminals, Plans, Profile, and Finish steps.
             </p>
             <ul class="check-list">
-              <li>Launch walkthrough and guided objectives</li>
-              <li>Intramuros sample trip and destination selection</li>
-              <li>Route comparison and transport mode explanation</li>
-              <li>Route guide, fare breakdown, plans, and collaboration</li>
+              <li>Uses Skip, Back, Next, and Finish controls</li>
+              <li>Does not require real route searches, plans, friends, or demo data</li>
+              <li>Can be replayed from Settings or Profile when enabled</li>
+              <li>Keeps onboarding focused on the new five-tab structure</li>
             </ul>
           </div>
           <div class="guide-panel reveal">
-            <div class="quest-card">
-              <span class="quest-label">Guide Mode</span>
-              <h3>Objective: Plan a commute to Intramuros</h3>
+            <div class="guide-card">
+              <span class="guide-label">Seven steps</span>
+              <h3>Welcome → Home → Explore → Terminals → Plans → Profile → Finish</h3>
               <p>
-                Compare a Jeepney + Train route, check the fare breakdown, save
-                the destination, and add it to a sample plan.
+                A lightweight walkthrough that explains the app shell first, then lets
+                commuters continue into the real app without needing sample activity.
               </p>
-              <div class="quest-progress"><span></span></div>
+              <div class="guide-progress"><span></span></div>
             </div>
           </div>
         </div>
@@ -438,11 +400,10 @@
             </div>
             <p>
               Cheong, Jerald Jia Le D. developed and rebuilt the final HalaPH
-              app and showcase site. The release includes route planning, fare
-              estimates, favorites, friends, plans, collaboration, reminders,
-              trip history, Firebase integration, Guide Mode, admin tools,
-              featured places, sponsored cards, fullscreen ads, APK release
-              updates, QR download updates, validation, and showcase testing.
+              app and showcase site. The release includes the redesigned Home,
+              Explore, Terminals, Plans, and Profile structure, Guide Mode,
+              featured places, route planning, fare estimates, collaboration,
+              reminders, trip history, showcase testing, APK updates, and QR support.
             </p>
             <p>
               The team supported leadership, documentation, finance, marketing,
@@ -558,12 +519,23 @@
         </div>
       </section>
 
-      <section class="section trust section-soft">
-        <div class="section-inner trust-grid">
-          <article class="trust-card reveal">Fare estimates may vary depending on actual route, distance, and fare updates.</article>
-          <article class="trust-card reveal">Route results depend on available transport and map data.</article>
-          <article class="trust-card reveal">Presenter Guide Mode introduces the app without changing real trip data.</article>
-          <article class="trust-card reveal">This showcase build is prepared for academic/business presentation use.</article>
+      <section class="section reliability section-soft">
+        <div class="section-inner reliability-layout">
+          <div class="section-heading reveal">
+            <p class="eyebrow">Expo-ready reliability</p>
+            <h2>Built to stay useful when the network gets noisy.</h2>
+            <p>
+              HalaPH uses cache-first data loading, reduces repeated Firebase and Google activity during demos,
+              keeps logs quieter, and uses safer weak-network fallbacks without promising perfect offline accuracy.
+            </p>
+          </div>
+          <ul class="reliability-list reveal">
+            <li>Uses cached and fallback data when network is weak</li>
+            <li>Reduces repeated cloud calls during demos</li>
+            <li>Keeps the app responsive when non-critical data fails to refresh</li>
+            <li>Uses quieter logs so demo behavior is easier to follow</li>
+            <li>Keeps usable fallback data when possible</li>
+          </ul>
         </div>
       </section>
 
@@ -571,7 +543,7 @@
         <div class="section-inner">
           <div class="section-heading reveal">
             <p class="eyebrow">FAQ</p>
-            <h2>Common Questions</h2>
+            <h2>Common FAQs</h2>
           </div>
           <div class="faq-list reveal">
             <details>
@@ -595,8 +567,8 @@
               <p>Public iPhone installation is not available for this showcase. The iOS build is available as a live presenter-device demo.</p>
             </details>
             <details>
-              <summary>What is Presenter Guide Mode?</summary>
-              <p>It is an interactive app walkthrough that teaches first-time users through a guided commute-planning story without affecting the real app data.</p>
+              <summary>What is Guide Mode?</summary>
+              <p>It is a simple five-tab onboarding guide for Home, Explore, Terminals, Plans, and Profile. It uses Welcome through Finish steps and can be replayed from Settings or Profile when enabled.</p>
             </details>
             <details>
               <summary>Are fare estimates exact?</summary>

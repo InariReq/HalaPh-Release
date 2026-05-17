@@ -20,7 +20,7 @@ Current showcase links and assets:
 - The Android APK link points to `downloads/HalaPH-release-brand-theme-final.apk`.
 - The showcase QR image points to the hosted showcase website.
 - The APK QR image points to the hosted Android APK download.
-- The advertisement video is marked as Coming Soon until the final video link is ready.
+- The advertisement video uses `assets/videos/halaph-promo-video.mp4`.
 - Official contact email: `triplineph13@gmail.com`.
 - Team content is managed through the manual carousel in `app.js`.
 - The official slogan is shown below for consistency checks.
@@ -47,14 +47,12 @@ Do not move, rename, or modify the original Flutter app logo asset.
 
 ## Theme Switcher
 
-The website includes a header theme switcher with four themes:
+The website includes a header theme switcher with two themes:
 
+- Burgundy (default)
 - Light
-- Dark
-- Burgundy
-- Navy
 
-The selected theme is applied immediately and saved in `localStorage`, so the browser remembers the visitor's choice. If no saved preference exists, the site may use the browser's dark-mode preference.
+The selected theme is applied immediately and saved in `localStorage`, so the browser remembers the visitor's manual choice. First-time visitors load into Burgundy by default.
 
 Theme colors are controlled with CSS variables near the top of `styles.css`. Edit the `:root` and `:root[data-theme="..."]` blocks to adjust backgrounds, cards, text, borders, buttons, route accents, and shadows.
 
@@ -98,7 +96,7 @@ If a photo is missing, the website automatically shows the member initials. The 
 
 - Confirm the Android APK link still points to the final release file.
 - Confirm both QR codes open the expected targets.
-- Keep the advertisement video marked Coming Soon until the final video link exists.
+- Confirm the advertisement video plays from the current promo path.
 - Check website on phone.
 - Check download button.
 - Test app on Android.

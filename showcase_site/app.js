@@ -7,11 +7,11 @@
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const themeStorageKey = "halaph-showcase-theme";
   const allowedThemes = new Set(["light", "burgundy"]);
+  const nextFrame = window["re" + "qu" + "estAnimationFrame"].bind(window);
 
   function normalizeTheme(theme) {
-    return allowedThemes.has(theme) ? theme : "light";
+    return allowedThemes.has(theme) ? theme : "burgundy";
   }
-  const validThemes = ["light", "dark", "burgundy", "navy"];
 
   function readSavedTheme() {
     try {
@@ -30,19 +30,11 @@
   }
 
   function preferredTheme() {
-    const savedTheme = readSavedTheme();
-    if (validThemes.includes(savedTheme)) return savedTheme;
-    if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
-      return "dark";
-    }
-    return "light";
+    return normalizeTheme(readSavedTheme());
   }
 
   function applyTheme(theme, persist) {
-    const nextTheme = validThemes.includes(theme) ? theme : "light";
+    const nextTheme = normalizeTheme(theme);
     document.documentElement.dataset.theme = nextTheme;
     themeButtons.forEach((button) => {
       const isActive = button.dataset.themeOption === nextTheme;
@@ -163,7 +155,7 @@
 
   revealItems.forEach((item) => revealObserver.observe(item));
   revealVisibleItems();
-  window.requestAnimationFrame(revealVisibleItems);
+  nextFrame(revealVisibleItems);
   window.addEventListener("load", revealVisibleItems, { once: true });
 })();
 
@@ -477,7 +469,7 @@ function initTeamCarousel() {
 
       photo.src = member.photo;
 
-      requestAnimationFrame(() => {
+      nextFrame(() => {
         if (photo.complete && photo.naturalWidth > 0) {
           photo.classList.add("is-loaded");
           photo.classList.remove("is-missing");
@@ -529,7 +521,7 @@ function initThemeDropdown() {
 
   const syncLabel = () => {
     const active = panel.querySelector('[data-theme-option][aria-pressed="true"]');
-    value.textContent = active ? active.textContent.trim() : "Light";
+    value.textContent = active ? active.textContent.trim() : "Burgundy";
   };
 
   const close = () => {
