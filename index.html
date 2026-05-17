@@ -35,9 +35,9 @@
         </button>
         <div class="theme-panel" role="menu" aria-label="Theme options">
           <button class="theme-option" type="button" data-theme-option="light" aria-pressed="true" role="menuitem">Light</button>
-          <button class="theme-option" type="button" data-theme-option="dark" aria-pressed="false" role="menuitem">Dark</button>
+          <button hidden class="theme-option" type="button" data-theme-option="dark" aria-pressed="false" role="menuitem">Dark</button>
           <button class="theme-option" type="button" data-theme-option="burgundy" aria-pressed="false" role="menuitem">Burgundy</button>
-          <button class="theme-option" type="button" data-theme-option="navy" aria-pressed="false" role="menuitem">Navy</button>
+          <button hidden class="theme-option" type="button" data-theme-option="navy" aria-pressed="false" role="menuitem">Navy</button>
         </div>
       </div>
 
@@ -60,7 +60,7 @@
     </header>
 
     <main>
-      <section class="hero section" id="home">
+      <section class="hero section section-dark" id="home">
         <div class="hero-bg-route" aria-hidden="true">
           <span class="route-dot dot-one"></span>
           <span class="route-dot dot-two"></span>
@@ -94,7 +94,8 @@
           </div>
 
           <div class="phone-showcase reveal" aria-label="HalaPH app preview">
-            <div class="phone-frame">
+            <div class="device-showcase-card">
+              <div class="phone-frame">
               <div class="phone-speaker"></div>
               <div class="app-preview">
                 <div class="app-topbar">
@@ -135,12 +136,13 @@
                   <span>Presenter Guide Mode ready</span>
                 </div>
               </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="section problem" id="problem">
+      <section class="section problem section-light" id="problem">
         <div class="section-inner two-column">
           <div class="reveal">
             <p class="eyebrow">The commuter problem</p>
@@ -160,7 +162,7 @@
         </div>
       </section>
 
-      <section class="section solution">
+      <section class="section solution section-light">
         <div class="section-inner">
           <div class="section-heading reveal">
             <p class="eyebrow">The HalaPH solution</p>
@@ -182,7 +184,7 @@
         </div>
       </section>
 
-      <section class="section" id="features">
+      <section class="section section-soft" id="features">
         <div class="section-inner">
           <div class="section-heading reveal">
             <p class="eyebrow">Feature showcase</p>
@@ -253,7 +255,7 @@
         </div>
       </section>
 
-      <section class="section" id="how-it-works">
+      <section class="section section-dark" id="how-it-works">
         <div class="section-inner">
           <div class="section-heading reveal">
             <p class="eyebrow">How it works</p>
@@ -299,7 +301,7 @@
         </div>
       </section>
 
-      <section class="section guide-mode" id="guide-mode">
+      <section class="section guide-mode section-light" id="guide-mode">
         <div class="section-inner guide-grid">
           <div class="reveal">
             <p class="eyebrow">Premium onboarding</p>
@@ -329,7 +331,7 @@
         </div>
       </section>
 
-      <section class="section mission" id="mission">
+      <section class="section mission section-soft" id="mission">
         <div class="section-inner">
           <div class="mission-grid">
             <article class="statement-card reveal">
@@ -376,7 +378,7 @@
         </div>
       </section>
 
-      <section class="section team-section" id="team">
+      <section class="section team-section section-light" id="team">
         <div class="container">
           <div class="section-heading reveal">
             <p class="eyebrow">Team</p>
@@ -404,7 +406,7 @@
 
               <article class="team-slide-card" aria-live="polite">
                 <div class="team-photo-wrap">
-                  <img id="team-photo" class="team-photo" alt="" loading="lazy" />
+                  <img id="team-photo" class="team-photo" alt="" loading="eager" />
                   <div id="team-initials" class="team-initials">JC</div>
                 </div>
 
@@ -467,14 +469,15 @@
       </section>
 
 
-      <section class="section download" id="download">
+      <section class="section download section-cta" id="download">
         <div class="section-inner">
           <div class="section-heading reveal">
             <p class="eyebrow">Access HalaPH</p>
             <h2>Download the Android build or open the showcase page.</h2>
           </div>
           <div class="download-grid">
-            <article class="download-card build-card reveal">
+            <div class="download-conversion-grid">
+              <article class="download-card build-card reveal">
               <div>
                 <p class="eyebrow">Latest Build</p>
                 <h3>Android APK</h3>
@@ -490,22 +493,33 @@
                 <p>Scan with an Android phone to download the APK.</p>
               </div>
               <a class="btn btn-primary" href="./downloads/HalaPH-release-sponsored-links-fullscreen-final.apk">Download APK</a>
-            </article>
-            <article class="download-card qr-card reveal">
-              <h3>Showcase Website</h3>
-              <div class="qr-placeholder" aria-label="Showcase website QR code"><img src="./assets/site_qr.png" alt="QR code to open the HalaPH showcase page" loading="lazy" /></div>
-              <p>Scan to open this showcase page on another device.</p>
-              <a class="btn btn-secondary" href="https://inarireq.github.io/HalaPh-Release/">Open Showcase Site</a>
-            </article>
-            <article class="download-card reveal" id="video-coming-soon">
-              <h3>Advertisement Video</h3>
-              <span class="ios-badge">Coming soon</span>
-              <p>
-                The advertisement video will be added once the final video link is ready.
-              </p>
-            </article>
-            <article class="download-card reveal">
-              <h3>iPhone</h3>
+              </article>
+              <article class="download-card qr-card reveal">
+                <h3>Showcase Website</h3>
+                <div class="qr-placeholder" aria-label="Showcase website QR code"><img src="./assets/site_qr.png" alt="QR code to open the HalaPH showcase page" loading="lazy" /></div>
+                <p>Scan to open this showcase page on another device.</p>
+                <a class="btn btn-secondary" href="https://inarireq.github.io/HalaPh-Release/">Open Showcase Site</a>
+              </article>
+            </div>
+            <div class="download-support-grid">
+              <article class="download-card cinema-card reveal" id="video-coming-soon">
+                <span class="video-label">Advertisement Video</span>
+                <h3>Advertisement Video</h3>
+              <span class="ios-badge"></span>
+              <div class="advertisement-video-frame">
+                <video
+                  class="advertisement-video-player"
+                  controls
+                  preload="metadata"
+                  playsinline
+                >
+                  <source src="./assets/videos/halaph-promo-video.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+              </article>
+              <article class="download-card device-note-card reveal">
+                <h3>iPhone</h3>
               <span class="ios-badge">Live demo available on presenter device</span>
               <p>
                 The iOS build is available as a live presenter-device demo
@@ -517,7 +531,7 @@
         </div>
       </section>
 
-      <section class="section install-section" id="install-android">
+      <section class="section install-section section-light" id="install-android">
         <div class="section-inner">
           <div class="section-heading reveal">
             <p class="eyebrow">Android installation</p>
@@ -544,7 +558,7 @@
         </div>
       </section>
 
-      <section class="section trust">
+      <section class="section trust section-soft">
         <div class="section-inner trust-grid">
           <article class="trust-card reveal">Fare estimates may vary depending on actual route, distance, and fare updates.</article>
           <article class="trust-card reveal">Route results depend on available transport and map data.</article>
@@ -553,7 +567,7 @@
         </div>
       </section>
 
-      <section class="section" id="faq">
+      <section class="section section-light" id="faq">
         <div class="section-inner">
           <div class="section-heading reveal">
             <p class="eyebrow">FAQ</p>

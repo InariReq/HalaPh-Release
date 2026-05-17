@@ -4,7 +4,13 @@
   const toast = document.querySelector("[data-toast]");
   const year = document.querySelector("[data-year]");
   const themeButtons = document.querySelectorAll("[data-theme-option]");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const themeStorageKey = "halaph-showcase-theme";
+  const allowedThemes = new Set(["light", "burgundy"]);
+
+  function normalizeTheme(theme) {
+    return allowedThemes.has(theme) ? theme : "light";
+  }
   const validThemes = ["light", "dark", "burgundy", "navy"];
 
   function readSavedTheme() {
@@ -42,6 +48,13 @@
       const isActive = button.dataset.themeOption === nextTheme;
       button.setAttribute("aria-pressed", String(isActive));
     });
+    const themeValue = document.querySelector(".theme-trigger-value");
+    const activeButton = document.querySelector(
+      `[data-theme-option="${nextTheme}"]`,
+    );
+    if (themeValue && activeButton) {
+      themeValue.textContent = activeButton.textContent.trim();
+    }
     if (persist) {
       saveTheme(nextTheme);
     }
@@ -63,6 +76,13 @@
     }, 2800);
   }
 
+  function closeNav() {
+    if (!navToggle || !nav) return;
+    nav.classList.remove("open");
+    navToggle.setAttribute("aria-expanded", "false");
+    document.body.classList.remove("nav-open");
+  }
+
   if (navToggle && nav) {
     navToggle.addEventListener("click", () => {
       const isOpen = nav.classList.toggle("open");
@@ -72,10 +92,18 @@
 
     nav.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", () => {
-        nav.classList.remove("open");
-        navToggle.setAttribute("aria-expanded", "false");
-        document.body.classList.remove("nav-open");
+        closeNav();
       });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!nav.classList.contains("open")) return;
+      if (nav.contains(event.target) || navToggle.contains(event.target)) return;
+      closeNav();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeNav();
     });
   }
 
@@ -90,7 +118,10 @@
       const target = document.querySelector(link.getAttribute("href"));
       if (!target) return;
       event.preventDefault();
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      target.scrollIntoView({
+        behavior: reducedMotion.matches ? "auto" : "smooth",
+        block: "start",
+      });
     });
   });
 
@@ -105,7 +136,7 @@
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         entry.target.classList.add("visible");
-        
+        revealObserver.unobserve(entry.target);
       });
     },
     {
@@ -114,7 +145,26 @@
     },
   );
 
+  function revealVisibleItems() {
+    revealItems.forEach((item) => {
+      if (item.classList.contains("visible")) return;
+
+      const rect = item.getBoundingClientRect();
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+      const isVisible = rect.top < viewportHeight * 0.92 && rect.bottom > 0;
+
+      if (isVisible) {
+        item.classList.add("visible");
+        revealObserver.unobserve(item);
+      }
+    });
+  }
+
   revealItems.forEach((item) => revealObserver.observe(item));
+  revealVisibleItems();
+  window.requestAnimationFrame(revealVisibleItems);
+  window.addEventListener("load", revealVisibleItems, { once: true });
 })();
 
 
@@ -353,8 +403,6 @@ const teamMembers = [
   }
 ]
 
-const organizationFlow = "General Manager → Assistant Manager → Technical / Design → Research / Data → Finance → Marketing / Ads → Customer Support";;
-
 function initTeamCarousel() {
   const name = document.getElementById("team-member-name");
   const role = document.getElementById("team-member-role");
@@ -387,11 +435,15 @@ function initTeamCarousel() {
     `).join("");
   };
 
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
   const render = (nextIndex) => {
     index = (nextIndex + teamMembers.length) % teamMembers.length;
     const member = teamMembers[index];
 
-    card.classList.add("is-changing");
+    if (!reducedMotion.matches) {
+      card.classList.add("is-changing");
+    }
 
     window.setTimeout(() => {
       name.textContent = member.name;
@@ -438,7 +490,7 @@ function initTeamCarousel() {
 
       renderDots();
       card.classList.remove("is-changing");
-    }, 140);
+    }, reducedMotion.matches ? 0 : 110);
   };
 
   prev.addEventListener("click", () => render(index - 1));
@@ -526,225 +578,3 @@ function initThemeDropdown() {
 }
 
 document.addEventListener("DOMContentLoaded", initThemeDropdown);
-
-// HalaPH replayable scroll and slide animations 20260515 START
-(() => {
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-  const revealSelectors = [
-    ".hero-copy",
-    ".hero-content",
-    ".hero-text",
-    ".hero-visual",
-    ".phone-mockup",
-    ".phone",
-    ".section-header",
-    ".section-heading",
-    ".feature-card",
-    ".card",
-    ".step-card",
-    ".workflow-card",
-    ".route-step",
-    ".mission-card",
-    ".vision-card",
-    ".team-card",
-    ".member-card",
-    ".contribution-card",
-    ".download-card",
-    ".apk-qr",
-    ".faq-card",
-    ".footer-inner"
-  ];
-
-  const slideScopes = [
-    ".team-carousel",
-    ".members-carousel",
-    ".carousel",
-    ".team-section",
-    ".team",
-    "[data-carousel]"
-  ];
-
-  let revealObserver = null;
-
-  function isInsideNav(element) {
-    return Boolean(element.closest(".nav-links, [data-nav], header, .site-header, .navbar"));
-  }
-
-  function markRevealElements() {
-    const elements = Array.from(document.querySelectorAll(revealSelectors.join(",")))
-      .filter((element) => !isInsideNav(element))
-      .filter((element) => !element.classList.contains("hala-reveal-opt-out"));
-
-    elements.forEach((element, index) => {
-      element.classList.add("hala-reveal");
-
-      if (
-        element.matches(".hero-visual, .phone-mockup, .phone") ||
-        element.closest(".hero-visual")
-      ) {
-        element.classList.add("reveal-right");
-      } else if (
-        element.matches(".hero-copy, .hero-content, .hero-text")
-      ) {
-        element.classList.add("reveal-left");
-      }
-
-      const delay = Math.min((index % 5) * 55, 220);
-      element.style.setProperty("--reveal-delay", `${delay}ms`);
-    });
-
-    return elements;
-  }
-
-  function elementIsInViewport(element) {
-    const rect = element.getBoundingClientRect();
-    const height = window.innerHeight || document.documentElement.clientHeight;
-
-    return rect.top < height * 0.86 && rect.bottom > height * 0.12;
-  }
-
-  function initRevealAnimations() {
-    const elements = markRevealElements();
-
-    if (reducedMotion.matches) {
-      elements.forEach((element) => element.classList.add("is-visible"));
-      return;
-    }
-
-    if (revealObserver) {
-      revealObserver.disconnect();
-    }
-
-    revealObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.08) {
-            entry.target.classList.add("is-visible");
-          } else if (!entry.isIntersecting) {
-            entry.target.classList.remove("is-visible");
-          }
-        });
-      },
-      {
-        threshold: [0, 0.08, 0.18, 0.32],
-        rootMargin: "-6% 0px -8% 0px"
-      }
-    );
-
-    elements.forEach((element) => {
-      revealObserver.observe(element);
-
-      if (elementIsInViewport(element)) {
-        element.classList.add("is-visible");
-      }
-    });
-  }
-
-  function closestSlideScope(element) {
-    return element.closest(slideScopes.join(","));
-  }
-
-  function inferDirection(trigger) {
-    const aria = trigger.getAttribute("aria-label") || "";
-    const title = trigger.getAttribute("title") || "";
-    const text = trigger.textContent || "";
-    const className =
-      typeof trigger.className === "string" ? trigger.className : "";
-
-    const label = `${aria} ${title} ${text} ${className}`.toLowerCase();
-
-    if (
-      label.includes("prev") ||
-      label.includes("previous") ||
-      label.includes("back") ||
-      label.includes("left") ||
-      label.includes("‹") ||
-      label.includes("←")
-    ) {
-      return "prev";
-    }
-
-    return "next";
-  }
-
-  function replaySlideAnimation(scope, direction = "next") {
-    if (!scope || reducedMotion.matches) return;
-
-    scope.classList.add("hala-slide-scope");
-    scope.classList.remove(
-      "hala-slide-animating",
-      "hala-slide-next",
-      "hala-slide-prev"
-    );
-
-    void scope.offsetWidth;
-
-    scope.classList.add(
-      "hala-slide-animating",
-      direction === "prev" ? "hala-slide-prev" : "hala-slide-next"
-    );
-
-    window.clearTimeout(scope.__halaSlideTimer);
-    scope.__halaSlideTimer = window.setTimeout(() => {
-      scope.classList.remove(
-        "hala-slide-animating",
-        "hala-slide-next",
-        "hala-slide-prev"
-      );
-    }, 620);
-  }
-
-  function initSlideAnimations() {
-    document.addEventListener(
-      "click",
-      (event) => {
-        const trigger = event.target.closest(
-          "button, [role='button'], .carousel-arrow, .carousel-dot, .team-arrow"
-        );
-
-        if (!trigger) return;
-
-        const scope = closestSlideScope(trigger);
-        if (!scope) return;
-
-        replaySlideAnimation(scope, inferDirection(trigger));
-      },
-      true
-    );
-
-    const scopes = Array.from(document.querySelectorAll(slideScopes.join(",")));
-
-    scopes.forEach((scope) => {
-      scope.classList.add("hala-slide-scope");
-
-      const observer = new MutationObserver(() => {
-        replaySlideAnimation(scope, "next");
-      });
-
-      observer.observe(scope, {
-        childList: true,
-        characterData: true,
-        subtree: true
-      });
-    });
-  }
-
-  function initHalaMotion() {
-    initRevealAnimations();
-    initSlideAnimations();
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initHalaMotion);
-  } else {
-    initHalaMotion();
-  }
-
-  window.addEventListener("load", () => {
-    window.setTimeout(initRevealAnimations, 150);
-  });
-
-  reducedMotion.addEventListener?.("change", initRevealAnimations);
-})();
-// HalaPH replayable scroll and slide animations 20260515 END
