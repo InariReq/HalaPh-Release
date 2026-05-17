@@ -28,6 +28,12 @@ class DestinationService {
   static final Map<String, String> _imageUrlCache = {};
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static const String _cachedDestinationsCollection = 'cached_destinations';
+  static const Duration _cachedDestinationWriteDebounce = Duration(seconds: 15);
+  static final Map<String, String> _cachedDestinationSessionFingerprints = {};
+  static final Map<String, DateTime> _cachedDestinationLastAttempts = {};
+  static final Map<String, String> _cachedDestinationLastAttemptFingerprints =
+      {};
+  static final Set<String> _cachedDestinationUpsertsInFlight = {};
 
   // Popular malls in the Philippines with their coordinates
   static final List<Destination> _popularMalls = [
@@ -885,6 +891,11 @@ class DestinationService {
               destination.tags.any((tag) => tag.toLowerCase() == 'google')
           ? 'google'
           : source;
+      final cacheKey = _cachedDestinationSessionKey(
+        destination,
+        googlePlaceId,
+        coordinates,
+      );
       final photoReference =
           _tagValue(destination.tags, 'googlePhotoReference:') ??
               _tagValue(destination.tags, 'photoReference:') ??
@@ -896,6 +907,37 @@ class DestinationService {
             'Cached destination display name cleaned: $name -> $displayName');
       }
       debugPrint('Featured place original name preserved: $name');
+
+      final incomingFingerprint = _cachedDestinationFingerprint(
+        destination: destination,
+        name: name,
+        displayName: displayName,
+        effectiveSource: effectiveSource,
+        googlePlaceId: googlePlaceId,
+        photoReference: photoReference,
+        imageUrl: imageUrl,
+      );
+      if (_cachedDestinationSessionFingerprints[cacheKey] ==
+          incomingFingerprint) {
+        debugPrint('Cached destination upsert skipped: unchanged this session');
+        return;
+      }
+      if (_cachedDestinationUpsertsInFlight.contains(cacheKey)) {
+        debugPrint('Cached destination upsert skipped: already in flight');
+        return;
+      }
+      final lastAttempt = _cachedDestinationLastAttempts[cacheKey];
+      final now = DateTime.now();
+      if (lastAttempt != null &&
+          _cachedDestinationLastAttemptFingerprints[cacheKey] ==
+              incomingFingerprint &&
+          now.difference(lastAttempt) < _cachedDestinationWriteDebounce) {
+        debugPrint('Cached destination upsert skipped: debounced');
+        return;
+      }
+      _cachedDestinationLastAttempts[cacheKey] = now;
+      _cachedDestinationLastAttemptFingerprints[cacheKey] = incomingFingerprint;
+      _cachedDestinationUpsertsInFlight.add(cacheKey);
 
       final existing = await _findCachedDestination(
         googlePlaceId: googlePlaceId,
@@ -920,11 +962,7 @@ class DestinationService {
         debugPrint('Cached destination image saved from field: imageUrl');
       }
 
-      final doc = existing?.reference ??
-          _firestore
-              .collection(_cachedDestinationsCollection)
-              .doc(_cachedDestinationDocId(destination, googlePlaceId));
-      await doc.set({
+      final writeData = <String, dynamic>{
         'id': destination.id,
         'name': name,
         'title': name,
@@ -958,14 +996,42 @@ class DestinationService {
         'source': effectiveSource,
         'rating': destination.rating,
         'tags': destination.tags,
+      };
+      if (existing != null &&
+          !_cachedDestinationRequiredFieldsChanged(existingData, writeData)) {
+        _cachedDestinationSessionFingerprints[cacheKey] = incomingFingerprint;
+        debugPrint('Cached destination upsert skipped: no field changes');
+        return;
+      }
+
+      final doc = existing?.reference ??
+          _firestore
+              .collection(_cachedDestinationsCollection)
+              .doc(_cachedDestinationDocId(destination, googlePlaceId));
+      await doc.set({
+        ...writeData,
         'updatedAt': FieldValue.serverTimestamp(),
         if (existing == null) 'createdAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
+      _cachedDestinationSessionFingerprints[cacheKey] = incomingFingerprint;
       debugPrint(
         'Cached destination upserted: ${googlePlaceId.isEmpty ? name : googlePlaceId}',
       );
     } catch (error) {
       debugPrint('Cached destination upsert failed: $error');
+    } finally {
+      final googlePlaceId = _tagValue(destination.tags, 'googlePlaceId:') ??
+          _tagValue(destination.tags, 'placeId:') ??
+          (destination.id.startsWith('google_') ? '' : destination.id).trim();
+      if (destination.coordinates != null) {
+        _cachedDestinationUpsertsInFlight.remove(
+          _cachedDestinationSessionKey(
+            destination,
+            googlePlaceId,
+            destination.coordinates!,
+          ),
+        );
+      }
     }
   }
 
@@ -1013,6 +1079,63 @@ class DestinationService {
         ? 'google_$googlePlaceId'
         : '${_normalizeDestinationName(destination.name)}_${_coordinateBucket(destination.coordinates!)}';
     return raw.replaceAll(RegExp(r'[^A-Za-z0-9_-]+'), '_');
+  }
+
+  static String _cachedDestinationSessionKey(
+    Destination destination,
+    String googlePlaceId,
+    LatLng coordinates,
+  ) {
+    if (googlePlaceId.isNotEmpty) return 'google:$googlePlaceId';
+    return 'local:${_normalizeDestinationName(destination.name)}:${_coordinateBucket(coordinates)}';
+  }
+
+  static String _cachedDestinationFingerprint({
+    required Destination destination,
+    required String name,
+    required String displayName,
+    required String effectiveSource,
+    required String googlePlaceId,
+    required String photoReference,
+    required String imageUrl,
+  }) {
+    final coordinates = destination.coordinates!;
+    return [
+      destination.id,
+      name,
+      displayName.isEmpty ? name : displayName,
+      destination.description.trim(),
+      destination.location.trim(),
+      destination.category.name,
+      coordinates.latitude.toStringAsFixed(6),
+      coordinates.longitude.toStringAsFixed(6),
+      imageUrl,
+      photoReference,
+      googlePlaceId,
+      effectiveSource,
+      destination.rating.toStringAsFixed(3),
+      destination.tags.join('\u001f'),
+    ].join('\u001e');
+  }
+
+  static bool _cachedDestinationRequiredFieldsChanged(
+    Map<String, dynamic> existingData,
+    Map<String, dynamic> writeData,
+  ) {
+    for (final entry in writeData.entries) {
+      final existingValue = existingData[entry.key];
+      final nextValue = entry.value;
+      if (existingValue is List && nextValue is List) {
+        if (!listEquals(existingValue, nextValue)) return true;
+        continue;
+      }
+      if (existingValue is num && nextValue is num) {
+        if (existingValue.toDouble() != nextValue.toDouble()) return true;
+        continue;
+      }
+      if (existingValue != nextValue) return true;
+    }
+    return false;
   }
 
   static String _bestDestinationImage(
