@@ -2623,19 +2623,23 @@ details p {
   }
 }
 
+/* APK access gate */
 .apk-access-form,
-.apk-locked-panel,
-.apk-download-area {
+.apk-locked-panel {
   grid-column: 1 / -1;
 }
 
 .apk-access-form {
   display: grid;
-  gap: 0.65rem;
+  gap: 0.75rem;
   padding: 1rem;
   border: 1px solid var(--border);
   border-radius: 1rem;
-  background: color-mix(in srgb, var(--surface) 88%, var(--accent-soft));
+  background: color-mix(in srgb, var(--surface) 90%, var(--accent-soft));
+}
+
+.apk-access-form[hidden] {
+  display: none !important;
 }
 
 .apk-access-form label {
@@ -2646,7 +2650,7 @@ details p {
 .apk-access-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.65rem;
+  gap: 0.75rem;
   align-items: center;
 }
 
@@ -2680,6 +2684,10 @@ details p {
   color: var(--text-muted);
 }
 
+.apk-locked-panel[hidden] {
+  display: none !important;
+}
+
 .apk-locked-panel strong {
   display: block;
   color: var(--text);
@@ -2690,18 +2698,22 @@ details p {
   margin: 0;
 }
 
+/* After unlock, restore the old clean APK layout */
 .apk-download-area {
-  display: grid;
-  gap: 1rem;
+  display: contents;
 }
 
-.apk-download-area[hidden],
-.apk-locked-panel[hidden] {
+.apk-download-area[hidden] {
   display: none !important;
 }
 
-.apk-access-form.is-unlocked {
-  border-color: var(--accent);
+.apk-download-area .apk-qr {
+  grid-area: qr;
+}
+
+.apk-download-area .btn {
+  grid-area: button;
+  width: fit-content;
 }
 
 @media (max-width: 640px) {
@@ -2709,7 +2721,8 @@ details p {
     grid-template-columns: 1fr;
   }
 
-  .apk-access-row .btn {
+  .apk-access-row .btn,
+  .apk-download-area .btn {
     width: 100%;
   }
 }
