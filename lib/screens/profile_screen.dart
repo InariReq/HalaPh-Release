@@ -154,7 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         content: Text(
           'Commuter type set to ${CommuterTypeService.labelFor(normalized)}.',
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         duration: const Duration(seconds: 2),
       ),
     );
@@ -371,7 +371,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         const HalaSectionHeader(
           title: 'Account hub',
-          subtitle: 'Saved places, friends, and trip tools stay here.',
+          subtitle:
+              'Keep shared trips, reminders, and travel history in one place.',
         ),
         const SizedBox(height: 12),
         HalaCard(
@@ -521,7 +522,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Icon(
                 CommuterTypeService.iconFor(_commuterType),
-                color: const Color(0xFF1976D2),
+                color: Theme.of(context).colorScheme.primary,
                 size: 22,
               ),
               const SizedBox(width: 10),
@@ -548,13 +549,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     vertical: 5,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE3F2FD),
+                    color: Theme.of(context).colorScheme.primaryContainer,
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
                     CommuterTypeService.labelFor(_commuterType),
                     style: TextStyle(
-                      color: Color(0xFF1565C0),
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                     ),
@@ -584,7 +585,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 avatar: Icon(
                   CommuterTypeService.iconFor(type),
                   size: 16,
-                  color: selected ? Colors.white : const Color(0xFF1976D2),
+                  color: selected
+                      ? Colors.white
+                      : Theme.of(context).colorScheme.primary,
                 ),
                 labelStyle: TextStyle(
                   color: selected
@@ -592,12 +595,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       : Theme.of(context).colorScheme.onSurface,
                   fontWeight: FontWeight.w700,
                 ),
-                selectedColor: const Color(0xFF1976D2),
+                selectedColor: Theme.of(context).colorScheme.primary,
                 backgroundColor:
                     Theme.of(context).colorScheme.surfaceContainerHigh,
                 side: BorderSide(
                   color: selected
-                      ? const Color(0xFF1976D2)
+                      ? Theme.of(context).colorScheme.primary
                       : Theme.of(context)
                           .colorScheme
                           .outlineVariant
@@ -739,9 +742,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           });
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Profile picture updated!'),
-                backgroundColor: Colors.green,
+              SnackBar(
+                content: const Text('Profile picture updated!'),
+                backgroundColor: Theme.of(context).colorScheme.primary,
               ),
             );
           }

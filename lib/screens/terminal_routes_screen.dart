@@ -672,14 +672,23 @@ class _StatusChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final normalized = status.trim().toLowerCase();
+    final colorScheme = Theme.of(context).colorScheme;
     final (label, background, foreground) = switch (normalized) {
-      'active' => ('Active', Colors.green.shade100, Colors.green.shade800),
+      'active' => (
+          'Active',
+          colorScheme.primaryContainer,
+          colorScheme.onPrimaryContainer,
+        ),
       'needs_review' => (
           'Needs review',
-          Colors.orange.shade100,
-          Colors.orange.shade900,
+          colorScheme.tertiaryContainer,
+          colorScheme.onTertiaryContainer,
         ),
-      _ => ('Inactive', Colors.grey.shade300, Colors.grey.shade800),
+      _ => (
+          'Inactive',
+          colorScheme.surfaceContainerHighest,
+          colorScheme.onSurfaceVariant,
+        ),
     };
     return Chip(
       visualDensity: VisualDensity.compact,

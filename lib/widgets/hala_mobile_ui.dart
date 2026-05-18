@@ -8,7 +8,7 @@ class HalaCard extends StatelessWidget {
   const HalaCard({
     super.key,
     required this.child,
-    this.padding = const EdgeInsets.all(18),
+    this.padding = const EdgeInsets.all(20),
     this.margin,
   });
 
@@ -19,16 +19,16 @@ class HalaCard extends StatelessWidget {
       margin: margin,
       padding: padding,
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(22),
+        color: colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: colorScheme.outlineVariant.withValues(alpha: 0.34),
+          color: colorScheme.outlineVariant.withValues(alpha: 0.56),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 28,
+            offset: const Offset(0, 14),
           ),
         ],
       ),
@@ -58,17 +58,17 @@ class HalaSectionHeader extends StatelessWidget {
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: colorScheme.onSurface,
                 fontWeight: FontWeight.w900,
-                letterSpacing: -0.25,
+                letterSpacing: -0.35,
               ),
         ),
         if (subtitle != null && subtitle!.trim().isNotEmpty) ...[
           const SizedBox(height: 4),
           Text(
             subtitle!,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w700,
-                  height: 1.3,
+                  fontWeight: FontWeight.w600,
+                  height: 1.4,
                 ),
           ),
         ],
@@ -99,7 +99,7 @@ class HalaPrimaryButton extends StatelessWidget {
             label: child,
           );
     return ConstrainedBox(
-      constraints: const BoxConstraints(minHeight: 48),
+      constraints: const BoxConstraints(minHeight: 52),
       child: button,
     );
   }
@@ -127,7 +127,7 @@ class HalaSecondaryButton extends StatelessWidget {
             label: child,
           );
     return ConstrainedBox(
-      constraints: const BoxConstraints(minHeight: 48),
+      constraints: const BoxConstraints(minHeight: 52),
       child: button,
     );
   }
@@ -150,7 +150,7 @@ class HalaStatusChip extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final foreground = color ?? colorScheme.primary;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       decoration: BoxDecoration(
         color: foreground.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(999),
@@ -165,7 +165,7 @@ class HalaStatusChip extends StatelessWidget {
             label,
             style: TextStyle(
               color: colorScheme.onSurface,
-              fontSize: 12,
+              fontSize: 12.5,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -204,7 +204,7 @@ class HalaEmptyState extends StatelessWidget {
             ),
             child: Icon(icon, color: colorScheme.primary, size: 28),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           Text(
             title,
             textAlign: TextAlign.center,
@@ -212,17 +212,17 @@ class HalaEmptyState extends StatelessWidget {
                   fontWeight: FontWeight.w900,
                 ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Text(
             message,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: colorScheme.onSurfaceVariant,
-                  height: 1.35,
+                  height: 1.4,
                 ),
           ),
           if (action != null) ...[
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
             action!,
           ],
         ],

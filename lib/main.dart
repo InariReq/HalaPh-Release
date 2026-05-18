@@ -1121,7 +1121,7 @@ ThemeData _buildHalaTheme(
   final isDark = brightness == Brightness.dark;
   final resolvedBrandMode = brandColorMode == BrandColorMode.burgundy
       ? BrandColorMode.burgundy
-      : BrandColorMode.navy;
+      : BrandColorMode.light;
   final isBurgundyMode = resolvedBrandMode == BrandColorMode.burgundy;
   final primary = isBurgundyMode ? _halaBurgundy : _halaNavy;
   final primaryAccent = isBurgundyMode ? _halaBurgundyAccent : _halaNavyAccent;
@@ -1386,49 +1386,38 @@ class _HalaPhAppState extends State<HalaPhApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<ThemeMode>(
-      valueListenable: ThemeModeService.themeMode,
-      builder: (context, themeMode, _) {
-        return ValueListenableBuilder<BrandColorMode>(
-          valueListenable: ThemeModeService.brandColorMode,
-          builder: (context, brandColorMode, _) {
-            final lightTheme = _buildHalaTheme(
-              Brightness.light,
-              brandColorMode: brandColorMode,
-            );
-            final darkTheme = _buildHalaTheme(
-              Brightness.dark,
-              brandColorMode: brandColorMode,
-            );
+    return ValueListenableBuilder<BrandColorMode>(
+      valueListenable: ThemeModeService.brandColorMode,
+      builder: (context, brandColorMode, _) {
+        final lightTheme = _buildHalaTheme(
+          Brightness.light,
+          brandColorMode: brandColorMode,
+        );
 
-            if (_showAndroidLaunchScreen) {
-              debugPrint('AppStartup: Android hard launch gate active');
-              debugPrint('AppStartup: Android launch screen v3 rendered');
-              return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                title: 'HalaPH - Discover Philippines',
-                theme: lightTheme,
-                darkTheme: darkTheme,
-                themeMode: themeMode,
-                home: HalaPhLaunchPreflight(
-                  visualOnly: true,
-                  debugLabel: 'Android launch screen v3',
-                  onStart: _onAndroidVisualLaunchStart,
-                ),
-              );
-            }
+        if (_showAndroidLaunchScreen) {
+          debugPrint('AppStartup: Android hard launch gate active');
+          debugPrint('AppStartup: Android launch screen v3 rendered');
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'HalaPH - Discover Philippines',
+            theme: lightTheme,
+            themeMode: ThemeMode.light,
+            home: HalaPhLaunchPreflight(
+              visualOnly: true,
+              debugLabel: 'Android launch screen v3',
+              onStart: _onAndroidVisualLaunchStart,
+            ),
+          );
+        }
 
-            return MaterialApp.router(
-              debugShowCheckedModeBanner: false,
-              title: 'HalaPH - Discover Philippines',
-              theme: lightTheme,
-              darkTheme: darkTheme,
-              themeMode: themeMode,
-              routerDelegate: _router.routerDelegate,
-              routeInformationParser: _router.routeInformationParser,
-              routeInformationProvider: _router.routeInformationProvider,
-            );
-          },
+        return MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          title: 'HalaPH - Discover Philippines',
+          theme: lightTheme,
+          themeMode: ThemeMode.light,
+          routerDelegate: _router.routerDelegate,
+          routeInformationParser: _router.routeInformationParser,
+          routeInformationProvider: _router.routeInformationProvider,
         );
       },
     );

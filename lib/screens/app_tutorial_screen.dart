@@ -27,7 +27,7 @@ class _AppTutorialScreenState extends State<AppTutorialScreen> {
     _GuideStep(
       title: 'Welcome to HalaPH',
       body:
-          'Plan commutes, explore places, check terminal routes, and keep trips organized.',
+          'Tour the five tabs that keep commutes, places, terminals, plans, and your profile organized.',
       icon: Icons.route_rounded,
       tabLabel: 'Overview',
     ),
@@ -173,7 +173,7 @@ class _AppTutorialScreenState extends State<AppTutorialScreen> {
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
                           maxWidth: 460,
-                          maxHeight: constraints.maxHeight * 0.72,
+                          maxHeight: constraints.maxHeight * 0.82,
                         ),
                         child: Semantics(
                           container: true,
@@ -256,11 +256,8 @@ class _GuideCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
-    final cardColor =
-        isDark ? const Color(0xFF111827) : const Color(0xFFF8FAFD);
-    final borderColor =
-        isDark ? const Color(0xFF334155) : const Color(0xFFD9E4F4);
+    final cardColor = colorScheme.surfaceContainerLow;
+    final borderColor = colorScheme.outlineVariant;
 
     return Material(
       color: Colors.transparent,

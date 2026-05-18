@@ -303,15 +303,19 @@ class _HalaPhLaunchPreflightState extends State<HalaPhLaunchPreflight>
                                 style: theme.textTheme.headlineSmall?.copyWith(
                                   fontWeight: FontWeight.w900,
                                   color: colorScheme.onSurface,
+                                  letterSpacing: -0.45,
                                 ),
                               ),
                               const SizedBox(height: 8),
+                              _TaglinePill(colorScheme: colorScheme),
+                              const SizedBox(height: 12),
                               Text(
-                                'Setting up route tools, plans, and reminders.',
+                                'Build your next commute with clearer routes, fares, and plans.',
                                 textAlign: TextAlign.center,
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   color: colorScheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.4,
                                 ),
                               ),
                               if (widget.visualOnly &&
@@ -330,9 +334,7 @@ class _HalaPhLaunchPreflightState extends State<HalaPhLaunchPreflight>
                                     icon: _animationComplete
                                         ? Icons.check_circle_rounded
                                         : Icons.route_rounded,
-                                    iconColor: _animationComplete
-                                        ? Colors.green[700]!
-                                        : colorScheme.primary,
+                                    iconColor: colorScheme.primary,
                                     label: _animationComplete
                                         ? 'Route guide ready'
                                         : 'Preparing route guide',
@@ -342,8 +344,8 @@ class _HalaPhLaunchPreflightState extends State<HalaPhLaunchPreflight>
                                         ? Icons.check_circle_rounded
                                         : Icons.info_rounded,
                                     iconColor: _notificationsReady
-                                        ? Colors.green[700]!
-                                        : Colors.orange[700]!,
+                                        ? colorScheme.primary
+                                        : colorScheme.tertiary,
                                     label: _notificationMessage,
                                   ),
                                   _StatusRow(
@@ -351,17 +353,15 @@ class _HalaPhLaunchPreflightState extends State<HalaPhLaunchPreflight>
                                         ? Icons.check_circle_rounded
                                         : Icons.info_rounded,
                                     iconColor: _locationReady
-                                        ? Colors.green[700]!
-                                        : Colors.orange[700]!,
+                                        ? colorScheme.primary
+                                        : colorScheme.tertiary,
                                     label: _locationMessage,
                                   ),
                                   _StatusRow(
                                     icon: _accountChecked
                                         ? Icons.check_circle_rounded
                                         : Icons.hourglass_top_rounded,
-                                    iconColor: _accountChecked
-                                        ? Colors.green[700]!
-                                        : colorScheme.primary,
+                                    iconColor: colorScheme.primary,
                                     label: _accountMessage,
                                   ),
                                 ],
@@ -473,6 +473,36 @@ class _LogoCard extends StatelessWidget {
   }
 }
 
+class _TaglinePill extends StatelessWidget {
+  final ColorScheme colorScheme;
+
+  const _TaglinePill({required this.colorScheme});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+      decoration: BoxDecoration(
+        color: colorScheme.primaryContainer.withValues(alpha: 0.72),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color: colorScheme.primary.withValues(alpha: 0.22),
+        ),
+      ),
+      child: Text(
+        'Where Every Trip Meets Its Line',
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: colorScheme.onPrimaryContainer,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.35,
+              height: 1.2,
+            ),
+      ),
+    );
+  }
+}
+
 class _LaunchRouteBoard extends StatelessWidget {
   final double introProgress;
   final double routeProgress;
@@ -522,7 +552,7 @@ class _LaunchRouteBoard extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      'A calm start before the commute begins.',
+                      'Your commute workspace is ready.',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodySmall?.copyWith(
@@ -626,21 +656,20 @@ class _BoardBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ready = progress >= 0.98;
+    final accent = colorScheme.primary;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: BoxDecoration(
-        color: (ready ? Colors.green : colorScheme.primary)
-            .withValues(alpha: 0.12),
+        color: accent.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(999),
         border: Border.all(
-          color: (ready ? Colors.green : colorScheme.primary)
-              .withValues(alpha: 0.25),
+          color: accent.withValues(alpha: 0.25),
         ),
       ),
       child: Icon(
         ready ? Icons.check_rounded : Icons.route_rounded,
         size: 18,
-        color: ready ? Colors.green[700] : colorScheme.primary,
+        color: accent,
       ),
     );
   }

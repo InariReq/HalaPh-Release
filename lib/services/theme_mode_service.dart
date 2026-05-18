@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum BrandColorMode {
-  navy,
   burgundy,
-  system,
+  light,
 }
 
 class ThemeModeService {
@@ -12,16 +11,23 @@ class ThemeModeService {
   static const String _brandPreferenceKey = 'hala_brand_color_mode';
 
   static final ValueNotifier<ThemeMode> themeMode =
-      ValueNotifier<ThemeMode>(ThemeMode.system);
+      ValueNotifier<ThemeMode>(ThemeMode.light);
   static final ValueNotifier<BrandColorMode> brandColorMode =
-      ValueNotifier<BrandColorMode>(BrandColorMode.navy);
+      ValueNotifier<BrandColorMode>(BrandColorMode.burgundy);
 
   static Future<void> initialize() async {
     final prefs = await SharedPreferences.getInstance();
     final savedValue = prefs.getString(_preferenceKey);
     themeMode.value = _parseThemeMode(savedValue);
-    brandColorMode.value =
-        _parseBrandColorMode(prefs.getString(_brandPreferenceKey));
+    if (savedValue != themeMode.value.name) {
+      await prefs.setString(_preferenceKey, themeMode.value.name);
+    }
+
+    final savedBrandValue = prefs.getString(_brandPreferenceKey);
+    brandColorMode.value = _parseBrandColorMode(savedBrandValue);
+    if (savedBrandValue != brandColorMode.value.name) {
+      await prefs.setString(_brandPreferenceKey, brandColorMode.value.name);
+    }
   }
 
   static Future<void> setThemeMode(ThemeMode mode) async {
@@ -39,68 +45,59 @@ class ThemeModeService {
   static String labelFor(ThemeMode mode) {
     switch (mode) {
       case ThemeMode.system:
-        return 'System Default';
+        return 'Light';
       case ThemeMode.light:
-        return 'Light Mode';
+        return 'Light';
       case ThemeMode.dark:
-        return 'Dark Mode';
+        return 'Light';
     }
   }
 
   static String descriptionFor(ThemeMode mode) {
     switch (mode) {
       case ThemeMode.system:
-        return 'Follow your device appearance.';
+        return 'Use the clean original light appearance.';
       case ThemeMode.light:
-        return 'Use the bright white theme.';
+        return 'Use the clean original light appearance.';
       case ThemeMode.dark:
-        return 'Use the black and grey theme.';
+        return 'Use the clean original light appearance.';
     }
   }
 
   static String labelForBrand(BrandColorMode mode) {
     switch (mode) {
-      case BrandColorMode.navy:
-        return 'Navy';
       case BrandColorMode.burgundy:
         return 'Burgundy';
-      case BrandColorMode.system:
-        return 'System Default';
+      case BrandColorMode.light:
+        return 'Light';
     }
   }
 
   static String descriptionForBrand(BrandColorMode mode) {
     switch (mode) {
-      case BrandColorMode.navy:
-        return 'Default HalaPH transport accent.';
       case BrandColorMode.burgundy:
-        return 'Warm premium accent with navy contrast.';
-      case BrandColorMode.system:
-        return 'Use the recommended HalaPH default: Navy.';
+        return 'Premium HalaPH identity and recommended default.';
+      case BrandColorMode.light:
+        return 'The clean original colorway with a lighter feel.';
     }
   }
 
-  static ThemeMode _parseThemeMode(String? value) {
-    switch (value) {
-      case 'light':
-        return ThemeMode.light;
-      case 'dark':
-        return ThemeMode.dark;
-      case 'system':
-      default:
-        return ThemeMode.system;
-    }
+  static ThemeMode _parseThemeMode(String? _) {
+    return ThemeMode.light;
   }
 
   static BrandColorMode _parseBrandColorMode(String? value) {
     switch (value) {
       case 'burgundy':
         return BrandColorMode.burgundy;
-      case 'system':
-        return BrandColorMode.system;
+      case 'light':
       case 'navy':
+        return BrandColorMode.light;
+      case 'system':
+      case null:
+        return BrandColorMode.burgundy;
       default:
-        return BrandColorMode.navy;
+        return BrandColorMode.burgundy;
     }
   }
 }

@@ -20,15 +20,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _tutorialEnabledOnStart = true;
   bool _deletingAccount = false;
   bool _replayingGuideMode = false;
-  ThemeMode _themeMode = ThemeMode.system;
-  BrandColorMode _brandColorMode = BrandColorMode.navy;
+  BrandColorMode _brandColorMode = BrandColorMode.burgundy;
 
   @override
   void initState() {
     super.initState();
     _loadPlanReminderSetting();
     _loadTutorialSetting();
-    _loadThemeModeSetting();
     _loadBrandColorSetting();
   }
 
@@ -37,12 +35,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (!mounted) return;
     setState(() {
       _notificationsEnabled = enabled;
-    });
-  }
-
-  Future<void> _loadThemeModeSetting() async {
-    setState(() {
-      _themeMode = ThemeModeService.themeMode.value;
     });
   }
 
@@ -99,17 +91,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  Future<void> _setThemeMode(ThemeMode mode) async {
-    await ThemeModeService.setThemeMode(mode);
-    if (!mounted) return;
-    setState(() {
-      _themeMode = mode;
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${ThemeModeService.labelFor(mode)} selected')),
-    );
-  }
-
   Future<void> _setBrandColorMode(BrandColorMode mode) async {
     await ThemeModeService.setBrandColorMode(mode);
     if (!mounted) return;
@@ -118,7 +99,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${ThemeModeService.labelForBrand(mode)} brand selected'),
+        content: Text('${ThemeModeService.labelForBrand(mode)} theme selected'),
       ),
     );
   }
@@ -406,33 +387,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SlideFadeIn(
               order: 1,
               child: _section(
-                title: 'Appearance',
-                icon: Icons.dark_mode_outlined,
+                title: 'App theme',
+                icon: Icons.palette_outlined,
                 iconColor: colorScheme.primary,
                 children: [
-                  _settingsSubheading('Display mode'),
-                  _themeOption(ThemeMode.system, Icons.phone_iphone_rounded),
-                  const SizedBox(height: 10),
-                  _themeOption(ThemeMode.light, Icons.light_mode_rounded),
-                  const SizedBox(height: 10),
-                  _themeOption(ThemeMode.dark, Icons.dark_mode_rounded),
-                  const SizedBox(height: 16),
-                  Divider(height: 1, color: _borderColor),
-                  const SizedBox(height: 16),
-                  _settingsSubheading('Brand color'),
-                  _brandColorOption(
-                    BrandColorMode.navy,
-                    Icons.directions_bus_filled_outlined,
-                  ),
-                  const SizedBox(height: 10),
+                  _settingsSubheading('Choose your colorway'),
                   _brandColorOption(
                     BrandColorMode.burgundy,
                     Icons.palette_rounded,
                   ),
                   const SizedBox(height: 10),
                   _brandColorOption(
-                    BrandColorMode.system,
-                    Icons.auto_awesome_rounded,
+                    BrandColorMode.light,
+                    Icons.light_mode_rounded,
                   ),
                 ],
               ),
@@ -582,7 +549,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               SizedBox(height: 5),
               Text(
-                'Manage reminders, appearance, permissions, and account controls.',
+                'Manage reminders, themes, permissions, and account controls.',
                 style: TextStyle(
                   color: Colors.white70,
                   fontSize: 13,
@@ -667,81 +634,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const SizedBox(height: 16),
           ...children,
         ],
-      ),
-    );
-  }
-
-  Widget _themeOption(ThemeMode mode, IconData icon) {
-    final selected = _themeMode == mode;
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return PressableCard(
-      borderRadius: BorderRadius.circular(18),
-      onTap: () => _setThemeMode(mode),
-      child: Container(
-        padding: const EdgeInsets.all(13),
-        decoration: BoxDecoration(
-          color: selected ? colorScheme.primaryContainer : _softCardColor,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: selected ? colorScheme.primary : _softBorderColor,
-            width: selected ? 1.4 : 1,
-          ),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: selected ? colorScheme.primary : _subtitleColor,
-              size: 22,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    ThemeModeService.labelFor(mode),
-                    style: TextStyle(
-                      color: _titleColor,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  const SizedBox(height: 3),
-                  Text(
-                    ThemeModeService.descriptionFor(mode),
-                    style: TextStyle(
-                      color: _subtitleColor,
-                      fontSize: 12,
-                      height: 1.25,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: selected ? colorScheme.primary : Colors.transparent,
-                border: Border.all(
-                  color: selected ? colorScheme.primary : _softBorderColor,
-                  width: 2,
-                ),
-              ),
-              child: selected
-                  ? const Icon(
-                      Icons.check_rounded,
-                      color: Colors.white,
-                      size: 16,
-                    )
-                  : null,
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -831,8 +723,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     switch (mode) {
       case BrandColorMode.burgundy:
         return const Color(0xFF8F123D);
-      case BrandColorMode.navy:
-      case BrandColorMode.system:
+      case BrandColorMode.light:
         return const Color(0xFF123A66);
     }
   }

@@ -136,7 +136,7 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
         child: _isLoading
             ? const Padding(
                 padding: EdgeInsets.all(20),
-                child: HalaLoadingState(label: 'Loading plans'),
+                child: HalaLoadingState(label: 'Preparing your plans...'),
               )
             : SingleChildScrollView(
                 child: Column(
@@ -163,10 +163,10 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
         _buildSectionHeader(
           title: 'Personal Plans',
           subtitle: plans.isEmpty
-              ? 'Plans you create will appear here.'
+              ? 'Keep routes, reminders, and upcoming trips in one place.'
               : '${plans.length} active plan${plans.length == 1 ? '' : 's'}',
           icon: Icons.person_pin_circle_rounded,
-          iconColor: const Color(0xFF1976D2),
+          iconColor: Theme.of(context).colorScheme.primary,
         ),
         const SizedBox(height: 14),
         plans.isEmpty
@@ -174,7 +174,8 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
                 order: 0,
                 child: _buildEmptyPlansPlaceholder(
                   title: 'No plans yet',
-                  message: 'Create your first trip plan and add destinations.',
+                  message:
+                      'Build your next commute with clearer routes, fares, and plans.',
                   actionLabel: 'Create plan',
                   onAction: () => GoRouter.of(context).push('/create-plan'),
                 ),
@@ -198,10 +199,10 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
         _buildSectionHeader(
           title: 'Collaborative Plans',
           subtitle: plans.isEmpty
-              ? 'Shared trips from friends will appear here.'
+              ? 'Keep shared trips, reminders, and travel history in one place.'
               : '${plans.length} shared plan${plans.length == 1 ? '' : 's'}',
           icon: Icons.groups_rounded,
-          iconColor: const Color(0xFF7B1FA2),
+          iconColor: Theme.of(context).colorScheme.secondary,
         ),
         const SizedBox(height: 14),
         plans.isEmpty
@@ -318,7 +319,7 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
                 Icon(
                   Icons.place_rounded,
                   size: 14,
-                  color: Color(0xFF1565C0),
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 const SizedBox(width: 5),
                 Flexible(
@@ -327,7 +328,7 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Color(0xFF1565C0),
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                     ),
@@ -337,7 +338,7 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
                 Icon(
                   Icons.open_in_new_rounded,
                   size: 13,
-                  color: Color(0xFF1565C0),
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ],
             ),
@@ -353,8 +354,9 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
         !SimplePlanService.isPlanOwner(plan.id);
     final firstDestination = _firstPlanDestination(plan);
     final destinationCount = _destinationCount(plan);
-    final accentColor =
-        isSharedPlan ? const Color(0xFF7B1FA2) : const Color(0xFF1976D2);
+    final accentColor = isSharedPlan
+        ? Theme.of(context).colorScheme.secondary
+        : Theme.of(context).colorScheme.primary;
 
     return Container(
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 14),
@@ -452,13 +454,17 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
                               vertical: 3,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.green[50],
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
                               borderRadius: BorderRadius.circular(999),
                             ),
                             child: Text(
                               'Done',
                               style: TextStyle(
-                                color: Colors.green[700],
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
                                 fontSize: 10,
                                 fontWeight: FontWeight.w900,
                               ),
@@ -508,7 +514,7 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
                       },
                       icon: Icon(
                         Icons.check_circle_outline,
-                        color: Colors.green[600],
+                        color: Theme.of(context).colorScheme.primary,
                         size: 20,
                       ),
                       tooltip: 'Mark as finished',
@@ -565,19 +571,19 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
             _buildPlanMetaChip(
               icon: Icons.today_rounded,
               label: 'Today',
-              color: const Color(0xFF1976D2),
+              color: Theme.of(context).colorScheme.primary,
             ),
             _buildPlanMetaChip(
               icon: Icons.notifications_active_rounded,
               label: 'Reminder preview',
-              color: const Color(0xFF7B1FA2),
+              color: Theme.of(context).colorScheme.secondary,
             ),
             _buildPlanMetaChip(
               icon: Icons.groups_rounded,
               label: collaborators.isEmpty
                   ? 'Add collaborators'
                   : '${collaborators.length} collaborator${collaborators.length == 1 ? '' : 's'}',
-              color: const Color(0xFF00897B),
+              color: Theme.of(context).colorScheme.tertiary,
             ),
           ],
         ),
@@ -814,7 +820,8 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
               ? 'Plan moved to Trip History.'
               : 'Could not mark plan as finished.',
         ),
-        backgroundColor: success ? Colors.green : Colors.red,
+        backgroundColor:
+            success ? Theme.of(context).colorScheme.primary : Colors.red,
       ),
     );
 
@@ -1019,7 +1026,7 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
                   icon: Icons.groups_rounded,
                   label:
                       '${sharedPlans.length} shared plan${sharedPlans.length == 1 ? '' : 's'}',
-                  color: const Color(0xFF7B1FA2),
+                  color: colorScheme.secondary,
                 ),
               ],
             ),

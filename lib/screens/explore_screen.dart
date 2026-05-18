@@ -746,15 +746,12 @@ class _ExploreScreenState extends State<ExploreScreen>
         curve: Curves.easeOutCubic,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: Theme.of(context).brightness == Brightness.dark
-                ? [
-                    Theme.of(context).colorScheme.surfaceContainerHigh,
-                    Theme.of(context).colorScheme.surfaceContainer,
-                  ]
-                : const [
-                    Color(0xFFFFFFFF),
-                    Color(0xFFF4F8FF),
-                  ],
+            colors: [
+              Theme.of(context).colorScheme.surfaceContainerLow,
+              Theme.of(context).colorScheme.primaryContainer.withValues(
+                    alpha: 0.28,
+                  ),
+            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -767,9 +764,9 @@ class _ExploreScreenState extends State<ExploreScreen>
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.blue.withValues(
-                alpha: _searchController.text.isEmpty ? 0.08 : 0.16,
-              ),
+              color: Theme.of(context).colorScheme.primary.withValues(
+                    alpha: _searchController.text.isEmpty ? 0.08 : 0.16,
+                  ),
               blurRadius: _searchController.text.isEmpty ? 22 : 28,
               offset: const Offset(0, 8),
             ),
@@ -797,7 +794,10 @@ class _ExploreScreenState extends State<ExploreScreen>
                 color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: Icon(Icons.search_rounded, color: Colors.blue[700]),
+              child: Icon(
+                Icons.search_rounded,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
             suffixIcon: _searchController.text.isNotEmpty
                 ? AnimatedSwitcher(
@@ -851,7 +851,10 @@ class _ExploreScreenState extends State<ExploreScreen>
               boxShadow: isSelected
                   ? [
                       BoxShadow(
-                        color: Colors.blue.withValues(alpha: 0.18),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withValues(alpha: 0.18),
                         blurRadius: 14,
                         offset: const Offset(0, 6),
                       ),
@@ -867,7 +870,9 @@ class _ExploreScreenState extends State<ExploreScreen>
                   ? Icon(
                       Icons.auto_awesome_rounded,
                       size: 17,
-                      color: isSelected ? Colors.white : Colors.blue[700],
+                      color: isSelected
+                          ? Colors.white
+                          : Theme.of(context).colorScheme.primary,
                     )
                   : Icon(
                       _categoryIcon(category),
@@ -877,7 +882,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                           : Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
               backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-              selectedColor: Colors.blue[700],
+              selectedColor: Theme.of(context).colorScheme.primary,
               surfaceTintColor: Colors.transparent,
               labelStyle: TextStyle(
                 color: isSelected
@@ -888,7 +893,7 @@ class _ExploreScreenState extends State<ExploreScreen>
               ),
               side: BorderSide(
                 color: isSelected
-                    ? Colors.blue[700]!
+                    ? Theme.of(context).colorScheme.primary
                     : Theme.of(context)
                         .colorScheme
                         .outlineVariant
@@ -1055,16 +1060,18 @@ class _ExploreScreenState extends State<ExploreScreen>
       padding: const EdgeInsets.all(12),
       child: Row(
         children: [
-          Icon(Icons.info_outline, color: Colors.blue[700], size: 18),
+          Icon(
+            Icons.info_outline,
+            color: Theme.of(context).colorScheme.primary,
+            size: 18,
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               'Only ${_destinations.length} found. Try a different search or category.',
               style: TextStyle(
                 fontSize: 12,
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? const Color(0xFFBFDBFE)
-                    : Colors.blue[700],
+                color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -1097,7 +1104,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                     color: colorScheme.surfaceContainerHighest,
                     child: Center(
                       child: CircularProgressIndicator(
-                        color: Colors.blue[600],
+                        color: colorScheme.primary,
                       ),
                     ),
                   ),
@@ -1362,7 +1369,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                             color: const Color(0xFFF2F6FC),
                             child: Center(
                               child: CircularProgressIndicator(
-                                color: Colors.blue[600],
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                           ),
@@ -1413,14 +1420,14 @@ class _ExploreScreenState extends State<ExploreScreen>
                             Icon(
                               _categoryIcon(destination.category),
                               size: 14,
-                              color: Colors.blue[700],
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                             const SizedBox(width: 5),
                             Text(
                               DestinationService.getCategoryName(
                                   destination.category),
                               style: TextStyle(
-                                color: Colors.blue[800],
+                                color: Theme.of(context).colorScheme.primary,
                                 fontSize: 11,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: -0.1,

@@ -645,7 +645,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     color: colorScheme.surfaceContainerHighest,
                     alignment: Alignment.center,
                     child: CircularProgressIndicator(
-                      color: Colors.blue[600],
+                      color: colorScheme.primary,
                     ),
                   ),
                   errorWidget: (context, url, error) {
@@ -787,18 +787,27 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           color: colorScheme.primary,
                           fontSize: 13,
                           fontWeight: FontWeight.w900,
-                          letterSpacing: 0.4,
+                          letterSpacing: 0.6,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 8),
                       Text(
                         'Where Every Trip Meets Its Line',
                         style: TextStyle(
                           color: colorScheme.onSurface,
                           fontSize: 24,
                           fontWeight: FontWeight.w900,
-                          height: 1.08,
-                          letterSpacing: -0.7,
+                          height: 1.06,
+                          letterSpacing: -0.75,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Container(
+                        width: 46,
+                        height: 3,
+                        decoration: BoxDecoration(
+                          color: colorScheme.primary,
+                          borderRadius: BorderRadius.circular(999),
                         ),
                       ),
                     ],
@@ -824,7 +833,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ),
             const SizedBox(height: 14),
             Text(
-              'Routes, fares, and trip plans in one commute workspace.',
+              'Build your next commute with clearer routes, fares, and plans.',
               style: TextStyle(
                 color: colorScheme.onSurfaceVariant,
                 fontSize: 14,
@@ -842,8 +851,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       ? Icons.location_on_rounded
                       : Icons.location_off_rounded,
                   label: _locationEnabled ? 'Nearby ready' : 'Location off',
-                  color:
-                      _locationEnabled ? Colors.green[700] : Colors.orange[700],
+                  color: _locationEnabled
+                      ? colorScheme.primary
+                      : colorScheme.tertiary,
                 ),
                 if (!_locationEnabled)
                   InkWell(
@@ -910,6 +920,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   Widget _buildProfileButton(BuildContext context, {String? avatarUrl}) {
     final hasAvatar = avatarUrl != null && avatarUrl.isNotEmpty;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Tooltip(
       message: widget.guideModeDemo ? 'Guide preview' : 'Open settings',
@@ -926,17 +937,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             padding: const EdgeInsets.all(3),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              gradient: const LinearGradient(
-                colors: [
-                  Color(0xFF1976D2),
-                  Color(0xFF03A9F4),
-                ],
+              gradient: LinearGradient(
+                colors: [colorScheme.primary, colorScheme.tertiary],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.blue.withValues(alpha: 0.22),
+                  color: colorScheme.primary.withValues(alpha: 0.22),
                   blurRadius: 14,
                   offset: const Offset(0, 6),
                 ),
@@ -953,7 +961,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       widget.guideModeDemo
                           ? Icons.navigation_rounded
                           : Icons.person,
-                      color: Colors.blue[700],
+                      color: colorScheme.primary,
                     ),
             ),
           ),
@@ -1003,7 +1011,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (_plansLoading) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: const HalaLoadingState(label: 'Loading your next plan...'),
+        child: const HalaLoadingState(label: 'Preparing your next plan...'),
       );
     }
 
@@ -1036,12 +1044,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: Theme.of(context).brightness == Brightness.dark
-              ? const [Color(0xFF10233F), Color(0xFF0F172A)]
-              : const [Color(0xFFFFFFFF), Color(0xFFEAF4FF)],
+          colors: [
+            colorScheme.surfaceContainerLow,
+            colorScheme.primaryContainer.withValues(alpha: 0.46),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -1051,7 +1060,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withValues(alpha: 0.14),
+            color: colorScheme.primary.withValues(alpha: 0.14),
             blurRadius: 26,
             offset: const Offset(0, 12),
           ),
@@ -1227,7 +1236,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: Colors.blue[700],
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),
@@ -1240,7 +1249,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   Widget _buildPlanImageFallback() {
     return Container(
-      color: Colors.blue[400],
+      color: Theme.of(context).colorScheme.primaryContainer,
       child: Center(
         child: Icon(
           Icons.calendar_month,
@@ -1354,14 +1363,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        Icon(Icons.place, size: 14, color: Colors.blue[600]),
+                        Icon(
+                          Icons.place,
+                          size: 14,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
                             '$destinationCount destination${destinationCount > 1 ? 's' : ''}',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.blue[600],
+                              color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -1417,7 +1430,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: Material(
-        color: const Color(0xFFEFF6FF),
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(14),
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
@@ -1426,7 +1439,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             child: Row(
               children: [
-                Icon(Icons.place_rounded, size: 18, color: Colors.blue[700]),
+                Icon(
+                  Icons.place_rounded,
+                  size: 18,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -1434,7 +1451,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Colors.blue[700],
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                       fontWeight: FontWeight.w700,
                       fontSize: 13,
                     ),
@@ -1444,7 +1461,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 Icon(
                   Icons.open_in_new_rounded,
                   size: 16,
-                  color: Colors.blue[600],
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                 ),
               ],
             ),
@@ -1529,6 +1546,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Widget _buildSearchPrompt() {
+    final colorScheme = Theme.of(context).colorScheme;
     return HalaCard(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       padding: const EdgeInsets.all(16),
@@ -1537,14 +1555,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         children: [
           Row(
             children: [
-              Icon(Icons.info_outline, color: Colors.orange[700], size: 20),
+              Icon(Icons.info_outline, color: colorScheme.primary, size: 20),
               const SizedBox(width: 8),
               Text(
                 'Want more options?',
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
-                  color: Colors.orange[900],
+                  color: colorScheme.onSurface,
                 ),
               ),
             ],
@@ -1554,7 +1572,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             'Search for specific places, restaurants, or attractions to discover more destinations.',
             style: TextStyle(
               fontSize: 13,
-              color: Colors.orange[800],
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 12),
@@ -1672,7 +1690,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               color: Colors.grey[100],
                               child: Center(
                                 child: CircularProgressIndicator(
-                                  color: Colors.blue[600],
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                             ),
