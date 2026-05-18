@@ -208,7 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurface,
             fontSize: 20,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w900,
           ),
         ),
         actions: [
@@ -280,6 +280,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'ACCOUNT',
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.75,
+                ),
+          ),
+          const SizedBox(height: 12),
           Row(
             children: [
               Stack(
@@ -317,7 +326,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: 28,
                         height: 28,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF2196F3),
+                          color: Theme.of(context).colorScheme.primary,
                           shape: BoxShape.circle,
                           border: Border.all(
                             color:
@@ -379,8 +388,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         const HalaSectionHeader(
           title: 'Account hub',
-          subtitle:
-              'Keep shared trips, reminders, and travel history in one place.',
+          subtitle: 'Saved places stay ready for your next route.',
         ),
         const SizedBox(height: 12),
         HalaCard(
@@ -628,7 +636,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildLogoutButton() {
     return SizedBox(
       width: double.infinity,
-      child: ElevatedButton.icon(
+      child: OutlinedButton.icon(
         onPressed: () async {
           if (widget.guideModeDemo) return;
           final router = GoRouter.of(context);
@@ -665,17 +673,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
         icon: Icon(Icons.logout, size: 18),
         label: Text(
-          'Logout Account',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          'Logout account',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
         ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red,
-          foregroundColor: Colors.white,
+        style: OutlinedButton.styleFrom(
+          foregroundColor: Colors.red,
+          side: BorderSide(color: Colors.red.withValues(alpha: 0.42)),
+          backgroundColor: Colors.red.withValues(alpha: 0.04),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          elevation: 0,
         ),
       ),
     );

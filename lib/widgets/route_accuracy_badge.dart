@@ -19,7 +19,7 @@ class RouteAccuracyBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final visual = _visualForLabel(label);
+    final visual = _visualForLabel(context, label);
     return Chip(
       visualDensity: VisualDensity.compact,
       backgroundColor: visual.backgroundColor,
@@ -59,26 +59,27 @@ String routeAccuracyLabel({
   return 'Needs Review';
 }
 
-_RouteAccuracyVisual _visualForLabel(String label) {
+_RouteAccuracyVisual _visualForLabel(BuildContext context, String label) {
+  final colorScheme = Theme.of(context).colorScheme;
   return switch (label) {
     'Verified' => _RouteAccuracyVisual(
-        backgroundColor: Colors.green.shade100,
-        foregroundColor: Colors.green.shade800,
+        backgroundColor: colorScheme.primaryContainer,
+        foregroundColor: colorScheme.onPrimaryContainer,
         icon: Icons.verified_rounded,
       ),
     'Community Reported' => _RouteAccuracyVisual(
-        backgroundColor: Colors.blue.shade100,
-        foregroundColor: Colors.blue.shade800,
+        backgroundColor: colorScheme.secondaryContainer,
+        foregroundColor: colorScheme.onSecondaryContainer,
         icon: Icons.groups_rounded,
       ),
     'Estimated' => _RouteAccuracyVisual(
-        backgroundColor: Colors.orange.shade100,
-        foregroundColor: Colors.orange.shade900,
+        backgroundColor: colorScheme.tertiaryContainer,
+        foregroundColor: colorScheme.onTertiaryContainer,
         icon: Icons.info_outline_rounded,
       ),
     _ => _RouteAccuracyVisual(
-        backgroundColor: Colors.red.shade100,
-        foregroundColor: Colors.red.shade800,
+        backgroundColor: colorScheme.errorContainer,
+        foregroundColor: colorScheme.onErrorContainer,
         icon: Icons.warning_amber_rounded,
       ),
   };

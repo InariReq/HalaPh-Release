@@ -298,7 +298,7 @@ class _HalaPhLaunchPreflightState extends State<HalaPhLaunchPreflight>
                           child: Column(
                             children: [
                               Text(
-                                'Preparing your commute workspace',
+                                'Your commute workspace is ready',
                                 textAlign: TextAlign.center,
                                 style: theme.textTheme.headlineSmall?.copyWith(
                                   fontWeight: FontWeight.w900,
@@ -310,7 +310,7 @@ class _HalaPhLaunchPreflightState extends State<HalaPhLaunchPreflight>
                               _TaglinePill(colorScheme: colorScheme),
                               const SizedBox(height: 12),
                               Text(
-                                'Build your next commute with clearer routes, fares, and plans.',
+                                'Plan with confidence before you leave.',
                                 textAlign: TextAlign.center,
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   color: colorScheme.onSurfaceVariant,
@@ -402,7 +402,7 @@ class _HalaPhLaunchPreflightState extends State<HalaPhLaunchPreflight>
                                         child: HalaPrimaryButton(
                                           onPressed: _completeStart,
                                           icon: Icons.arrow_forward_rounded,
-                                          child: const Text('Start'),
+                                          child: const Text('Start commute'),
                                         ),
                                       )
                                     : _PreparingPill(
@@ -542,7 +542,7 @@ class _LaunchRouteBoard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Getting HalaPH ready',
+                      'HalaPH',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.titleMedium?.copyWith(
@@ -552,7 +552,7 @@ class _LaunchRouteBoard extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      'Your commute workspace is ready.',
+                      'Where Every Trip Meets Its Line',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodySmall?.copyWith(
@@ -941,7 +941,17 @@ class _StatusPanel extends StatelessWidget {
     return HalaCard(
       padding: const EdgeInsets.all(16),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'READINESS CHECK',
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: colorScheme.primary,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.75,
+                ),
+          ),
+          const SizedBox(height: 12),
           for (var i = 0; i < children.length; i++) ...[
             children[i],
             if (i != children.length - 1) const SizedBox(height: 10),

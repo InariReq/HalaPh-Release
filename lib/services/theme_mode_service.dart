@@ -78,7 +78,7 @@ class ThemeModeService {
       case BrandColorMode.burgundy:
         return 'Premium HalaPH identity and recommended default.';
       case BrandColorMode.light:
-        return 'The clean original colorway with a lighter feel.';
+        return 'A cleaner light surface with the same Burgundy identity.';
     }
   }
 

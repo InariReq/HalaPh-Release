@@ -50,33 +50,28 @@ class _TerminalRoutesScreenState extends State<TerminalRoutesScreen> {
             bottom: false,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 14),
-              child: HalaCard(
-                padding: const EdgeInsets.all(18),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const HalaSectionHeader(
-                      title: 'Terminals',
-                      subtitle:
-                          'Browse terminal and bus route data with source and confidence cues.',
+              child: HalaHeroCard(
+                icon: Icons.departure_board_rounded,
+                eyebrow: 'Verified route data',
+                title: 'Terminals',
+                message:
+                    'Browse verified terminal routes before choosing your next ride.',
+                children: [
+                  TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search terminals, destinations, operators',
+                      prefixIcon: const Icon(Icons.search_rounded),
+                      suffixIcon: _searchController.text.trim().isEmpty
+                          ? null
+                          : IconButton(
+                              tooltip: 'Clear search',
+                              onPressed: _searchController.clear,
+                              icon: const Icon(Icons.close_rounded),
+                            ),
                     ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        hintText: 'Search terminals, destinations, operators',
-                        prefixIcon: const Icon(Icons.search_rounded),
-                        suffixIcon: _searchController.text.trim().isEmpty
-                            ? null
-                            : IconButton(
-                                tooltip: 'Clear search',
-                                onPressed: _searchController.clear,
-                                icon: const Icon(Icons.close_rounded),
-                              ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -89,7 +84,7 @@ class _TerminalRoutesScreenState extends State<TerminalRoutesScreen> {
                   return const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: HalaLoadingState(
-                      label: 'Loading verified terminal routes...',
+                      label: 'Preparing verified terminal routes...',
                     ),
                   );
                 }
@@ -170,10 +165,10 @@ class _TerminalRouteCard extends StatelessWidget {
             children: [
               Text(
                 route.terminalName,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.w900),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w900,
+                      height: 1.18,
+                    ),
               ),
               const SizedBox(height: 10),
               Row(
@@ -191,6 +186,7 @@ class _TerminalRouteCard extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onSurface,
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
+                        height: 1.25,
                       ),
                     ),
                   ),
@@ -258,6 +254,16 @@ class _TerminalRouteCard extends StatelessWidget {
                   _StatusChip(status: route.status),
                 ],
               ),
+              if (route.sourceName.isNotEmpty) ...[
+                const SizedBox(height: 10),
+                Text(
+                  'Source: ${route.sourceName}',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w700,
+                      ),
+                ),
+              ],
             ],
           ),
         ),
@@ -589,7 +595,7 @@ class _ReportCorrectionSheetState extends State<_ReportCorrectionSheet> {
       setState(() => _isSubmitting = false);
       parentMessenger.showSnackBar(
         const SnackBar(
-          content: Text('Something went wrong. Please try again.'),
+          content: Text('We could not send that correction yet. Try again.'),
         ),
       );
     }
@@ -710,8 +716,8 @@ class _RoutesEmptyState extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: HalaEmptyState(
         icon: Icons.directions_bus_outlined,
-        title: 'No terminal routes found',
-        message: 'Try another terminal, destination, or operator search.',
+        title: 'No matching terminal routes',
+        message: 'Try another terminal, destination, or operator.',
       ),
     );
   }
@@ -728,7 +734,7 @@ class _RoutesErrorState extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: HalaEmptyState(
         icon: Icons.cloud_off_rounded,
-        title: 'Could not load routes',
+        title: 'Routes are not available yet',
         message:
             'Check your connection, then try loading the route list again.',
         action: HalaSecondaryButton(

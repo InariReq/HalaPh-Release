@@ -782,7 +782,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'HalaPH',
+                        'COMMUTE DASHBOARD',
                         style: TextStyle(
                           color: colorScheme.primary,
                           fontSize: 13,
@@ -873,7 +873,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 _locationStatus,
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.orange[700],
+                  color: colorScheme.tertiary,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -1023,8 +1023,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: HalaEmptyState(
         icon: Icons.event_available_rounded,
-        title: 'No trip planned yet',
-        message: 'Create a plan to keep routes, stops, and reminders together.',
+        title: 'No plans yet',
+        message: 'Create one when you are ready to move.',
         action: SizedBox(
           width: double.infinity,
           child: HalaPrimaryButton(
@@ -1515,6 +1515,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: HalaSectionHeader(
+            eyebrow: 'Discovery',
             title: 'Explore places',
             subtitle: hasFewResults
                 ? 'Only ${_trendingDestinations.length} nearby places found'
@@ -1602,31 +1603,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Widget _buildFallbackImage(DestinationCategory category) {
-    final (startColor, endColor) = switch (category) {
-      DestinationCategory.park => (
-          const Color(0xFF81C784),
-          const Color(0xFF4CAF50),
-        ),
-      DestinationCategory.landmark => (
-          const Color(0xFF64B5F6),
-          const Color(0xFF2196F3),
-        ),
-      DestinationCategory.food => (
-          const Color(0xFFFFB74D),
-          const Color(0xFFFF9800),
-        ),
-      DestinationCategory.activities => (
-          const Color(0xFFBA68C8),
-          const Color(0xFF9C27B0),
-        ),
-      DestinationCategory.museum => (
-          const Color(0xFFF06292),
-          const Color(0xFFE91E63),
-        ),
-      DestinationCategory.malls => (
-          const Color(0xFF4DB6AC),
-          const Color(0xFF009688),
-        ),
+    final colorScheme = Theme.of(context).colorScheme;
+    final startColor = colorScheme.primaryContainer;
+    final endColor = colorScheme.secondaryContainer;
+    final icon = switch (category) {
+      DestinationCategory.park => Icons.park_rounded,
+      DestinationCategory.landmark => Icons.location_city_rounded,
+      DestinationCategory.food => Icons.restaurant_rounded,
+      DestinationCategory.activities => Icons.local_activity_rounded,
+      DestinationCategory.museum => Icons.museum_rounded,
+      DestinationCategory.malls => Icons.shopping_bag_rounded,
     };
 
     return Container(
@@ -1641,12 +1627,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.image, size: 48, color: Colors.white),
-            SizedBox(height: 8),
+            Icon(icon, size: 48, color: colorScheme.onPrimaryContainer),
+            const SizedBox(height: 8),
             Text(
               'No Photo Available',
               style: TextStyle(
-                color: Colors.white,
+                color: colorScheme.onPrimaryContainer,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -1772,14 +1758,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         children: [
                           Icon(
                             Icons.star_border_rounded,
-                            color: Color(0xFF6B7280),
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                             size: 15,
                           ),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 4),
                           Text(
                             'Unrated',
                             style: TextStyle(
-                              color: Color(0xFF374151),
+                              color: Theme.of(context).colorScheme.onSurface,
                               fontSize: 11,
                               fontWeight: FontWeight.w800,
                             ),
@@ -1813,14 +1800,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         children: [
                           Icon(
                             Icons.star_rounded,
-                            color: Color(0xFFFFB300),
+                            color: Theme.of(context).colorScheme.primary,
                             size: 15,
                           ),
                           const SizedBox(width: 3),
                           Text(
                             destination.rating.toStringAsFixed(1),
                             style: TextStyle(
-                              color: Color(0xFF111827),
+                              color: Theme.of(context).colorScheme.onSurface,
                               fontSize: 12,
                               fontWeight: FontWeight.w900,
                             ),

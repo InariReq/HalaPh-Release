@@ -75,7 +75,7 @@ void main() async {
       textDirection: TextDirection.ltr,
       child: _HalaPhErrorPanel(
         message: kReleaseMode
-            ? 'Something went wrong, but HalaPH is still running.'
+            ? 'We hit a problem, but HalaPH is still running.'
             : details.exceptionAsString(),
       ),
     );
@@ -844,11 +844,11 @@ class _HalaPhErrorPanel extends StatelessWidget {
                 Icon(
                   Icons.error_outline_rounded,
                   size: 56,
-                  color: Colors.orange[700],
+                  color: Theme.of(context).colorScheme.tertiary,
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Something went wrong',
+                  'We hit a problem',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
@@ -892,10 +892,6 @@ Destination? _decodeDestinationQuery(String? encoded) {
   return null;
 }
 
-const Color _halaNavy = Color(0xFF123A66);
-const Color _halaNavyAccent = Color(0xFF14518F);
-const Color _halaDeepNavy = Color(0xFF06162F);
-const Color _halaSoftNavy = Color(0xFFE6F0FF);
 const Color _halaBurgundy = Color(0xFF8F123D);
 const Color _halaBurgundyAccent = Color(0xFFA91446);
 const Color _halaDeepBurgundy = Color(0xFF2F0715);
@@ -940,12 +936,10 @@ class _MainNavigationState extends State<MainNavigation> {
   void _onGuideStepChanged(int stepIndex) {
     final targetIndex = switch (stepIndex) {
       0 => 0,
-      1 => 0,
-      2 => 1,
-      3 => 2,
-      4 => 3,
-      5 => 4,
-      6 => 0,
+      1 => 1,
+      2 => 2,
+      3 => 3,
+      4 => 4,
       _ => _currentIndex,
     };
     final shouldInitializeTerminals = targetIndex == 2;
@@ -1123,13 +1117,15 @@ ThemeData _buildHalaTheme(
       ? BrandColorMode.burgundy
       : BrandColorMode.light;
   final isBurgundyMode = resolvedBrandMode == BrandColorMode.burgundy;
-  final primary = isBurgundyMode ? _halaBurgundy : _halaNavy;
-  final primaryAccent = isBurgundyMode ? _halaBurgundyAccent : _halaNavyAccent;
-  final deepPrimary = isBurgundyMode ? _halaDeepBurgundy : _halaDeepNavy;
-  final primaryTint = isBurgundyMode ? _halaSoftBurgundy : _halaSoftNavy;
-  final supporting = isBurgundyMode ? _halaNavy : _halaBurgundyAccent;
-  final supportingTint = isBurgundyMode ? _halaSoftNavy : _halaSoftBurgundy;
-  final deepSupporting = isBurgundyMode ? _halaDeepNavy : _halaDeepBurgundy;
+  final primary = _halaBurgundy;
+  final primaryAccent = _halaBurgundyAccent;
+  final deepPrimary = _halaDeepBurgundy;
+  final primaryTint = _halaSoftBurgundy;
+  final supporting =
+      isBurgundyMode ? _halaBurgundyAccent : _darken(_halaBurgundy, 0.12);
+  final supportingTint =
+      isBurgundyMode ? _lighten(_halaSoftBurgundy, 0.10) : _halaSoftBurgundy;
+  final deepSupporting = _halaDeepBurgundy;
 
   final baseScheme = ColorScheme.fromSeed(
     seedColor: primary,

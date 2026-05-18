@@ -720,20 +720,15 @@ class _ExploreScreenState extends State<ExploreScreen>
   Widget _buildExploreHero() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-      child: HalaCard(
-        padding: const EdgeInsets.all(18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const HalaSectionHeader(
-              title: 'Explore',
-              subtitle:
-                  'Find places, compare route options, and save trips for later.',
-            ),
-            const SizedBox(height: 16),
-            _buildSearchBar(),
-          ],
-        ),
+      child: HalaHeroCard(
+        icon: Icons.explore_rounded,
+        eyebrow: 'Destination discovery',
+        title: 'Explore',
+        message:
+            'Move from destination search to trip planning in fewer steps.',
+        children: [
+          _buildSearchBar(),
+        ],
       ),
     );
   }
@@ -924,8 +919,8 @@ class _ExploreScreenState extends State<ExploreScreen>
     final summary = isSearching
         ? 'Showing up to 5 search results'
         : _selectedCategory == null
-            ? 'Featured and nearby destinations are shown here.'
-            : 'Featured and nearby destinations for this category.';
+            ? 'Start with a destination, then compare what makes sense.'
+            : 'Browsing featured and nearby destinations in this category.';
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -974,7 +969,7 @@ class _ExploreScreenState extends State<ExploreScreen>
     if (_destinations.isEmpty) {
       final title = _placesUnavailable
           ? 'Showing saved data while we reconnect.'
-          : 'No places found';
+          : 'No matching places yet';
       final message = _placesUnavailable
           ? 'Check your connection or try again later.'
           : 'Try a simpler search or choose another category.';
@@ -1223,32 +1218,10 @@ class _ExploreScreenState extends State<ExploreScreen>
   }
 
   Widget _buildFallbackImage(DestinationCategory category) {
-    final (startColor, endColor) = switch (category) {
-      DestinationCategory.park => (
-          const Color(0xFF81C784),
-          const Color(0xFF4CAF50),
-        ),
-      DestinationCategory.landmark => (
-          const Color(0xFF64B5F6),
-          const Color(0xFF2196F3),
-        ),
-      DestinationCategory.food => (
-          const Color(0xFFFFB74D),
-          const Color(0xFFFF9800),
-        ),
-      DestinationCategory.activities => (
-          const Color(0xFFBA68C8),
-          const Color(0xFF9C27B0),
-        ),
-      DestinationCategory.museum => (
-          const Color(0xFFF06292),
-          const Color(0xFFE91E63),
-        ),
-      DestinationCategory.malls => (
-          const Color(0xFF4DB6AC),
-          const Color(0xFF009688),
-        ),
-    };
+    final colorScheme = Theme.of(context).colorScheme;
+    final startColor = colorScheme.primaryContainer;
+    final endColor = colorScheme.secondaryContainer;
+    final icon = _categoryIcon(category);
 
     return Container(
       decoration: BoxDecoration(
@@ -1262,12 +1235,12 @@ class _ExploreScreenState extends State<ExploreScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.image, size: 48, color: Colors.white),
-            SizedBox(height: 8),
+            Icon(icon, size: 48, color: colorScheme.onPrimaryContainer),
+            const SizedBox(height: 8),
             Text(
               'No Photo Available',
               style: TextStyle(
-                color: Colors.white,
+                color: colorScheme.onPrimaryContainer,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -1298,12 +1271,16 @@ class _ExploreScreenState extends State<ExploreScreen>
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.star_border_rounded, color: Color(0xFF6B7280), size: 15),
-            SizedBox(width: 4),
+            Icon(
+              Icons.star_border_rounded,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              size: 15,
+            ),
+            const SizedBox(width: 4),
             Text(
               'Unrated',
               style: TextStyle(
-                color: Color(0xFF374151),
+                color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 11,
                 fontWeight: FontWeight.w800,
               ),
@@ -1316,19 +1293,25 @@ class _ExploreScreenState extends State<ExploreScreen>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF8E1),
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: const Color(0xFFFFECB3)),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.18),
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.star_rounded, color: Color(0xFFFFB300), size: 15),
+          Icon(
+            Icons.star_rounded,
+            color: Theme.of(context).colorScheme.primary,
+            size: 15,
+          ),
           const SizedBox(width: 3),
           Text(
             destination.rating.toStringAsFixed(1),
             style: TextStyle(
-              color: Color(0xFF7A5200),
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
               fontSize: 12,
               fontWeight: FontWeight.w900,
             ),
@@ -1366,7 +1349,9 @@ class _ExploreScreenState extends State<ExploreScreen>
                           width: double.infinity,
                           height: 188,
                           placeholder: (context, url) => Container(
-                            color: const Color(0xFFF2F6FC),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerHighest,
                             child: Center(
                               child: CircularProgressIndicator(
                                 color: Theme.of(context).colorScheme.primary,
@@ -1443,14 +1428,22 @@ class _ExploreScreenState extends State<ExploreScreen>
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFF8E1),
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
                             borderRadius: BorderRadius.circular(999),
-                            border: Border.all(color: const Color(0xFFFFECB3)),
+                            border: Border.all(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withValues(alpha: 0.18),
+                            ),
                           ),
-                          child: const Text(
+                          child: Text(
                             'Start here',
                             style: TextStyle(
-                              color: Color(0xFF7A5200),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
                               fontSize: 11,
                               fontWeight: FontWeight.w900,
                               letterSpacing: -0.1,

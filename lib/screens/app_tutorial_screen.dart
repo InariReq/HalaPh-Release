@@ -25,53 +25,39 @@ class AppTutorialScreen extends StatefulWidget {
 class _AppTutorialScreenState extends State<AppTutorialScreen> {
   static const _steps = <_GuideStep>[
     _GuideStep(
-      title: 'Welcome to HalaPH',
-      body:
-          'Tour the five tabs that keep commutes, places, terminals, plans, and your profile organized.',
-      icon: Icons.route_rounded,
-      tabLabel: 'Overview',
-    ),
-    _GuideStep(
       title: 'Home',
       body:
-          'Home shows today’s commute overview, Up Next, and quick actions when you want to plan a trip fast.',
+          'See your commute dashboard, Up Next, and the quickest path into trip planning.',
       icon: Icons.home_rounded,
       tabLabel: 'Home',
     ),
     _GuideStep(
       title: 'Explore',
       body:
-          'Search destinations, browse categories, scan place cards, and start route viewing from Explore.',
+          'Search destinations, browse categories, and move from discovery into route planning.',
       icon: Icons.explore_rounded,
       tabLabel: 'Explore',
     ),
     _GuideStep(
       title: 'Terminals',
       body:
-          'Look up verified terminal and bus routes, check trust badges, and report corrections when data needs attention.',
+          'Browse verified terminal routes, review confidence cues, and report corrections when needed.',
       icon: Icons.departure_board_rounded,
       tabLabel: 'Terminals',
     ),
     _GuideStep(
       title: 'Plans',
       body:
-          'Create plans, review shared trips, revisit trip history, and keep reminders close to the journey.',
+          'Create plans, review shared trips, revisit history, and keep reminders close.',
       icon: Icons.calendar_month_rounded,
       tabLabel: 'Plans',
     ),
     _GuideStep(
       title: 'Profile',
       body:
-          'Profile keeps your account, Friends, Saved Places, Settings, and Guide Mode in one dependable place.',
+          'Open Friends, Saved Places, Trip History, Settings, and Guide Mode from one hub.',
       icon: Icons.person_rounded,
       tabLabel: 'Profile',
-    ),
-    _GuideStep(
-      title: 'Ready to commute',
-      body:
-          'Start with Plan a trip on Home or open Explore when you already know where you want to go.',
-      icon: Icons.check_circle_rounded,
-      tabLabel: 'Finish',
     ),
   ];
 

@@ -128,7 +128,7 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurface,
             fontSize: 18,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w900,
           ),
         ),
       ),
@@ -163,7 +163,7 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
         _buildSectionHeader(
           title: 'Personal Plans',
           subtitle: plans.isEmpty
-              ? 'Keep routes, reminders, and upcoming trips in one place.'
+              ? 'Keep your commute details in one clean workspace.'
               : '${plans.length} active plan${plans.length == 1 ? '' : 's'}',
           icon: Icons.person_pin_circle_rounded,
           iconColor: Theme.of(context).colorScheme.primary,
@@ -174,8 +174,7 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
                 order: 0,
                 child: _buildEmptyPlansPlaceholder(
                   title: 'No plans yet',
-                  message:
-                      'Build your next commute with clearer routes, fares, and plans.',
+                  message: 'Create one when you are ready to move.',
                   actionLabel: 'Create plan',
                   onAction: () => GoRouter.of(context).push('/create-plan'),
                 ),
@@ -199,7 +198,7 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
         _buildSectionHeader(
           title: 'Collaborative Plans',
           subtitle: plans.isEmpty
-              ? 'Keep shared trips, reminders, and travel history in one place.'
+              ? 'Your shared trips, reminders, and travel history in one workspace.'
               : '${plans.length} shared plan${plans.length == 1 ? '' : 's'}',
           icon: Icons.groups_rounded,
           iconColor: Theme.of(context).colorScheme.secondary,
@@ -993,7 +992,7 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Organize every trip',
+                        'Your commute workspace',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.w900,
                               letterSpacing: -0.25,
@@ -1001,7 +1000,7 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        'Create plans, keep shared trips close, and return to finished journeys when you need them.',
+                        'Keep shared trips, reminders, and travel history in one clean workspace.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: colorScheme.onSurfaceVariant,
                               height: 1.35,
@@ -1042,7 +1041,7 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
                             GoRouter.of(context).push('/create-plan');
                           },
                     icon: Icons.add_rounded,
-                    child: const Text('Create New Plan'),
+                    child: const Text('Create new plan'),
                   ),
                 ),
               ],
