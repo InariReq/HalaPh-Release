@@ -600,3 +600,54 @@ function initThemeDropdown() {
 }
 
 document.addEventListener("DOMContentLoaded", initThemeDropdown);
+
+function initApkAccessGate() {
+  const form = document.querySelector("[data-apk-access-form]");
+  const input = document.querySelector("[data-apk-access-input]");
+  const message = document.querySelector("[data-apk-access-message]");
+  const lockedPanel = document.querySelector("[data-apk-locked-panel]");
+  const downloadArea = document.querySelector("[data-apk-download-area]");
+
+  if (!form || !input || !message || !lockedPanel || !downloadArea) return;
+
+  const apkAccessKey = "halaph-apk-access-unlocked";
+  const expectedCode = "HALAPH2026";
+
+  const unlock = () => {
+    downloadArea.hidden = false;
+    lockedPanel.hidden = true;
+    form.classList.add("is-unlocked");
+    message.textContent = "Android APK access unlocked for this browser.";
+    try {
+      window.localStorage.setItem(apkAccessKey, "true");
+    } catch (error) {
+      message.textContent = "Android APK access unlocked for this session.";
+    }
+  };
+
+  try {
+    if (window.localStorage.getItem(apkAccessKey) === "true") {
+      unlock();
+    }
+  } catch (error) {
+    // Browser storage can fail in private mode. Keep the form usable.
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const code = input.value.trim();
+
+    if (code === expectedCode) {
+      unlock();
+      input.value = "";
+      return;
+    }
+
+    downloadArea.hidden = true;
+    lockedPanel.hidden = false;
+    message.textContent = "Incorrect access code. Ask the presenter for the expo code.";
+    input.select();
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initApkAccessGate);
