@@ -64,6 +64,7 @@ class UserFeaturedPlacesService {
       AppLog.throttledInfo(
         'featured-places-query',
         'Featured places query started',
+        interval: _cacheTtl,
       );
       final now = DateTime.now();
       final candidates = <_FeaturedDestination>[];
@@ -88,11 +89,11 @@ class UserFeaturedPlacesService {
       final destinations = merged
           .map((candidate) => candidate.destination)
           .toList(growable: false);
-      _cachedActivePlaces = destinations;
-      _cachedAt = DateTime.now();
+      _cacheActivePlaces(destinations);
       AppLog.throttledInfo(
         'featured-places-loaded',
         'Featured places loaded: ${destinations.length}',
+        interval: _cacheTtl,
       );
       return destinations;
     } on FirebaseException catch (error) {
@@ -100,14 +101,15 @@ class UserFeaturedPlacesService {
         AppLog.throttledInfo(
           'featured-places-denied',
           'Featured places permission-denied; showing saved data if available.',
+          interval: _cacheTtl,
         );
-        return _cachedActivePlaces ?? const <Destination>[];
+        return _cacheFallbackPlaces();
       }
       AppLog.error('Featured places read failed: ${error.code}');
-      return _cachedActivePlaces ?? const <Destination>[];
+      return _cacheFallbackPlaces();
     } catch (error) {
       AppLog.error('Featured places read failed: $error');
-      return _cachedActivePlaces ?? const <Destination>[];
+      return _cacheFallbackPlaces();
     }
   }
 
@@ -117,6 +119,18 @@ class UserFeaturedPlacesService {
     if (cached == null || cachedAt == null) return null;
     if (DateTime.now().difference(cachedAt) > _cacheTtl) return null;
     return cached;
+  }
+
+  static List<Destination> _cacheFallbackPlaces() {
+    return _cacheActivePlaces(_cachedActivePlaces ?? const <Destination>[]);
+  }
+
+  static List<Destination> _cacheActivePlaces(
+    List<Destination> destinations,
+  ) {
+    _cachedActivePlaces = List<Destination>.unmodifiable(destinations);
+    _cachedAt = DateTime.now();
+    return _cachedActivePlaces!;
   }
 
   static List<Destination> _filterDestinations(

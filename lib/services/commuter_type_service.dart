@@ -12,6 +12,7 @@ class CommuterTypeService {
 
   final Map<String, PassengerType> _cacheByUid = {};
   final Map<String, Future<PassengerType>> _loadInFlightByUid = {};
+  final Set<String> _loadedLogUidsThisSession = {};
 
   static const allowedKeys = <String>{
     'regular',
@@ -65,9 +66,11 @@ class CommuterTypeService {
 
     final loadedType = fromKey(rawType);
     _cacheByUid[uid] = loadedType;
-    debugPrint(
-      'Loaded commuter type ${keyFor(loadedType)} for uid=$uid code=$code',
-    );
+    if (_loadedLogUidsThisSession.add(uid)) {
+      debugPrint(
+        'Loaded commuter type ${keyFor(loadedType)} for uid=$uid code=$code',
+      );
+    }
     return loadedType;
   }
 

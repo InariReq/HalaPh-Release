@@ -81,6 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   StreamSubscription<firebase_auth.User?>? _authSubscription;
   User? _user;
   String? _myCode;
+  String? _lastObservedAuthUid;
   bool _isUploadingProfilePicture = false;
   PassengerType _commuterType = PassengerType.regular;
   bool _isSavingCommuterType = false;
@@ -92,12 +93,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _myCode = 'GUIDE-JIA';
       return;
     }
+    _lastObservedAuthUid = firebase_auth.FirebaseAuth.instance.currentUser?.uid;
     _loadUser();
     _loadCommuterType();
-    _authSubscription =
-        firebase_auth.FirebaseAuth.instance.userChanges().listen((_) {
+    _authSubscription = firebase_auth.FirebaseAuth.instance
+        .userChanges()
+        .listen((firebaseUser) {
       if (!mounted) return;
-      CommuterTypeService().clearCache();
+      final nextUid = firebaseUser?.uid;
+      final uidChanged = nextUid != _lastObservedAuthUid;
+      _lastObservedAuthUid = nextUid;
+      if (uidChanged) {
+        CommuterTypeService().clearCache();
+      }
       setState(() {
         _user = null;
         _myCode = null;

@@ -10,6 +10,9 @@ class UserAdsService {
   static List<SponsoredAd>? _cachedSponsoredCards;
   static DateTime? _sponsoredCardsCachedAt;
   static Future<List<SponsoredAd>>? _sponsoredCardsLoadInFlight;
+  static Future<List<SponsoredAd>>? _sponsoredCardsReadInFlight;
+  static Completer<List<SponsoredAd>>? _sponsoredCardsFirstValueCompleter;
+  static Future<List<SponsoredAd>>? _sponsoredCardsWatchFuture;
   static StreamController<List<SponsoredAd>>? _sponsoredCardsController;
   static StreamSubscription<QuerySnapshot<Map<String, dynamic>>>?
       _sponsoredCardsSubscription;
@@ -25,6 +28,12 @@ class UserAdsService {
   Stream<List<SponsoredAd>> watchSponsoredCards() {
     final controller = _sponsoredCardsController ??=
         StreamController<List<SponsoredAd>>.broadcast();
+    final firstWatchValue =
+        _sponsoredCardsFirstValueCompleter ??= Completer<List<SponsoredAd>>();
+    _sponsoredCardsWatchFuture ??= firstWatchValue.future.timeout(
+      _readTimeout,
+      onTimeout: () => _fallbackSponsoredCards(logTimeout: true),
+    );
     final cached = _freshSponsoredCards;
     if (cached != null) {
       scheduleMicrotask(() => controller.add(cached));
@@ -33,6 +42,9 @@ class UserAdsService {
       (snapshot) {
         final ads = _filterAndSortSponsoredAds(snapshot.docs);
         _cacheSponsoredCards(ads);
+        if (!firstWatchValue.isCompleted) {
+          firstWatchValue.complete(ads);
+        }
         controller.add(ads);
       },
       onError: (Object error) {
@@ -44,7 +56,11 @@ class UserAdsService {
         } else {
           AppLog.error('Sponsored ads watch failed: $error');
         }
-        controller.add(_cachedSponsoredCards ?? const <SponsoredAd>[]);
+        final fallback = _fallbackSponsoredCards();
+        if (!firstWatchValue.isCompleted) {
+          firstWatchValue.complete(fallback);
+        }
+        controller.add(fallback);
       },
     );
     return controller.stream;
@@ -164,53 +180,68 @@ class UserAdsService {
     if (!forceRefresh && cached != null) {
       return Future.value(cached);
     }
+    final readInFlight = _sponsoredCardsReadInFlight;
+    if (!forceRefresh && readInFlight != null) {
+      return _sponsoredCardsLoadInFlight ??
+          Future.value(_fallbackSponsoredCards());
+    }
     final inFlight = _sponsoredCardsLoadInFlight;
     if (!forceRefresh && inFlight != null) return inFlight;
 
+    final watchFuture = _sponsoredCardsWatchFuture;
+    if (!forceRefresh && watchFuture != null) {
+      return watchFuture;
+    }
+
     final future = _fetchSponsoredCards();
     _sponsoredCardsLoadInFlight = future;
-    return future.whenComplete(() {
-      if (identical(_sponsoredCardsLoadInFlight, future)) {
-        _sponsoredCardsLoadInFlight = null;
-      }
-    });
+    return future;
   }
 
-  Future<List<SponsoredAd>> _fetchSponsoredCards() async {
-    try {
-      AppLog.throttledInfo(
-        'sponsored-cards-query',
-        'Sponsored cards query started',
-      );
-      final snapshot = await _collection
-          .get(const GetOptions(source: Source.server))
-          .timeout(_readTimeout);
+  Future<List<SponsoredAd>> _fetchSponsoredCards() {
+    AppLog.throttledInfo(
+      'sponsored-cards-query',
+      'Sponsored cards query started',
+      interval: _cacheTtl,
+    );
+    final source = _collection
+        .get(const GetOptions(source: Source.server))
+        .then((snapshot) {
       final ads = _filterAndSortSponsoredAds(snapshot.docs);
       _cacheSponsoredCards(ads);
       return ads;
-    } on TimeoutException {
-      AppLog.throttledInfo(
-        'sponsored-cards-timeout',
-        'Sponsored cards read timed out; showing cached cards if available.',
-      );
-      return _cachedSponsoredCards ?? const [];
-    } on FirebaseException catch (error) {
-      if (error.code == 'permission-denied') {
-        AppLog.throttledInfo(
-          'sponsored-cards-denied',
-          'Sponsored cards permission-denied; hiding cards.',
+    });
+    _sponsoredCardsReadInFlight = source;
+    unawaited(
+      source
+          .then<void>(
+        (_) {},
+        onError: (_) {},
+      )
+          .whenComplete(() {
+        if (identical(_sponsoredCardsReadInFlight, source)) {
+          _sponsoredCardsReadInFlight = null;
+          _sponsoredCardsLoadInFlight = null;
+        }
+      }),
+    );
+
+    return source.timeout(
+      _readTimeout,
+      onTimeout: () {
+        final fallback = _fallbackSponsoredCards(logTimeout: true);
+        unawaited(
+          source.catchError((Object error) {
+            _logSponsoredCardsReadFailure(error);
+            return fallback;
+          }),
         );
-      } else {
-        AppLog.error('Sponsored cards read failed: ${error.code}');
-      }
-      return _cachedSponsoredCards ?? const [];
-    } on FormatException catch (error) {
-      AppLog.error('Sponsored cards data invalid; hiding cards: $error');
-      return _cachedSponsoredCards ?? const [];
-    } catch (error) {
-      AppLog.error('Sponsored cards read failed: $error');
-      return _cachedSponsoredCards ?? const [];
-    }
+        return fallback;
+      },
+    ).catchError((Object error) {
+      _logSponsoredCardsReadFailure(error);
+      return _fallbackSponsoredCards();
+    });
   }
 
   List<SponsoredAd>? get _freshSponsoredCards {
@@ -224,5 +255,38 @@ class UserAdsService {
   void _cacheSponsoredCards(List<SponsoredAd> ads) {
     _cachedSponsoredCards = List<SponsoredAd>.unmodifiable(ads);
     _sponsoredCardsCachedAt = DateTime.now();
+  }
+
+  List<SponsoredAd> _fallbackSponsoredCards({bool logTimeout = false}) {
+    if (logTimeout) {
+      AppLog.throttledInfo(
+        'sponsored-cards-timeout',
+        'Sponsored cards read timed out; showing cached cards if available.',
+        interval: _cacheTtl,
+      );
+    }
+    final fallback = _cachedSponsoredCards ?? const <SponsoredAd>[];
+    _cacheSponsoredCards(fallback);
+    return _cachedSponsoredCards!;
+  }
+
+  void _logSponsoredCardsReadFailure(Object error) {
+    if (error is FirebaseException) {
+      if (error.code == 'permission-denied') {
+        AppLog.throttledInfo(
+          'sponsored-cards-denied',
+          'Sponsored cards permission-denied; hiding cards.',
+          interval: _cacheTtl,
+        );
+      } else {
+        AppLog.error('Sponsored cards read failed: ${error.code}');
+      }
+      return;
+    }
+    if (error is FormatException) {
+      AppLog.error('Sponsored cards data invalid; hiding cards: $error');
+      return;
+    }
+    AppLog.error('Sponsored cards read failed: $error');
   }
 }
