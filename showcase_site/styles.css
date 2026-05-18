@@ -2726,3 +2726,54 @@ details p {
     width: 100%;
   }
 }
+
+/* Compact APK access card refinement */
+.apk-access-form {
+  max-width: 720px;
+  margin-top: 1.25rem;
+}
+
+.apk-access-row {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto;
+  max-width: 620px;
+  gap: 0.85rem;
+}
+
+.apk-access-row input {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+.apk-access-row input::placeholder {
+  color: color-mix(in srgb, var(--text-muted) 75%, transparent);
+}
+
+.apk-access-row .btn {
+  min-width: 132px;
+  justify-content: center;
+}
+
+.apk-locked-panel {
+  max-width: 720px;
+  margin-top: 1rem;
+}
+
+.apk-download-area {
+  margin-top: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  .apk-access-form {
+    max-width: none;
+  }
+
+  .apk-access-row {
+    grid-template-columns: 1fr;
+    max-width: none;
+  }
+
+  .apk-access-row .btn {
+    width: 100%;
+  }
+}
