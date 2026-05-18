@@ -170,12 +170,13 @@ const teamMembers = [
     photo: "assets/team/john-jian-carlos.jpg",
     image: "assets/team/john-jian-carlos.jpg",
     imageUrl: "assets/team/john-jian-carlos.jpg",
-    summary: "Served as the overall head of TripLine PH. Guided the project direction, coordinated major decisions, monitored team progress, and helped keep the business proposal, HalaPH app, and presentation outputs aligned with the project objectives.",
+    summary: "Served as the overall head of TripLine PH. Guided the project direction, coordinated major decisions, monitored progress, supported submission requirements, and helped align the business proposal, HalaPH app, booth preparation, and presentation outputs.",
     contributions: [
-      "Led group coordination, project direction, task assignment, member progress checking, and final preparation support.",
-      "Supported business proposal decisions, API-related coordination, major paperwork responsibilities, printing, and physical submission preparation.",
-      "Helped with booth design planning, showcase booth preparation, Android build checking, and bug finding during app testing.",
-      "Helped prepare, review, and improve the final paper."
+      "Led overall team coordination, task assignment, progress monitoring, and major project decisions.",
+      "Supported business proposal direction, final paper preparation, review, printing, and physical submission requirements.",
+      "Coordinated project requirements across app development, documentation, marketing, research, finance, and presentation work.",
+      "Helped with booth design planning, showcase preparation, Android build checking, and app issue reporting.",
+      "Supported panel-readiness by helping align the business plan, app features, and final presentation flow.",
     ]
   },
   {
@@ -187,13 +188,13 @@ const teamMembers = [
     photo: "assets/team/fritzver-valdueza.jpg",
     image: "assets/team/fritzver-valdueza.jpg",
     imageUrl: "assets/team/fritzver-valdueza.jpg",
-    summary: "Managed day-to-day coordination, documentation flow, task follow-ups, and deadline tracking. Helped organize team responsibilities, supported communication between members, and contributed to advertisement video production and presentation preparation.",
+    summary: "Managed operations support, documentation flow, task follow-ups, deadline tracking, and preparation of written outputs. Helped organize team responsibilities and supported advertisement video and presentation preparation.",
     contributions: [
-      "Led documentation work, organized written outputs, managed project files, and supported operations planning for the business proposal.",
-      "Checked paper structure, formatting, completeness, consistency, and written materials for submission and presentation.",
-      "Coordinated documentation needs with research and presentation requirements.",
-      "Helped prepare, review, and improve the final paper.",
-      "Helped with and appeared in the advertisement video."
+      "Managed documentation flow, written-output organization, task follow-ups, and deadline tracking.",
+      "Checked paper structure, formatting, completeness, consistency, and readiness for submission.",
+      "Coordinated documentation needs with research, operations, and presentation requirements.",
+      "Supported operations planning and helped keep team responsibilities organized.",
+      "Helped with advertisement video preparation, final paper review, and presentation support.",
     ]
   },
   {
@@ -205,15 +206,22 @@ const teamMembers = [
     photo: "assets/team/cheong-jia-le.jpg",
     image: "assets/team/cheong-jia-le.jpg",
     imageUrl: "assets/team/cheong-jia-le.jpg",
-    summary: "Led the technical side of HalaPH and handled the app development work using Flutter and Dart. Built and refined the mobile app, Firebase and Firestore integration, routing features, featured places system, advertisement tools, admin dashboard support, APK release flow, website deployment support, testing, debugging, and production-ready fixes.",
+    summary: "Led the technical development and final product build of HalaPH. Built and refined the Flutter mobile app, Firebase and Firestore integration, route and fare features, Terminal Routes, Guide Mode, shared plans, Favorites, Friends, admin support, APK release flow, showcase website updates, reliability optimization, debugging, and deployment support.",
     contributions: [
-      "Technical Development: Handled the development of the HalaPH mobile application using Flutter and Dart.",
-      "App Features: Built and refined route guidance, trip planning, collaboration flows, favorites, profiles, guide mode, account tools, and polished user interfaces.",
-      "Firebase and Backend Work: Worked on Firebase Authentication, Firestore data flows, Firestore rules, Firebase Storage, profile image syncing, friend systems, shared plans, account cleanup, and real-time data behavior.",
-      "Routes and Places: Improved route-related features, fare support, Google Maps integration, cached destinations, featured places, admin-managed locations, and Explore screen behavior.",
-      "Admin and Monetization Tools: Built and improved the admin dashboard, featured places management, advertisement controls, sponsored card behavior, delete controls, and dashboard statistics.",
-      "Release and Deployment: Handled APK builds, public APK updates, QR/download support, showcase website updates, GitHub Pages deployment, and Firebase admin web deployment.",
-      "Testing and Stability: Ran Dart analyze, Flutter analyze, Flutter tests, release builds, Xcode/iOS checks, Android checks, debugging, and production-ready fixes."
+      "Built and refined the HalaPH Flutter app using Dart, including app navigation, routing surfaces, screen structure, and production-ready UI updates.",
+      "Restructured the app into the final five-tab experience: Home, Explore, Terminals, Plans, and Profile.",
+      "Redesigned and polished the launch/preflight flow, Home dashboard, Explore discovery, Terminals screen, Plans workspace, Profile hub, Settings, and Guide Mode presentation.",
+      "Aligned the app to the premium Burgundy and Light visual system, official tagline, cleaner typography, improved copy, better tap targets, and small-screen safety.",
+      "Replaced the old tutorial flow with a simple five-tab Guide Mode onboarding covering Welcome, Home, Explore, Terminals, Plans, Profile, and Finish.",
+      "Built and refined route-related features, fare estimates, route guidance, route option behavior, route confidence, fare breakdowns, and safe route calculation entry points.",
+      "Implemented and improved Terminal Routes, terminal route details, accuracy/source cues, and Report Correction flow for user-submitted route corrections.",
+      "Built and maintained plan features including Create New Plan, shared plans, participant flows, starting points, reminders, trip history, plan deletion, and collaboration behavior.",
+      "Worked on Favorites, Friends, friend codes, friend requests, profile display, profile images, account settings, logout/account controls, and delete-account cleanup behavior.",
+      "Integrated and maintained Firebase Authentication, Firestore data flows, Firebase Storage behavior, local notification handling, cached data behavior, and Firestore-safe app flows.",
+      "Created and refined admin-support features including route correction report handling, admin route management support, advertisement controls, featured places management, and dashboard-related improvements.",
+      "Optimized expo reliability by reducing repeated Firebase and Google activity, locking down passive cached-destination writes, preventing passive Directions billing calls, adding cache-first behavior, deduplicating startup reads, and reducing noisy logs.",
+      "Prepared Android APK release flow, QR support, website download flow, GitHub Pages showcase deployment, Firebase admin web deployment support, and final app testing.",
+      "Ran validation and debugging through dart analyze, flutter analyze, flutter tests, Xcode/iOS checks, Android checks, terminal-based patches, and release-readiness verification.",
     ]
   },
   {
@@ -225,13 +233,13 @@ const teamMembers = [
     photo: "assets/team/ynna-toh.jpg",
     image: "assets/team/ynna-toh.jpg",
     imageUrl: "assets/team/ynna-toh.jpg",
-    summary: "Led the visual direction of HalaPH. Designed the app's look and feel, interface flow, branding direction, layout decisions, and user experience improvements. Directed the advertisement video and will lead its editing to keep the promotional output consistent with the HalaPH brand.",
+    summary: "Led the visual direction of HalaPH. Supported branding, UI/UX planning, layout direction, booth visuals, brochure design, and advertisement video direction to keep the project presentation consistent.",
     contributions: [
-      "Led main design direction, UI/UX planning, visual layout support, color and presentation design discussions, and user-facing design improvements.",
-      "Made the tarpaulin design for the showcase booth and made the brochure design and layout for the project presentation.",
-      "Supported booth visuals, showcase design planning, Android build checking, and bug finding during app testing.",
-      "Reviewed design-related paper and presentation sections, and helped prepare, review, and improve the final paper.",
-      "Directed the advertisement video and will lead its editing."
+      "Led the main design direction, branding discussions, UI/UX planning, and visual presentation approach for HalaPH.",
+      "Supported app layout decisions, screen presentation, user-facing design improvements, and visual consistency discussions.",
+      "Created the tarpaulin design for the showcase booth and prepared the brochure design and layout.",
+      "Supported booth visuals, showcase design planning, Android build checking, and app bug reporting.",
+      "Directed the advertisement video and planned editing direction to keep the promotional output aligned with the HalaPH brand.",
     ]
   },
   {
@@ -243,13 +251,13 @@ const teamMembers = [
     photo: "assets/team/ej-barroga.jpg",
     image: "assets/team/ej-barroga.jpg",
     imageUrl: "assets/team/ej-barroga.jpg",
-    summary: "Conducts market research, competitor analysis, and user requirement gathering to support project planning and feature development. Also helped with and appeared in the advertisement video.",
+    summary: "Supported research work for HalaPH, including market understanding, commuter needs, competitor review, and proposal evidence. Helped strengthen the research basis of the product and presentation.",
     contributions: [
-      "Supported project research, information gathering, commuter and public transport review, and business proposal research sections.",
-      "Reviewed research-based content and checked if written content matched project goals.",
-      "Helped prepare proposal and presentation content through research support.",
-      "Helped prepare, review, and improve the final paper.",
-      "Helped with and appeared in the advertisement video."
+      "Supported market research, information gathering, commuter needs review, and public transport context checking.",
+      "Contributed to competitor review and helped explain how HalaPH differs from existing commute tools.",
+      "Reviewed research-based content to keep the written proposal aligned with the project goals.",
+      "Supported proposal and presentation content through research input and evidence gathering.",
+      "Helped with final paper review and participated in advertisement video preparation.",
     ]
   },
   {
@@ -261,13 +269,13 @@ const teamMembers = [
     photo: "assets/team/jian-dela-cruz.png",
     image: "assets/team/jian-dela-cruz.png",
     imageUrl: "assets/team/jian-dela-cruz.png",
-    summary: "Collects, manages, and analyzes transport data such as routes, fare estimates, and destination information to support application accuracy. Also helped with and appeared in the advertisement video.",
+    summary: "Supported the data side of HalaPH by helping organize transport-related information, destination details, fare references, and route-related content for the proposal and app explanation.",
     contributions: [
-      "Supported data analysis, route-related information review, commuter use case review, and app concept data support.",
+      "Supported transport data organization, route-related information review, and destination information checking.",
+      "Helped review fare references, commuter use cases, and data needed to explain app accuracy.",
       "Organized data used for proposal support and checked consistency of project information.",
       "Supported research and documentation with data-related input and proposal review.",
-      "Helped prepare, review, and improve the final paper.",
-      "Helped with and appeared in the advertisement video."
+      "Helped with final paper review and advertisement video participation.",
     ]
   },
   {
@@ -279,13 +287,13 @@ const teamMembers = [
     photo: "assets/team/ervin-amad.jpg",
     image: "assets/team/ervin-amad.jpg",
     imageUrl: "assets/team/ervin-amad.jpg",
-    summary: "Handles budgeting, capital management, financial projections, expense monitoring, and revenue planning from in-app advertisements. Also helped with and appeared in the advertisement video.",
+    summary: "Handled finance planning for TripLine PH, including budget preparation, expense awareness, feasibility support, and revenue planning connected to controlled sponsored content.",
     contributions: [
-      "Led finance planning, cost-related information preparation, budget planning, and business feasibility review.",
-      "Supported pricing, funding, and ad-supported business model discussions for the proposal.",
-      "Worked with the assistant finance role and reviewed finance-related paper sections.",
-      "Helped prepare, review, and improve the final paper.",
-      "Helped with and appeared in the advertisement video."
+      "Led finance planning, cost-related preparation, budget review, and business feasibility support.",
+      "Supported pricing, funding, projected expenses, and ad-supported sustainability discussions.",
+      "Connected the sponsored-content model to the proposed revenue and maintenance plan.",
+      "Worked with finance support members to review finance-related paper sections.",
+      "Helped with final paper review and advertisement video participation.",
     ]
   },
   {
@@ -297,12 +305,13 @@ const teamMembers = [
     photo: "assets/team/angela-encarnacion.jpg",
     image: "assets/team/angela-encarnacion.jpg",
     imageUrl: "assets/team/angela-encarnacion.jpg",
-    summary: "Tracks expenses, monitors development costs, prepares financial reports, and helps develop budget-friendly features for HalaPH.",
+    summary: "Supported finance analysis, cost tracking, budget organization, and financial documentation for the HalaPH business proposal.",
     contributions: [
-      "Assisted the Finance Manager with finance work, cost review, budget details, and business feasibility analysis.",
-      "Helped organize financial information and check finance-related written content for clarity.",
+      "Assisted with expense tracking, development cost awareness, and financial documentation.",
+      "Supported budget details, cost review, and business feasibility analysis.",
+      "Helped organize finance-related information and improve clarity in written sections.",
       "Supported the business model section through finance-related input and review.",
-      "Helped prepare, review, and improve the final paper."
+      "Helped prepare and review finance-related proposal materials.",
     ]
   },
   {
@@ -314,12 +323,13 @@ const teamMembers = [
     photo: "assets/team/maraiah-salivio.jpg",
     image: "assets/team/maraiah-salivio.jpg",
     imageUrl: "assets/team/maraiah-salivio.jpg",
-    summary: "Creates marketing strategies and handles promotional activities for the project.",
+    summary: "Led marketing planning for HalaPH, including audience positioning, promotional direction, booth presentation ideas, and marketing-related proposal support.",
     contributions: [
-      "Led marketing planning, audience positioning, promotional ideas, and how HalaPH should be presented to students and commuters.",
-      "Led booth design planning and helped align booth visuals with the HalaPH brand and app purpose.",
+      "Led marketing planning, target-user positioning, promotional strategy, and audience messaging.",
+      "Helped plan how HalaPH should be presented to students, commuters, and expo visitors.",
+      "Led booth design planning and aligned booth visuals with the HalaPH brand and app purpose.",
       "Supported brochure planning, presentation materials, and marketing-related paper review.",
-      "Helped prepare, review, and improve the final paper."
+      "Helped prepare marketing content for the final showcase.",
     ]
   },
   {
@@ -331,13 +341,13 @@ const teamMembers = [
     photo: "assets/team/dhustine-catubig.jpg",
     image: "assets/team/dhustine-catubig.jpg",
     imageUrl: "assets/team/dhustine-catubig.jpg",
-    summary: "Plans and supervises advertising and promotional campaigns, including in-app advertisements, to reach target users. Also helped with and appeared in the advertisement video.",
+    summary: "Managed advertising direction and promotional campaign planning for HalaPH, including ad-related showcase preparation and advertisement video support.",
     contributions: [
-      "Led advertisement planning, advertising direction, promotional content ideas, and ad-related showcase preparation.",
-      "Coordinated advertisement-related tasks with advertisement officers and supported promotional material planning.",
-      "Contributed to the ad-supported business concept and reviewed advertising-related paper and presentation details.",
-      "Helped prepare, review, and improve the final paper.",
-      "Helped with and appeared in the advertisement video."
+      "Led advertisement planning, promotional campaign direction, and ad-related showcase preparation.",
+      "Coordinated advertisement-related tasks with advertisement officers and creative support members.",
+      "Supported in-app sponsored-content planning and ad-supported business concept explanation.",
+      "Reviewed advertising-related paper and presentation details.",
+      "Helped with final paper review and advertisement video participation.",
     ]
   },
   {
@@ -349,12 +359,13 @@ const teamMembers = [
     photo: "assets/team/mark-ian-alimen.jpg",
     image: "assets/team/mark-ian-alimen.jpg",
     imageUrl: "assets/team/mark-ian-alimen.jpg",
-    summary: "Creates promotional content, social media materials, advertising designs, and advertisement video support materials to increase awareness of HalaPH.",
+    summary: "Supported advertisement production and promotional content preparation, including visual advertising concepts, social media support materials, and showcase promotion.",
     contributions: [
-      "Assisted the Advertisement Manager with advertisement tasks, promotional ideas, and showcase advertising preparation.",
-      "Supported advertisement video or promotional material planning and ad-related presentation details.",
+      "Assisted with advertisement tasks, promotional ideas, and showcase advertising preparation.",
+      "Created and supported promotional content, social media materials, and advertising concepts.",
+      "Helped prepare advertisement video or promotional support materials.",
       "Reviewed advertising details for the paper and presentation.",
-      "Helped prepare, review, and improve the final paper."
+      "Helped strengthen promotional awareness for the HalaPH showcase.",
     ]
   },
   {
@@ -366,13 +377,13 @@ const teamMembers = [
     photo: "assets/team/allen-ewag.jpg",
     image: "assets/team/allen-ewag.jpg",
     imageUrl: "assets/team/allen-ewag.jpg",
-    summary: "Creates promotional content, social media materials, advertising designs, and advertisement video support materials to increase awareness of HalaPH. Also helped with and appeared in the advertisement video.",
+    summary: "Supported advertising work for HalaPH through promotional materials, social media concepts, advertisement video support, and showcase awareness efforts.",
     contributions: [
-      "Assisted the Advertisement Manager with advertisement tasks, promotional ideas, and showcase advertising preparation.",
-      "Supported advertisement video or promotional material planning and ad-related presentation details.",
-      "Reviewed advertising details for the paper and presentation.",
-      "Helped prepare, review, and improve the final paper.",
-      "Helped with and appeared in the advertisement video."
+      "Assisted with advertisement tasks, promotional ideas, and showcase advertising preparation.",
+      "Created and supported promotional content, advertising designs, and social media support materials.",
+      "Helped prepare advertisement video and promotional presentation details.",
+      "Reviewed advertising-related paper and presentation content.",
+      "Helped with final paper review and advertisement video participation.",
     ]
   },
   {
@@ -384,13 +395,13 @@ const teamMembers = [
     photo: "assets/team/mark-jansen-abilo.jpg",
     image: "assets/team/mark-jansen-abilo.jpg",
     imageUrl: "assets/team/mark-jansen-abilo.jpg",
-    summary: "Handles user feedback, concerns about routes, fares, and usability, and collects suggestions to improve the application. Also helped with and appeared in the advertisement video.",
+    summary: "Supported customer support planning for HalaPH by preparing user-feedback handling ideas, route and fare concern handling, usability concern review, and visitor support planning.",
     contributions: [
-      "Supported customer support planning, user concern handling, and customer-facing service responsibilities.",
-      "Helped review how users could ask for help, report concerns, and receive service support.",
-      "Assisted with presentation support and customer support-related paper content.",
-      "Helped prepare, review, and improve the final paper.",
-      "Helped with and appeared in the advertisement video."
+      "Supported customer support planning, user concern handling, and service-response responsibilities.",
+      "Helped review how users could ask for help, report concerns, and raise route, fare, or usability issues.",
+      "Prepared customer-facing support ideas for expo visitors and potential app users.",
+      "Assisted with customer support-related paper content and presentation support.",
+      "Helped with final paper review and advertisement video participation.",
     ]
   }
 ]
@@ -476,9 +487,28 @@ function initTeamCarousel() {
         }
       });
 
-      contributions.innerHTML = member.contributions
-        .map((item) => `<li>${item}</li>`)
-        .join("");
+      contributions.hidden = false;
+      contributions.classList.add("is-visible");
+      contributions.setAttribute("aria-label", `${member.name} key contributions`);
+      contributions.setAttribute("data-visible-contributions", "true");
+      contributions.style.display = "grid";
+      contributions.style.visibility = "visible";
+      contributions.style.opacity = "1";
+      contributions.style.maxHeight = "360px";
+      contributions.style.overflowY = "auto";
+      contributions.style.paddingRight = "0.25rem";
+      contributions.innerHTML = "";
+
+      const contributionHeading = document.createElement("li");
+      contributionHeading.className = "team-contribution-heading";
+      contributionHeading.textContent = "Key contributions";
+      contributions.appendChild(contributionHeading);
+
+      (member.contributions || []).forEach((item) => {
+        const contributionItem = document.createElement("li");
+        contributionItem.textContent = item;
+        contributions.appendChild(contributionItem);
+      });
 
       renderDots();
       card.classList.remove("is-changing");
