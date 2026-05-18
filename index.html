@@ -491,13 +491,39 @@
               <div class="build-meta" aria-label="Android APK build details">
                 <span>HalaPH-release-brand-theme-final.apk</span>
                 <span>Around 63 MB</span>
-                <span>Use the button or APK QR code</span>
+                <span>Expo access code required</span>
               </div>
-              <div class="apk-qr">
-                <img src="./assets/apk_qr.png" alt="QR code to download the HalaPH Android APK" loading="lazy" />
-                <p>Scan with an Android phone to download the APK.</p>
+
+              <form class="apk-access-form" data-apk-access-form>
+                <label for="apk-access-code">Enter expo access code</label>
+                <div class="apk-access-row">
+                  <input
+                    id="apk-access-code"
+                    type="password"
+                    inputmode="text"
+                    autocomplete="off"
+                    placeholder="Access code"
+                    data-apk-access-input
+                  />
+                  <button class="btn btn-primary" type="submit">Unlock</button>
+                </div>
+                <p class="apk-access-message" data-apk-access-message>
+                  Ask the presenter for the Android download access code.
+                </p>
+              </form>
+
+              <div class="apk-locked-panel" data-apk-locked-panel>
+                <strong>Android APK locked for expo control.</strong>
+                <p>The APK QR and download button unlock after entering the access code.</p>
               </div>
-              <a class="btn btn-primary" href="./downloads/HalaPH-release-sponsored-links-fullscreen-final.apk">Download APK</a>
+
+              <div class="apk-download-area" data-apk-download-area hidden>
+                <div class="apk-qr">
+                  <img src="./assets/apk_qr.png" alt="QR code to download the HalaPH Android APK" loading="lazy" />
+                  <p>Scan with an Android phone to download the APK.</p>
+                </div>
+                <a class="btn btn-primary" href="./downloads/HalaPH-release-sponsored-links-fullscreen-final.apk">Download APK</a>
+              </div>
               </article>
               <article class="download-card qr-card reveal">
                 <h3>Showcase Website</h3>
