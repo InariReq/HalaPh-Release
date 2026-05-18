@@ -135,7 +135,6 @@ class FriendService {
 
       if (code.isEmpty || code == 'HP-0000') return null;
 
-      debugPrint('FriendService: refreshed friend code from Firebase: $code');
       return code;
     } catch (error) {
       debugPrint('FriendService: friend code refresh lookup skipped: $error');
@@ -1311,23 +1310,15 @@ class FriendService {
   Future<List<Map<String, dynamic>>> getPendingFriendRequests() async {
     final currentUid = await _currentUserId();
     if (currentUid == null) {
-      debugPrint('getPendingFriendRequests: No current user');
       return const [];
     }
-
-    debugPrint('getPendingFriendRequests: Checking for user $currentUid');
 
     try {
       final snapshot = await FirestoreService.getPendingFriendRequests();
 
-      debugPrint(
-        'getPendingFriendRequests: Found ${snapshot.docs.length} total requests',
-      );
-
       final requests = snapshot.docs.where((doc) {
         final data = doc.data();
         final status = data['status'] as String? ?? '';
-        debugPrint('Request ${doc.id}: status=$status');
         return status == 'pending';
       }).map((doc) {
         final data = doc.data();
@@ -1343,9 +1334,6 @@ class FriendService {
         };
       }).toList();
 
-      debugPrint(
-        'getPendingFriendRequests: Returning ${requests.length} pending requests',
-      );
       return requests;
     } catch (e) {
       debugPrint('Failed to load friend requests: $e');

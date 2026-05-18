@@ -1231,13 +1231,7 @@ class FirestoreService {
       getPendingFriendRequests() async {
     final userId = firebase_auth.FirebaseAuth.instance.currentUser?.uid;
 
-    debugPrint(
-        'getPendingFriendRequests: FirebaseAuth uid=${firebase_auth.FirebaseAuth.instance.currentUser?.uid}');
-    debugPrint('getPendingFriendRequests: effective uid=$userId');
-
     if (userId == null) {
-      debugPrint(
-          'getPendingFriendRequests: No authenticated user, returning empty snapshot');
       // Return empty snapshot using limit(0) - returns 0 docs
       return _db
           .collection('users')
@@ -1246,8 +1240,6 @@ class FirestoreService {
           .limit(0)
           .get();
     }
-
-    debugPrint('getPendingFriendRequests: path users/$userId/friend_requests');
 
     return _db
         .collection('users')

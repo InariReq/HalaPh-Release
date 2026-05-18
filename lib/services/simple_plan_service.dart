@@ -289,7 +289,6 @@ class SimplePlanService {
       return false;
     }
 
-    debugPrint('Attempting to delete plan $id');
     // Mark as recently deleted to prevent real-time listener from re-adding
     _recentlyDeletedPlanIds.add(id);
 
@@ -307,7 +306,6 @@ class SimplePlanService {
     Future.delayed(const Duration(seconds: 5), () {
       _recentlyDeletedPlanIds.remove(id);
     });
-    debugPrint('Plan $id deleted successfully');
     return true;
   }
 
@@ -1166,11 +1164,6 @@ class SimplePlanService {
       return true;
     }
     try {
-      // Debug logging
-      debugPrint('Deleting plan: sharedPlans/$id');
-      debugPrint('Current UID: ${_currentUserId()}');
-      debugPrint('Operation: deletePlan');
-
       // Check if plan exists and verify ownership
       final doc = await _plansCollection.doc(id).get();
       if (!doc.exists) {
@@ -1183,10 +1176,6 @@ class SimplePlanService {
       final ownerUid = data?['ownerUid'] as String? ?? '';
       final ownerId = data?['ownerId'] as String? ?? '';
       final currentUid = _currentUserId();
-
-      debugPrint('Plan createdBy: $createdBy');
-      debugPrint('Plan ownerUid: $ownerUid');
-      debugPrint('Plan ownerId: $ownerId');
 
       if (currentUid != createdBy &&
           currentUid != ownerUid &&

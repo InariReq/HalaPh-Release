@@ -208,7 +208,7 @@ class _PlanDetailsScreenState extends State<PlanDetailsScreen> {
         await _loadBudgetPassengerTypes();
         await _loadMyParticipantStartKey();
         await _loadBudgetFallbackOrigin();
-        unawaited(_refreshRouteBudgetFareCache());
+        _hydrateCachedRouteBudgetFareEstimates();
       }
     } catch (error) {
       debugPrint('Plan details load failed: $error');
@@ -971,7 +971,7 @@ class _PlanDetailsScreenState extends State<PlanDetailsScreen> {
       _meetingPointLongitude = destination.coordinates?.longitude;
       _routeBudgetFareCache.clear();
     });
-    unawaited(_refreshRouteBudgetFareCache());
+    _hydrateCachedRouteBudgetFareEstimates();
   }
 
   void _clearMeetingPoint() {
@@ -987,7 +987,7 @@ class _PlanDetailsScreenState extends State<PlanDetailsScreen> {
       _meetingPointLongitude = null;
       _routeBudgetFareCache.clear();
     });
-    unawaited(_refreshRouteBudgetFareCache());
+    _hydrateCachedRouteBudgetFareEstimates();
   }
 
   Future<void> _loadMyParticipantStartKey() async {
@@ -1818,7 +1818,35 @@ class _PlanDetailsScreenState extends State<PlanDetailsScreen> {
     return legs;
   }
 
-  Future<void> _refreshRouteBudgetFareCache() async {
+  void _hydrateCachedRouteBudgetFareEstimates() {
+    final originPoint = _meetingPointLatLng() ?? _budgetFallbackOrigin;
+    final sharedLegs = _routeBudgetLegsFrom(originPoint);
+
+    final participantLegs = <({LatLng origin, LatLng destination})>[];
+    final meetingPoint = _meetingPointLatLng();
+    if (meetingPoint != null) {
+      for (final start in _participantStartLocations.values) {
+        final startPoint = _participantStartLatLng(start);
+        if (startPoint != null) {
+          participantLegs.add((origin: startPoint, destination: meetingPoint));
+        }
+      }
+    }
+
+    for (final leg in [...sharedLegs, ...participantLegs]) {
+      final estimate = RouteFareEstimatorService.cachedBestRouteFare(
+        origin: leg.origin,
+        destination: leg.destination,
+        type: PassengerType.regular,
+      );
+      if (estimate != null && estimate.isAvailable) {
+        _routeBudgetFareCache[_routeBudgetLegKey(leg.origin, leg.destination)] =
+            estimate.totalFare;
+      }
+    }
+  }
+
+  Future<void> _calculateRouteBudgetFareCache() async {
     if (_isRouteBudgetLoading || _routeBudgetRefreshScheduled) return;
 
     _routeBudgetRefreshScheduled = true;
@@ -2069,6 +2097,7 @@ class _PlanDetailsScreenState extends State<PlanDetailsScreen> {
     );
     final perPassengerDisplay = _formatPerPassengerRange(passengerEstimates);
     final hasStops = stopCount > 0;
+    final hasCachedRouteEstimate = _routeBudgetFareCache.isNotEmpty;
     final participantLabel = participantCount == 1
         ? '1 participant'
         : '$participantCount participants';
@@ -2140,7 +2169,7 @@ class _PlanDetailsScreenState extends State<PlanDetailsScreen> {
                       const SizedBox(height: 3),
                       Text(
                         _isRouteBudgetLoading
-                            ? 'Transport fares only • updating route fares'
+                            ? 'Transport fares only • calculating route fares'
                             : 'Transport fares only',
                         style: TextStyle(
                           fontSize: 12,
@@ -2159,23 +2188,54 @@ class _PlanDetailsScreenState extends State<PlanDetailsScreen> {
                 Expanded(
                   child: _buildBudgetMetric(
                     label: 'Estimated total',
-                    value: hasStops
-                        ? _formatBudgetAmount(totalEstimate)
-                        : 'Add destinations',
+                    value: !hasStops
+                        ? 'Add destinations'
+                        : _isRouteBudgetLoading
+                            ? 'Calculating…'
+                            : hasCachedRouteEstimate
+                                ? _formatBudgetAmount(totalEstimate)
+                                : 'After route',
                   ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: _buildBudgetMetric(
                     label: 'Per passenger',
-                    value: hasStops ? perPassengerDisplay : 'Pending',
-                    onTap: hasStops
+                    value: !hasStops
+                        ? 'Pending'
+                        : _isRouteBudgetLoading
+                            ? 'Calculating…'
+                            : hasCachedRouteEstimate
+                                ? perPassengerDisplay
+                                : 'Open route first',
+                    onTap: hasStops && hasCachedRouteEstimate
                         ? () => unawaited(_openPassengerBudgetBreakdown())
                         : null,
                   ),
                 ),
               ],
             ),
+            if (hasStops) ...[
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: _isRouteBudgetLoading
+                      ? null
+                      : () => unawaited(_calculateRouteBudgetFareCache()),
+                  icon: Icon(
+                    hasCachedRouteEstimate
+                        ? Icons.refresh_rounded
+                        : Icons.route_rounded,
+                  ),
+                  label: Text(
+                    hasCachedRouteEstimate
+                        ? 'Refresh route fares'
+                        : 'Calculate route fares',
+                  ),
+                ),
+              ),
+            ],
             const SizedBox(height: 12),
             Container(
               width: double.infinity,
@@ -2239,8 +2299,10 @@ class _PlanDetailsScreenState extends State<PlanDetailsScreen> {
                   _buildBudgetDetailLine(
                     icon: Icons.info_outline_rounded,
                     text: _isRouteBudgetLoading
-                        ? 'Updating budget using the same route fare logic as View Route.'
-                        : 'Unknown participant fare types default to Regular. Actual fares may change by route, transfers, discounts, passenger type, and live transport availability.',
+                        ? 'Calculating route fares from an explicit request.'
+                        : hasCachedRouteEstimate
+                            ? 'Unknown participant fare types default to Regular. Actual fares may change by route, transfers, discounts, passenger type, and live transport availability.'
+                            : 'Estimate available after opening a route or tapping Calculate route fares.',
                   ),
                 ],
               ),
@@ -2315,8 +2377,6 @@ class _PlanDetailsScreenState extends State<PlanDetailsScreen> {
   }
 
   Future<void> _openPassengerBudgetBreakdown() async {
-    await _refreshRouteBudgetFareCache();
-
     if (!mounted) return;
 
     final regularPassengerEstimate = _estimatedTransportTotal();

@@ -25,8 +25,6 @@ class PlaceDisplayNameUtils {
     if (cleanRawName) {
       final cleaned = cleanGoogleDisplayName(rawName);
       if (cleaned.isNotEmpty && cleaned != rawName) {
-        debugPrint(
-            'Cached destination display name cleaned: $rawName -> $cleaned');
         return cleaned;
       }
       if (cleaned.isNotEmpty) return cleaned;

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:halaph/services/friend_service.dart';
 import 'package:halaph/services/guide_mode_demo_data.dart';
 import 'package:halaph/services/guide_mode_demo_state.dart';
 import 'package:halaph/services/guide_presenter_controller.dart';
@@ -33,10 +32,8 @@ class MyPlansScreen extends StatefulWidget {
 class _MyPlansScreenState extends State<MyPlansScreen> {
   static bool _fullscreenAdShownThisSession = false;
 
-  final FriendService _friendService = FriendService();
   final AppPublicConfigService _publicConfigService = AppPublicConfigService();
   final UserAdsService _adsService = UserAdsService();
-  String _myCode = 'current_user';
   bool _isLoading = true;
   StreamSubscription? _plansSubscription;
 
@@ -50,7 +47,9 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
     }
     _loadPlans();
     _plansSubscription = SimplePlanService.changes.listen((_) {
-      _loadPlans(forceRefresh: true);
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -69,7 +68,9 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
     GuideModeDemoState.version.removeListener(_applyGuideModeDemo);
     _loadPlans();
     _plansSubscription = SimplePlanService.changes.listen((_) {
-      _loadPlans(forceRefresh: true);
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -77,7 +78,6 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
     if (!mounted) return;
     setState(() {
       _isLoading = false;
-      _myCode = 'guide_user';
     });
   }
 
@@ -92,30 +92,19 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
     if (widget.guideModeDemo) {
       if (!mounted) return;
       setState(() {
-        _myCode = 'guide_user';
         _isLoading = false;
       });
       return;
     }
-    final results = await Future.wait<dynamic>([
-      _friendService.getMyCode().catchError((_) => 'demo_user'),
-      SimplePlanService.initialize(forceRefresh: forceRefresh).catchError((e) {
-        debugPrint('SimplePlanService.init error: $e');
-      }),
-    ]);
+    await SimplePlanService.initialize(forceRefresh: forceRefresh)
+        .catchError((e) {
+      debugPrint('SimplePlanService.init error: $e');
+    });
     if (!mounted) return;
 
     setState(() {
-      _myCode = results[0] as String;
       _isLoading = false;
     });
-
-    debugPrint('Loaded plans for user: $_myCode');
-    final personalPlans = SimplePlanService.getUserPlans();
-    final sharedPlans = SimplePlanService.getCollaborativePlans();
-    debugPrint(
-      'Personal plans: ${personalPlans.length}, Shared plans: ${sharedPlans.length}',
-    );
   }
 
   @override
@@ -899,7 +888,6 @@ class _MyPlansScreenState extends State<MyPlansScreen> {
                 final success = await SimplePlanService.deletePlan(plan.id);
                 if (!mounted) return;
                 if (success) {
-                  _loadPlans();
                   messenger.showSnackBar(
                     SnackBar(
                       content: Text(

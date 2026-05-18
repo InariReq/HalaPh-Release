@@ -219,16 +219,6 @@ class _ExploreDetailsScreenState extends State<ExploreDetailsScreen> {
         }
       }
 
-      // Destination no longer fetched by ID - use existing data
-      if (found != null && !widget.guideModeDemo) {
-        unawaited(
-          DestinationService.cacheDestinationForAdminFeature(
-            found,
-            source: 'app_search',
-          ),
-        );
-      }
-
       final isFav = found != null && !widget.guideModeDemo
           ? await _favoritesService.isFavorite(found.id)
           : false;

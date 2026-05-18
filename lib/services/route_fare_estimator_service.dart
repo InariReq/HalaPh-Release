@@ -87,6 +87,20 @@ class RouteFareEstimatorService {
     return unavailable;
   }
 
+  static RouteFareEstimateResult? cachedBestRouteFare({
+    required LatLng origin,
+    required LatLng destination,
+    PassengerType type = PassengerType.regular,
+  }) {
+    if (BudgetRoutingService.isInvalidLocation(origin) ||
+        BudgetRoutingService.isInvalidLocation(destination)) {
+      return null;
+    }
+
+    return _fareEstimateCache[_fareEstimateCacheKey(
+        origin: origin, destination: destination, type: type)];
+  }
+
   static String _fareEstimateCacheKey({
     required LatLng origin,
     required LatLng destination,

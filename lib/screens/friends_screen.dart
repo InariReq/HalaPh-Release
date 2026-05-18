@@ -92,14 +92,10 @@ class _FriendsScreenState extends State<FriendsScreen> {
       setState(_applyGuideModeDemo);
       return;
     }
-    debugPrint('FriendsScreen: Loading data...');
     try {
       final myCode = await _friendService.getMyCode(forceRefresh: true);
       final friends = await _friendService.getFriends(forceRefresh: true);
       final requests = await _loadPendingRequests();
-      debugPrint(
-        'FriendsScreen: Loaded ${friends.length} friends, ${requests.length} pending requests',
-      );
       if (!mounted) return;
       setState(() {
         _myCode = myCode;

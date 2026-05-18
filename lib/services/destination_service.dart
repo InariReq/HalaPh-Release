@@ -391,7 +391,9 @@ class DestinationService {
   static Future<void> cacheDestinationForAdminFeature(
     Destination destination, {
     String source = 'app_search',
+    bool allowRemoteCacheWrite = false,
   }) async {
+    if (!allowRemoteCacheWrite) return;
     await _upsertCachedDestination(destination, source: source);
   }
 
@@ -553,6 +555,7 @@ class DestinationService {
     required String query,
     required LatLng location,
     required int limit,
+    bool allowRemoteCacheWrite = false,
   }) async {
     if (!DevModeService.allowPaidGoogleApis) {
       debugPrint('Google Places skipped by dev cost guard: $query');
@@ -576,11 +579,26 @@ class DestinationService {
         final data = json.decode(response.body) as Map<String, dynamic>;
         if (data['status'] == 'OK') {
           final results = data['results'] as List;
+          var missingPhotoInResultSet = false;
           final destinations = results
-              .map((item) => _convertGooglePlaceToDestination(item, null))
+              .map((item) {
+                final result = Map<String, dynamic>.from(item as Map);
+                if (_firstGooglePhotoReference(result) == null) {
+                  missingPhotoInResultSet = true;
+                }
+                return _convertGooglePlaceToDestination(result, null);
+              })
               .whereType<Destination>()
               .toList();
-          _cacheDestinationsBestEffort(destinations, source: 'google');
+          if (missingPhotoInResultSet) {
+            AppLog.throttledInfo(
+              'destination-google-photo-missing-result-set',
+              'Google photo unavailable for some destinations in this result set.',
+            );
+          }
+          if (allowRemoteCacheWrite) {
+            _cacheDestinationsBestEffort(destinations, source: 'google');
+          }
           return destinations;
         }
       }
@@ -876,13 +894,6 @@ class DestinationService {
     final imageUrl = photoReference == null
         ? ''
         : GoogleMapsService.buildPhotoUrl(photoReference);
-    if (photoReference == null) {
-      AppLog.throttledInfo(
-        'destination-google-photo-missing',
-        'Google photo unavailable for some destinations in this result set.',
-      );
-    }
-
     return Destination(
       id: id,
       name: name,
@@ -919,10 +930,6 @@ class DestinationService {
     final name = destination.name.trim();
     final coordinates = destination.coordinates;
     if (name.isEmpty || coordinates == null) {
-      AppLog.throttledInfo(
-        'cached-destination-missing-fields',
-        'Cached destination upsert skipped: missing name or coordinates',
-      );
       return;
     }
 
@@ -945,11 +952,6 @@ class DestinationService {
               '';
       final imageUrl = _bestDestinationImage(destination, photoReference);
       final displayName = PlaceDisplayNameUtils.cleanGoogleDisplayName(name);
-      if (displayName.isNotEmpty && displayName != name) {
-        debugPrint(
-            'Cached destination display name cleaned: $name -> $displayName');
-      }
-      debugPrint('Featured place original name preserved: $name');
 
       final incomingFingerprint = _cachedDestinationFingerprint(
         destination: destination,
@@ -962,17 +964,9 @@ class DestinationService {
       );
       if (_cachedDestinationSessionFingerprints[cacheKey] ==
           incomingFingerprint) {
-        AppLog.throttledInfo(
-          'cached-destination-unchanged',
-          'Cached destination upsert skipped: unchanged this session',
-        );
         return;
       }
       if (_cachedDestinationUpsertsInFlight.contains(cacheKey)) {
-        AppLog.throttledInfo(
-          'cached-destination-inflight',
-          'Cached destination upsert skipped: already in flight',
-        );
         return;
       }
       final lastAttempt = _cachedDestinationLastAttempts[cacheKey];
@@ -981,10 +975,6 @@ class DestinationService {
           _cachedDestinationLastAttemptFingerprints[cacheKey] ==
               incomingFingerprint &&
           now.difference(lastAttempt) < _cachedDestinationWriteDebounce) {
-        AppLog.throttledInfo(
-          'cached-destination-debounced',
-          'Cached destination upsert skipped: debounced',
-        );
         return;
       }
       _cachedDestinationLastAttempts[cacheKey] = now;
@@ -1008,11 +998,6 @@ class DestinationService {
         'bannerImage',
       ]);
       final savedImage = imageUrl.isNotEmpty ? imageUrl : existingImage;
-      if (imageUrl.isEmpty && existingImage.isNotEmpty) {
-        debugPrint('Cached destination image preserved');
-      } else if (imageUrl.isNotEmpty) {
-        debugPrint('Cached destination image saved from field: imageUrl');
-      }
 
       final writeData = <String, dynamic>{
         'id': destination.id,
@@ -1052,10 +1037,6 @@ class DestinationService {
       if (existing != null &&
           !_cachedDestinationRequiredFieldsChanged(existingData, writeData)) {
         _cachedDestinationSessionFingerprints[cacheKey] = incomingFingerprint;
-        AppLog.throttledInfo(
-          'cached-destination-no-field-changes',
-          'Cached destination upsert skipped: no field changes',
-        );
         return;
       }
 
@@ -1069,9 +1050,6 @@ class DestinationService {
         if (existing == null) 'createdAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
       _cachedDestinationSessionFingerprints[cacheKey] = incomingFingerprint;
-      debugPrint(
-        'Cached destination upserted: ${googlePlaceId.isEmpty ? name : googlePlaceId}',
-      );
     } catch (error) {
       debugPrint('Cached destination upsert failed: $error');
     } finally {
@@ -1200,12 +1178,7 @@ class DestinationService {
     final imageUrl = destination.imageUrl.trim();
     if (imageUrl.startsWith('http')) return imageUrl;
     if (photoReference.isEmpty) return '';
-    final googlePhotoUrl = GoogleMapsService.buildPhotoUrl(photoReference);
-    if (googlePhotoUrl.isNotEmpty) {
-      debugPrint(
-          'Cached destination image saved from field: googlePhotoReference');
-    }
-    return googlePhotoUrl;
+    return GoogleMapsService.buildPhotoUrl(photoReference);
   }
 
   static String? _firstGooglePhotoReference(Map<String, dynamic> item) {
