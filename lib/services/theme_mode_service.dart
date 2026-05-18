@@ -56,11 +56,11 @@ class ThemeModeService {
   static String descriptionFor(ThemeMode mode) {
     switch (mode) {
       case ThemeMode.system:
-        return 'Use the clean original light appearance.';
+        return 'Use the clean showcase-aligned light appearance.';
       case ThemeMode.light:
-        return 'Use the clean original light appearance.';
+        return 'Use the clean showcase-aligned light appearance.';
       case ThemeMode.dark:
-        return 'Use the clean original light appearance.';
+        return 'Use the clean showcase-aligned light appearance.';
     }
   }
 
@@ -78,7 +78,7 @@ class ThemeModeService {
       case BrandColorMode.burgundy:
         return 'Premium HalaPH identity and recommended default.';
       case BrandColorMode.light:
-        return 'A cleaner light surface with the same Burgundy identity.';
+        return 'Showcase-aligned clean theme with blue-forward accents.';
     }
   }
 

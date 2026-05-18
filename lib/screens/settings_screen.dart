@@ -641,8 +641,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final selected = _brandColorMode == mode;
     final colorScheme = Theme.of(context).colorScheme;
     final swatch = _brandSwatch(mode);
-    final iconColor =
-        mode == BrandColorMode.light ? colorScheme.primary : swatch;
 
     return PressableCard(
       borderRadius: BorderRadius.circular(18),
@@ -666,7 +664,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 color: swatch.withValues(alpha: _isDark ? 0.22 : 0.13),
                 borderRadius: BorderRadius.circular(13),
               ),
-              child: Icon(icon, color: iconColor, size: 19),
+              child: Icon(icon, color: swatch, size: 19),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -725,7 +723,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       case BrandColorMode.burgundy:
         return const Color(0xFF8F123D);
       case BrandColorMode.light:
-        return Theme.of(context).colorScheme.surfaceContainerHighest;
+        return const Color(0xFF007EE3);
     }
   }
 

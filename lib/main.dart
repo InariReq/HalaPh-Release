@@ -897,7 +897,16 @@ const Color _halaBurgundyAccent = Color(0xFFA91446);
 const Color _halaDeepBurgundy = Color(0xFF2F0715);
 const Color _halaSoftBurgundy = Color(0xFFFDE8EF);
 const Color _halaCreamBackground = Color(0xFFFFF8F5);
-const Color _halaNeutralBackground = Color(0xFFF8FAFC);
+const Color _halaLightBrand900 = Color(0xFF0B264A);
+const Color _halaLightBrand700 = Color(0xFF0859AC);
+const Color _halaLightBlue600 = Color(0xFF007EE3);
+const Color _halaLightCyan500 = Color(0xFF34B9DC);
+const Color _halaLightInk = Color(0xFF121B28);
+const Color _halaLightMuted = Color(0xFF535F6F);
+const Color _halaLightPaper = Color(0xFFF9FCFF);
+const Color _halaLightPaperSoft = Color(0xFFEEF4FC);
+const Color _halaLightMist = Color(0xFFE1F1FF);
+const Color _halaLightMistDeep = Color(0xFFCEE8FF);
 
 class MainNavigation extends StatefulWidget {
   final bool showGuideMode;
@@ -959,10 +968,11 @@ class _MainNavigationState extends State<MainNavigation> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final navBackground =
-        isDark ? const Color(0xFF111827) : Colors.white.withValues(alpha: 0.96);
+    final navBackground = isDark
+        ? const Color(0xFF111827)
+        : theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.96);
     final navBorder =
-        isDark ? const Color(0xFF263244) : const Color(0xFFE3ECF8);
+        isDark ? const Color(0xFF263244) : theme.colorScheme.outline;
 
     return Stack(
       children: [
@@ -1117,15 +1127,16 @@ ThemeData _buildHalaTheme(
       ? BrandColorMode.burgundy
       : BrandColorMode.light;
   final isBurgundyMode = resolvedBrandMode == BrandColorMode.burgundy;
-  final primary = _halaBurgundy;
-  final primaryAccent = _halaBurgundyAccent;
-  final deepPrimary = _halaDeepBurgundy;
-  final primaryTint = _halaSoftBurgundy;
-  final supporting =
-      isBurgundyMode ? _halaBurgundyAccent : _darken(_halaBurgundy, 0.12);
+  final primary = isBurgundyMode ? _halaBurgundy : _halaLightBlue600;
+  final primaryAccent =
+      isBurgundyMode ? _halaBurgundyAccent : _halaLightCyan500;
+  final deepPrimary = isBurgundyMode ? _halaDeepBurgundy : _halaLightBrand900;
+  final primaryTint = isBurgundyMode ? _halaSoftBurgundy : _halaLightMist;
+  final supporting = isBurgundyMode ? _halaBurgundyAccent : _halaLightBrand700;
   final supportingTint =
-      isBurgundyMode ? _lighten(_halaSoftBurgundy, 0.10) : _halaSoftBurgundy;
-  final deepSupporting = _halaDeepBurgundy;
+      isBurgundyMode ? _lighten(_halaSoftBurgundy, 0.10) : _halaLightPaperSoft;
+  final deepSupporting =
+      isBurgundyMode ? _halaDeepBurgundy : _halaLightBrand900;
 
   final baseScheme = ColorScheme.fromSeed(
     seedColor: primary,
@@ -1145,27 +1156,41 @@ ThemeData _buildHalaTheme(
     tertiaryContainer:
         isDark ? _darken(primaryAccent, 0.42) : _lighten(primaryAccent, 0.88),
     onTertiaryContainer: isDark ? primaryTint : deepPrimary,
-    surface: isDark ? const Color(0xFF101827) : Colors.white,
-    onSurface: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF071426),
+    surface: isDark
+        ? const Color(0xFF101827)
+        : (isBurgundyMode ? Colors.white : _halaLightPaper),
+    onSurface: isDark
+        ? const Color(0xFFF8FAFC)
+        : (isBurgundyMode ? const Color(0xFF071426) : _halaLightInk),
     surfaceContainerLowest: isDark ? const Color(0xFF07101F) : Colors.white,
-    surfaceContainerLow:
-        isDark ? const Color(0xFF0E1726) : const Color(0xFFFFFCFB),
-    surfaceContainer: isDark ? const Color(0xFF111C2D) : Colors.white,
-    surfaceContainerHigh:
-        isDark ? const Color(0xFF172338) : const Color(0xFFF8FAFC),
-    surfaceContainerHighest:
-        isDark ? const Color(0xFF1E2C44) : const Color(0xFFF1F5F9),
-    outline: isDark ? const Color(0xFF64748B) : const Color(0xFFCBD5E1),
-    outlineVariant: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+    surfaceContainerLow: isDark
+        ? const Color(0xFF0E1726)
+        : (isBurgundyMode ? const Color(0xFFFFFCFB) : Colors.white),
+    surfaceContainer: isDark
+        ? const Color(0xFF111C2D)
+        : (isBurgundyMode ? Colors.white : _halaLightPaper),
+    surfaceContainerHigh: isDark
+        ? const Color(0xFF172338)
+        : (isBurgundyMode ? const Color(0xFFF8FAFC) : _halaLightPaperSoft),
+    surfaceContainerHighest: isDark
+        ? const Color(0xFF1E2C44)
+        : (isBurgundyMode ? const Color(0xFFF1F5F9) : _halaLightMist),
+    outline: isDark
+        ? const Color(0xFF64748B)
+        : (isBurgundyMode ? const Color(0xFFCBD5E1) : _halaLightMistDeep),
+    outlineVariant: isDark
+        ? const Color(0xFF334155)
+        : (isBurgundyMode ? const Color(0xFFE2E8F0) : _halaLightPaperSoft),
   );
 
   final scaffoldBackground = isDark
       ? const Color(0xFF0B1120)
-      : (isBurgundyMode ? _halaCreamBackground : _halaNeutralBackground);
+      : (isBurgundyMode ? _halaCreamBackground : _halaLightPaper);
   final surfaceColor = colorScheme.surface;
   final textColor = colorScheme.onSurface;
-  final mutedTextColor =
-      isDark ? const Color(0xFFCBD5E1) : const Color(0xFF52657F);
+  final mutedTextColor = isDark
+      ? const Color(0xFFCBD5E1)
+      : (isBurgundyMode ? const Color(0xFF52657F) : _halaLightMuted);
 
   return ThemeData(
     useMaterial3: true,
@@ -1200,7 +1225,9 @@ ThemeData _buildHalaTheme(
         letterSpacing: -0.1,
       ),
       bodyMedium: TextStyle(
-        color: isDark ? const Color(0xFFE5E7EB) : const Color(0xFF071426),
+        color: isDark
+            ? const Color(0xFFE5E7EB)
+            : (isBurgundyMode ? const Color(0xFF071426) : _halaLightInk),
         height: 1.35,
         letterSpacing: -0.05,
       ),
